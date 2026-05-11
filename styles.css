@@ -256,7 +256,9 @@ button {
 .hero {
   min-height: auto;
   overflow: hidden;
-  padding: 118px 0 30px;
+  /* padding: 118px 0 200px; */
+  padding-top: 200px;
+  padding-bottom: 150px;
   position: relative;
 }
 
@@ -329,12 +331,15 @@ button {
   top: 25%;
 }
 
+
 .hero-layout {
   align-items: end;
-  display: grid;
+  display: flex;
   gap: 42px;
-  grid-template-columns: minmax(0, 1fr) minmax(300px, 360px);
+  /* grid-template-columns: minmax(0, 1fr) minmax(300px, 360px); */
   position: relative;
+  justify-content: space-between;
+  align-items: center;
   z-index: 1;
 }
 
