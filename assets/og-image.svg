@@ -1,14 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" fill="none">
-  <rect width="1200" height="630" fill="#0E1116"/>
-  <path d="M0 90H1200M0 180H1200M0 270H1200M0 360H1200M0 450H1200M0 540H1200M120 0V630M240 0V630M360 0V630M480 0V630M600 0V630M720 0V630M840 0V630M960 0V630M1080 0V630" stroke="#2DD4BF" stroke-opacity=".08"/>
-  <rect x="76" y="82" width="70" height="70" fill="#171F2B" stroke="#2DD4BF" stroke-width="2"/>
-  <text x="111" y="126" text-anchor="middle" fill="#2DD4BF" font-family="Arial, sans-serif" font-size="24" font-weight="900">MJ</text>
-  <text x="76" y="228" fill="#2DD4BF" font-family="Arial, sans-serif" font-size="24" font-weight="900">BACKEND DEVELOPER</text>
-  <text x="76" y="322" fill="#E8EAED" font-family="Arial, sans-serif" font-size="76" font-weight="900">김민준</text>
-  <text x="76" y="406" fill="#E8EAED" font-family="Arial, sans-serif" font-size="54" font-weight="900">성능과 안정성을 함께 고려합니다</text>
-  <text x="76" y="480" fill="#A7B1BD" font-family="Arial, sans-serif" font-size="28" font-weight="600">Java · Spring Boot · MySQL · Redis · Testing · Monitoring</text>
-  <path d="M750 180H1040V310H1110M880 310V450H1060" stroke="#2DD4BF" stroke-opacity=".38" stroke-width="4"/>
-  <rect x="738" y="168" width="24" height="24" fill="#2DD4BF"/>
-  <rect x="1028" y="298" width="24" height="24" fill="#2DD4BF"/>
-  <rect x="1048" y="438" width="24" height="24" fill="#2DD4BF"/>
+  <rect width="1200" height="630" fill="#FFFFFF"/>
+  <rect x="72" y="72" width="1056" height="486" fill="#FFFFFF" stroke="#111111" stroke-width="3"/>
+  <rect x="96" y="96" width="72" height="72" fill="#FFFFFF" stroke="#111111" stroke-width="3"/>
+  <text x="132" y="142" text-anchor="middle" fill="#111111" font-family="Arial, sans-serif" font-size="25" font-weight="900">MJ</text>
+  <text x="96" y="242" fill="#777777" font-family="Arial, sans-serif" font-size="24" font-weight="800">BACKEND DEVELOPER</text>
+  <text x="96" y="338" fill="#111111" font-family="Arial, sans-serif" font-size="82" font-weight="900">김민준</text>
+  <text x="96" y="424" fill="#111111" font-family="Arial, sans-serif" font-size="46" font-weight="800">검증 가능한 구조와 안정적인 흐름</text>
+  <text x="96" y="492" fill="#666666" font-family="Arial, sans-serif" font-size="28" font-weight="600">Java · Spring Boot · MySQL · Redis · Testing · Monitoring</text>
 </svg>
