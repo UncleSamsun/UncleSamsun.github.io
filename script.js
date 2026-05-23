@@ -133,13 +133,13 @@ function renderProject() {
         </aside>
 
         <div class="detail-main">
-          ${detailSection("프로젝트 개요", `<p>${escapeHtml(project.overview)}</p>`)}
-          ${detailSection("내가 담당한 역할", `<p>${escapeHtml(project.role)}</p>`)}
-          ${detailSection("주요 기능", list(project.features))}
-          ${detailSection("아키텍처 / 구조", `<p>${escapeHtml(project.architecture)}</p>`)}
-          ${detailSection("문제 해결 경험", problemList(project.problemSolving))}
-          ${project.validation ? detailSection("검증 / 테스트", problemList(project.validation)) : ""}
-          ${detailSection("성과 또는 개선 결과", list(project.results))}
+          ${detailSection("개요", `<p>${escapeHtml(project.overview)}</p>`)}
+          ${detailSection("역할", `<p>${escapeHtml(project.role)}</p>`)}
+          ${detailSection("기능", list(project.features))}
+          ${detailSection("구조", `<p>${escapeHtml(project.architecture)}</p>`)}
+          ${detailSection("문제 해결", problemList(project.problemSolving))}
+          ${project.validation ? detailSection("검증", problemList(project.validation)) : ""}
+          ${detailSection("성과", list(project.results))}
         </div>
       </div>
     </section>
