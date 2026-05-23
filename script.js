@@ -138,6 +138,7 @@ function renderProject() {
           ${detailSection("주요 기능", list(project.features))}
           ${detailSection("아키텍처 / 구조", `<p>${escapeHtml(project.architecture)}</p>`)}
           ${detailSection("문제 해결 경험", problemList(project.problemSolving))}
+          ${project.validation ? detailSection("검증 / 테스트", problemList(project.validation)) : ""}
           ${detailSection("성과 또는 개선 결과", list(project.results))}
         </div>
       </div>
