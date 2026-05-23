@@ -50,7 +50,7 @@ function renderHome() {
 
   const skills = document.querySelector("[data-skills]");
   if (skills) {
-    skills.innerHTML = profile.skills.map((skill) => `<span>${escapeHtml(skill)}</span>`).join("");
+    skills.innerHTML = renderSkillGroups(profile.skillGroups ?? [{ title: "Skills", items: profile.skills }]);
   }
 
   const cards = document.querySelector("[data-project-cards]");
@@ -129,7 +129,7 @@ function renderProject() {
       <div class="container detail-layout">
         <aside class="detail-aside">
           <h2>기술 스택</h2>
-          <div class="tag-cloud compact">${project.stack.map((skill) => `<span>${escapeHtml(skill)}</span>`).join("")}</div>
+          ${renderSkillGroups(groupStack(project.stack))}
         </aside>
 
         <div class="detail-main">
@@ -186,6 +186,76 @@ function problemList(items) {
 
 function list(items) {
   return `<ul>${items.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>`;
+}
+
+function renderSkillGroups(groups) {
+  return `
+    <div class="skill-groups">
+      ${groups
+        .filter((group) => group.items.length > 0)
+        .map(
+          (group) => `
+            <article class="skill-group">
+              <h3>${escapeHtml(group.title)}</h3>
+              <div class="tag-cloud compact">${group.items.map((skill) => `<span>${escapeHtml(skill)}</span>`).join("")}</div>
+            </article>
+          `
+        )
+        .join("")}
+    </div>
+  `;
+}
+
+function groupStack(stack) {
+  const groups = [
+    { title: "Backend", items: [] },
+    { title: "Data", items: [] },
+    { title: "AI / Crawling", items: [] },
+    { title: "Infra", items: [] },
+    { title: "Test / Docs", items: [] },
+    { title: "Frontend", items: [] },
+    { title: "Etc", items: [] },
+  ];
+
+  stack.forEach((skill) => {
+    getStackGroup(groups, skill).items.push(skill);
+  });
+
+  return groups.filter((group) => group.items.length > 0);
+}
+
+function getStackGroup(groups, skill) {
+  const value = skill.toLowerCase();
+
+  if (includesAny(value, ["junit", "mockito", "swagger", "test"])) {
+    return groups[4];
+  }
+
+  if (includesAny(value, ["java", "spring", "security", "jpa", "querydsl", "jwt", "websocket", "actuator", "python", "fastapi"])) {
+    return groups[0];
+  }
+
+  if (includesAny(value, ["mysql", "h2", "redis", "elasticsearch", "firebase"])) {
+    return groups[1];
+  }
+
+  if (includesAny(value, ["selenium", "kiwi", "sbert", "tf-idf"])) {
+    return groups[2];
+  }
+
+  if (includesAny(value, ["docker", "aws", "github actions", "gradle"])) {
+    return groups[3];
+  }
+
+  if (includesAny(value, ["react", "typescript", "vite"])) {
+    return groups[5];
+  }
+
+  return groups[6];
+}
+
+function includesAny(value, keywords) {
+  return keywords.some((keyword) => value.includes(keyword));
 }
 
 function linkButton(label, url, external) {

@@ -31,6 +31,24 @@ export const profile = {
     "Grafana",
     "Swagger",
   ],
+  skillGroups: [
+    {
+      title: "Backend",
+      items: ["Java", "Spring Boot", "Spring Security", "JPA", "Querydsl", "Spring Batch"],
+    },
+    {
+      title: "Data",
+      items: ["MySQL", "Redis", "Elasticsearch"],
+    },
+    {
+      title: "Infra",
+      items: ["Docker", "AWS", "GitHub Actions", "Prometheus", "Grafana"],
+    },
+    {
+      title: "Test / Docs",
+      items: ["JUnit5", "Mockito", "Swagger"],
+    },
+  ],
   education: [
     {
       period: "2024.11 ~ 2025.06",
