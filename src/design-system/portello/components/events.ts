@@ -1,0 +1,36 @@
+export type EventHandler<E> = (event: E) => void;
+interface PreventableEvent {
+  defaultPrevented?: boolean;
+}
+
+export interface KeyboardActivationEvent {
+  key: string;
+  defaultPrevented?: boolean;
+  preventDefault: () => void;
+  currentTarget: {
+    click: () => void;
+  };
+}
+
+export function composeEventHandlers<E extends PreventableEvent>(
+  consumerHandler: EventHandler<E> | undefined,
+  internalHandler: EventHandler<E>,
+): EventHandler<E> {
+  return (event) => {
+    consumerHandler?.(event);
+    if (!event.defaultPrevented) {
+      internalHandler(event);
+    }
+  };
+}
+
+export function isKeyboardActivationKey(key: string): boolean {
+  return key === "Enter" || key === " " || key === "Spacebar";
+}
+
+export function activateOnKeyboard(event: KeyboardActivationEvent): void {
+  if (!isKeyboardActivationKey(event.key)) return;
+
+  event.preventDefault();
+  event.currentTarget.click();
+}

@@ -1,5 +1,6 @@
 import type { CSSProperties, HTMLAttributes, MouseEventHandler, ReactNode } from "react";
 import { useState } from "react";
+import { composeEventHandlers } from "./events";
 import { PortelloIconView } from "./icons";
 
 export interface CardProps extends Omit<HTMLAttributes<HTMLDivElement>, "title"> {
@@ -20,6 +21,8 @@ export function Card({
   interactive = false,
   children,
   style,
+  onMouseEnter,
+  onMouseLeave,
   ...rest
 }: CardProps) {
   const [hover, setHover] = useState(false);
@@ -40,10 +43,10 @@ export function Card({
 
   return (
     <div
-      onMouseEnter={() => interactive && setHover(true)}
-      onMouseLeave={() => interactive && setHover(false)}
       style={cardStyle}
       {...rest}
+      onMouseEnter={composeEventHandlers(onMouseEnter, () => interactive && setHover(true))}
+      onMouseLeave={composeEventHandlers(onMouseLeave, () => interactive && setHover(false))}
     >
       {(title || menu) && (
         <div

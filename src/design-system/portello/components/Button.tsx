@@ -1,4 +1,5 @@
 import type { ButtonHTMLAttributes, CSSProperties, MouseEvent } from "react";
+import { composeEventHandlers } from "./events";
 import { PortelloIconView, type PortelloIcon } from "./icons";
 
 export type ButtonVariant = "primary" | "secondary" | "ghost" | "icon";
@@ -74,6 +75,12 @@ export function Button({
   disabled = false,
   type = "button",
   style,
+  onMouseEnter,
+  onMouseLeave,
+  onMouseDown,
+  onMouseUp,
+  onFocus,
+  onBlur,
   ...rest
 }: ButtonProps) {
   const s = sizes[size];
@@ -112,17 +119,21 @@ export function Button({
       type={type}
       disabled={disabled}
       style={base}
-      onMouseEnter={(event) => setBackground(event, hoverBackgrounds[variant])}
-      onMouseLeave={(event) => setBackground(event, String(v.background))}
-      onMouseDown={(event) => setBackground(event, activeBackgrounds[variant])}
-      onMouseUp={(event) => setBackground(event, hoverBackgrounds[variant])}
-      onFocus={(event) => {
-        event.currentTarget.style.boxShadow = "var(--ring-focus)";
-      }}
-      onBlur={(event) => {
-        event.currentTarget.style.boxShadow = "none";
-      }}
       {...rest}
+      onMouseEnter={composeEventHandlers(onMouseEnter, (event) =>
+        setBackground(event, hoverBackgrounds[variant]),
+      )}
+      onMouseLeave={composeEventHandlers(onMouseLeave, (event) => setBackground(event, String(v.background)))}
+      onMouseDown={composeEventHandlers(onMouseDown, (event) =>
+        setBackground(event, activeBackgrounds[variant]),
+      )}
+      onMouseUp={composeEventHandlers(onMouseUp, (event) => setBackground(event, hoverBackgrounds[variant]))}
+      onFocus={composeEventHandlers(onFocus, (event) => {
+        event.currentTarget.style.boxShadow = "var(--ring-focus)";
+      })}
+      onBlur={composeEventHandlers(onBlur, (event) => {
+        event.currentTarget.style.boxShadow = "none";
+      })}
     >
       {icon ? <PortelloIconView icon={icon} size={s.icon} /> : null}
       {!isIconOnly ? children : children && !icon ? children : null}

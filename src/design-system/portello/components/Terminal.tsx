@@ -19,7 +19,7 @@ export interface TerminalProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 export function Terminal({
-  prompt = "kim@portfolio",
+  prompt = "dev@portfolio",
   cwd = "~",
   lines = [],
   header = true,

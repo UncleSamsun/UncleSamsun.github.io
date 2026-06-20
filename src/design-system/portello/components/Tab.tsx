@@ -1,5 +1,6 @@
 import type { CSSProperties, HTMLAttributes, MouseEventHandler, ReactNode } from "react";
 import { useState } from "react";
+import { activateOnKeyboard, composeEventHandlers } from "./events";
 import { PortelloIconView, type PortelloIcon } from "./icons";
 
 export interface TabProps extends HTMLAttributes<HTMLDivElement> {
@@ -8,7 +9,7 @@ export interface TabProps extends HTMLAttributes<HTMLDivElement> {
   glyphColor?: string;
   active?: boolean;
   dirty?: boolean;
-  onClose?: MouseEventHandler<HTMLSpanElement>;
+  onClose?: MouseEventHandler<HTMLButtonElement>;
 }
 
 export function Tab({
@@ -19,6 +20,10 @@ export function Tab({
   dirty = false,
   onClose,
   style,
+  onKeyDown,
+  onMouseEnter,
+  onMouseLeave,
+  tabIndex,
   ...rest
 }: TabProps) {
   const [hover, setHover] = useState(false);
@@ -43,12 +48,14 @@ export function Tab({
 
   return (
     <div
+      {...rest}
       role="tab"
       aria-selected={active}
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
+      tabIndex={tabIndex ?? 0}
+      onMouseEnter={composeEventHandlers(onMouseEnter, () => setHover(true))}
+      onMouseLeave={composeEventHandlers(onMouseLeave, () => setHover(false))}
+      onKeyDown={composeEventHandlers(onKeyDown, activateOnKeyboard)}
       style={tabStyle}
-      {...rest}
     >
       {active && (
         <span
@@ -76,10 +83,6 @@ export function Tab({
           borderRadius: "var(--radius-sm)",
           color: "var(--text-muted)",
         }}
-        onClick={(event) => {
-          event.stopPropagation();
-          onClose?.(event);
-        }}
         onMouseEnter={(event) => {
           event.currentTarget.style.background = "var(--surface-active)";
         }}
@@ -87,10 +90,33 @@ export function Tab({
           event.currentTarget.style.background = "transparent";
         }}
       >
-        {dirty && !hover ? (
+        {dirty && (!hover || !onClose) ? (
           <span style={{ width: 8, height: 8, borderRadius: "50%", background: "var(--text-secondary)" }} />
+        ) : onClose ? (
+          <button
+            type="button"
+            aria-label="Close tab"
+            onClick={(event) => {
+              event.stopPropagation();
+              onClose(event);
+            }}
+            style={{
+              width: 16,
+              height: 16,
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              padding: 0,
+              border: "none",
+              background: "transparent",
+              color: "inherit",
+              cursor: "pointer",
+            }}
+          >
+            <PortelloIconView icon="x" size={13} style={{ opacity: hover ? 1 : 0 }} />
+          </button>
         ) : (
-          <PortelloIconView icon="x" size={13} style={{ opacity: hover || !onClose ? 1 : 0 }} />
+          null
         )}
       </span>
     </div>

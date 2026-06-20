@@ -1,8 +1,18 @@
 export { Badge } from "./Badge";
+export type { BadgeProps, BadgeStatus, BadgeVariant } from "./Badge";
 export { Button } from "./Button";
+export type { ButtonProps, ButtonSize, ButtonVariant } from "./Button";
 export { Card } from "./Card";
+export type { CardProps } from "./Card";
 export { CodeBlock } from "./CodeBlock";
+export type { CodeBlockProps } from "./CodeBlock";
 export { FileTreeItem } from "./FileTreeItem";
+export type { FileTreeItemProps } from "./FileTreeItem";
+export { PortelloIconView } from "./icons";
+export type { PortelloIcon, PortelloIconName, PortelloIconViewProps } from "./icons";
 export { StatusBarItem } from "./StatusBarItem";
+export type { StatusBarItemProps } from "./StatusBarItem";
 export { Tab } from "./Tab";
+export type { TabProps } from "./Tab";
 export { Terminal } from "./Terminal";
+export type { TerminalLine, TerminalProps } from "./Terminal";

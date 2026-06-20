@@ -1,5 +1,6 @@
 import type { CSSProperties, HTMLAttributes } from "react";
 import { useState } from "react";
+import { activateOnKeyboard, composeEventHandlers } from "./events";
 import { PortelloIconView, type PortelloIcon } from "./icons";
 
 export interface StatusBarItemProps extends HTMLAttributes<HTMLDivElement> {
@@ -14,6 +15,10 @@ export function StatusBarItem({
   onClick,
   title,
   style,
+  onKeyDown,
+  onMouseEnter,
+  onMouseLeave,
+  tabIndex,
   ...rest
 }: StatusBarItemProps) {
   const [hover, setHover] = useState(false);
@@ -43,13 +48,17 @@ export function StatusBarItem({
 
   return (
     <div
+      {...rest}
       role={interactive ? "button" : undefined}
+      tabIndex={tabIndex ?? (interactive ? 0 : undefined)}
       title={title}
       onClick={onClick}
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
+      onMouseEnter={composeEventHandlers(onMouseEnter, () => setHover(true))}
+      onMouseLeave={composeEventHandlers(onMouseLeave, () => setHover(false))}
+      onKeyDown={composeEventHandlers(onKeyDown, (event) => {
+        if (interactive) activateOnKeyboard(event);
+      })}
       style={itemStyle}
-      {...rest}
     >
       {icon && <PortelloIconView icon={icon} size={13} style={{ flex: "none" }} />}
       {children}

@@ -11,12 +11,14 @@
   --font-mono: 'JetBrains Mono', 'Nanum Gothic Coding', ui-monospace, 'SF Mono',
                'Cascadia Code', 'Fira Code', Menlo, Consolas, monospace;
   --font-ui:   system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-korean: 'Pretendard', 'Noto Sans KR', 'Apple SD Gothic Neo',
+                 'Malgun Gothic', system-ui, -apple-system, 'Segoe UI', sans-serif;
 
   /* Aliases by role */
   --font-display:  var(--font-mono);   /* hero / section headings  */
   --font-code:     var(--font-mono);   /* editor + code blocks     */
   --font-terminal: var(--font-mono);   /* terminal output          */
-  --font-body:     var(--font-mono);   /* prose, descriptions      */
+  --font-body:     var(--font-korean); /* prose, descriptions      */
   --font-chrome:   var(--font-ui);     /* IDE chrome labels        */
 
   /* ── Weights ──────────────────────────────────────────────────────────── */

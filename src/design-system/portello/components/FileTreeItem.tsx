@@ -1,5 +1,6 @@
 import type { CSSProperties, HTMLAttributes, ReactNode } from "react";
 import { useState } from "react";
+import { activateOnKeyboard, composeEventHandlers } from "./events";
 import { PortelloIconView, type PortelloIcon } from "./icons";
 
 export interface FileTreeItemProps extends HTMLAttributes<HTMLDivElement> {
@@ -23,9 +24,15 @@ export function FileTreeItem({
   glyphColor = "var(--text-muted)",
   badge,
   style,
+  onClick,
+  onKeyDown,
+  onMouseEnter,
+  onMouseLeave,
+  tabIndex,
   ...rest
 }: FileTreeItemProps) {
   const [hover, setHover] = useState(false);
+  const interactive = !!onClick;
   const bg = active ? "var(--surface-active)" : hover ? "var(--surface-hover)" : "transparent";
   const rowStyle: CSSProperties = {
     display: "flex",
@@ -39,7 +46,7 @@ export function FileTreeItem({
     fontSize: "var(--text-xs)",
     color: active ? "var(--text-bright)" : "var(--text-secondary)",
     background: bg,
-    cursor: "pointer",
+    cursor: interactive ? "pointer" : "default",
     userSelect: "none",
     whiteSpace: "nowrap",
     boxSizing: "border-box",
@@ -52,11 +59,18 @@ export function FileTreeItem({
 
   return (
     <div
-      role="treeitem"
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
-      style={rowStyle}
       {...rest}
+      role="treeitem"
+      aria-selected={active}
+      aria-expanded={type === "folder" ? open : undefined}
+      tabIndex={tabIndex ?? (interactive ? 0 : undefined)}
+      onClick={onClick}
+      onMouseEnter={composeEventHandlers(onMouseEnter, () => setHover(true))}
+      onMouseLeave={composeEventHandlers(onMouseLeave, () => setHover(false))}
+      onKeyDown={composeEventHandlers(onKeyDown, (event) => {
+        if (interactive) activateOnKeyboard(event);
+      })}
+      style={rowStyle}
     >
       {type === "folder" ? (
         <PortelloIconView
