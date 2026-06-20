@@ -502,7 +502,7 @@ import react from "@astrojs/react";
 
 export default defineConfig({
   integrations: [react()],
-  site: "https://unclesamsun.github.io",
+  site: "https://minjoon.me",
   output: "static",
 });
 ```
@@ -933,7 +933,7 @@ interface Props {
   canonical?: string;
 }
 
-const { title, description, canonical = "https://unclesamsun.github.io/" } = Astro.props;
+const { title, description, canonical = "https://minjoon.me/" } = Astro.props;
 ---
 <!doctype html>
 <html lang="ko">
@@ -946,7 +946,7 @@ const { title, description, canonical = "https://unclesamsun.github.io/" } = Ast
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content="https://unclesamsun.github.io/assets/og-image.svg" />
+    <meta property="og:image" content="https://minjoon.me/assets/og-image.svg" />
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
     <title>{title}</title>
@@ -1043,7 +1043,7 @@ if (!project) {
 <BaseLayout
   title={`${project.name} | 김민준 Portfolio`}
   description={project.summary}
-  canonical={`https://unclesamsun.github.io/projects/${project.slug}/`}
+  canonical={`https://minjoon.me/projects/${project.slug}/`}
 >
   <main id="main">
     <ProjectDetail project={project} />

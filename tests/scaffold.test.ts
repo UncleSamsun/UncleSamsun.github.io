@@ -10,7 +10,7 @@ describe("Astro scaffold", () => {
 
     expect(robots).toContain("Sitemap: https://minjoon.me/sitemap.xml");
     expect(sitemap).toContain("<loc>https://minjoon.me/</loc>");
-    expect(`${robots}\n${sitemap}`).not.toContain("https://unclesamsun.github.io");
+    expect(`${robots}\n${sitemap}`).not.toContain("unclesamsun.github.io");
   });
 
   test("declares the local npm package manager", async () => {
