@@ -16,11 +16,26 @@ describe("terminal commands", () => {
     });
   });
 
-  it("opens files", () => {
+  it("opens README.md", () => {
+    expect(runTerminalCommand("open README.md")).toEqual({
+      type: "open",
+      fileId: "README.md",
+      lines: ["opened README.md"],
+    });
+  });
+
+  it("opens Hola project files", () => {
     expect(runTerminalCommand("open Projects/hola-climbing.md")).toEqual({
       type: "open",
       fileId: "Projects/hola-climbing.md",
       lines: ["opened Projects/hola-climbing.md"],
+    });
+  });
+
+  it("returns output for invalid open targets", () => {
+    expect(runTerminalCommand("open missing.md")).toEqual({
+      type: "output",
+      lines: ["open: missing.md: file not found", "try: ls"],
     });
   });
 

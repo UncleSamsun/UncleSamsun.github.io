@@ -1,7 +1,11 @@
+import { portfolioFiles } from "../data/navigation";
+
 export type TerminalResult =
   | { type: "output"; lines: string[] }
   | { type: "open"; fileId: string; lines: string[] }
   | { type: "clear" };
+
+const validOpenFileIds = new Set(portfolioFiles.map((file) => file.id));
 
 export function runTerminalCommand(command: string): TerminalResult {
   const normalized = command.trim();
@@ -46,6 +50,10 @@ export function runTerminalCommand(command: string): TerminalResult {
 
   if (normalized.startsWith("open ")) {
     const fileId = normalized.slice(5);
+    if (!validOpenFileIds.has(fileId)) {
+      return { type: "output", lines: [`open: ${fileId}: file not found`, "try: ls"] };
+    }
+
     return { type: "open", fileId, lines: [`opened ${fileId}`] };
   }
 
