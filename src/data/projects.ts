@@ -45,7 +45,7 @@ export const holaClimbingProject: PortfolioProject = {
     ],
   },
   tech: [
-    { name: "Java 25", category: "backend" },
+    { name: "Java 25", category: "backend", reason: "Spring Boot 4 기반 백엔드 런타임과 최신 Java API를 맞춰 사용했다." },
     {
       name: "Spring Boot 4",
       category: "backend",
@@ -121,6 +121,7 @@ export const holaClimbingProject: PortfolioProject = {
       tradeOff:
         "서버 부하는 줄지만 GCS CORS, 만료 시간, object path 검증, 업로드 완료 후 메타데이터 정합을 신경 써야 한다.",
       verification: "GCS Signed URL double slash 회귀 테스트와 운영 upload path 검증을 수행한다.",
+      ownership: "direct",
     },
     {
       title: "Redis Streams 기반 AI dispatch",
@@ -129,6 +130,7 @@ export const holaClimbingProject: PortfolioProject = {
       alternatives: ["Kafka", "RabbitMQ", "HTTP direct call"],
       tradeOff: "운영 단순성은 얻지만 Kafka 수준의 생태계와 장기 보관/관측성은 약하다.",
       verification: "Spring -> Redis Stream -> AI worker -> Spring callback -> SSE E2E smoke를 통과시킨다.",
+      ownership: "direct",
     },
     {
       title: "MyBatis over JPA",
@@ -137,6 +139,7 @@ export const holaClimbingProject: PortfolioProject = {
       alternatives: ["Spring Data JPA", "JPA + native query 혼용"],
       tradeOff: "SQL 명시성과 성능 제어는 좋아지지만 반복 mapping 코드와 mapper 테스트 부담이 생긴다.",
       verification: "Mapper/Integration 테스트와 SQL explain evidence로 주요 조회 성능을 확인한다.",
+      ownership: "direct",
     },
   ],
   problems: [
@@ -318,7 +321,7 @@ export const cafeGamsugwangProject: PortfolioProject = {
     ],
   },
   tech: [
-    { name: "Java 17", category: "backend" },
+    { name: "Java 17", category: "backend", reason: "Spring Boot 서비스 서버의 표준 런타임으로 사용했다." },
     {
       name: "Spring Boot 3.4.5",
       category: "backend",
@@ -348,6 +351,7 @@ export const cafeGamsugwangProject: PortfolioProject = {
       alternatives: ["Spring 단일 서버에서 Python 프로세스 호출", "FastAPI 단일 서버"],
       tradeOff: "런타임 경계와 API 계약 관리 비용은 생기지만, 데이터 처리와 서비스 도메인의 책임이 명확해진다.",
       verification: "크롤링 서버 단위 테스트와 Spring 도메인 테스트를 분리해 각각의 실패 범위를 확인한다.",
+      ownership: "direct",
     },
     {
       title: "제주 좌표 격자 기반 수집",
@@ -356,6 +360,7 @@ export const cafeGamsugwangProject: PortfolioProject = {
       alternatives: ["행정동 키워드 수동 수집", "검색 결과 pagination만 사용"],
       tradeOff: "좌표 생성과 중복 제거 비용은 늘지만 누락 가능성을 줄일 수 있다.",
       verification: "수집된 카페 수, 실패 ID 재시도 결과, 중복 제거 후 개수를 기록한다.",
+      ownership: "direct",
     },
     {
       title: "키워드 정제 후 추천 데이터로 사용",
@@ -364,6 +369,7 @@ export const cafeGamsugwangProject: PortfolioProject = {
       alternatives: ["리뷰 전문 임베딩만 사용", "수동 태그 입력"],
       tradeOff: "파이프라인은 복잡해지지만 사람이 이해할 수 있는 추천 근거 키워드를 만들 수 있다.",
       verification: "원천 키워드와 최종 키워드 수, 샘플 카페의 대표 키워드를 비교한다.",
+      ownership: "direct",
     },
   ],
   problems: [
@@ -443,7 +449,7 @@ export const jsonstoreProject: PortfolioProject = {
     developmentIssue:
       "고객과 관리자가 같은 서비스에 존재해 인증 필터, 권한, 장바구니 캐싱, 주문 재고 동시성 경계가 흐려질 수 있었다.",
     results: [
-      "고객/관리자 JWT 필터와 토큰 Provider를 분리했다.",
+      "팀 프로젝트의 고객/관리자 인증 분리 구조를 분석하고, 본인 담당 API는 JWT 인증 주체 기준으로 정리했다.",
       "Redis 기반 장바구니 캐싱 흐름을 구성했다.",
       "Firebase Cloud Messaging 기반 웹 알림을 구현했다.",
       "주문·재고 동시성 테스트와 JUnit/Mockito 테스트를 보강했다.",
@@ -467,7 +473,7 @@ export const jsonstoreProject: PortfolioProject = {
     ],
   },
   tech: [
-    { name: "Java 21", category: "backend" },
+    { name: "Java 21", category: "backend", reason: "커머스 MVP 백엔드의 Spring Boot 런타임으로 사용했다." },
     { name: "Spring Boot 3.4.4", category: "backend", reason: "커머스 도메인 API를 빠르게 구성하고 계층별 테스트를 붙이기 위해 사용했다." },
     { name: "Spring Security + JWT", category: "backend", reason: "고객과 관리자 인증 필터를 분리하기 위해 사용했다." },
     { name: "Spring Data JPA", category: "data", reason: "상품, 주문, 배송지, 회원 도메인의 관계형 모델을 관리하기 위해 사용했다." },
@@ -484,28 +490,31 @@ export const jsonstoreProject: PortfolioProject = {
   ],
   decisions: [
     {
-      title: "고객/관리자 JWT 필터 분리",
-      decision: "Member와 Admin 인증 필터·Provider를 분리한다.",
-      reason: "같은 JWT 구조를 공유하더라도 권한과 진입점이 달라 실수로 교차 인증되는 위험을 줄여야 했다.",
-      alternatives: ["단일 JWT 필터에서 role 분기", "세션 기반 관리자 인증"],
-      tradeOff: "중복 설정은 늘지만 고객과 관리자 인증 경계가 명확해진다.",
-      verification: "고객 API와 관리자 API의 인증 성공/실패 케이스를 Spring Security Test로 검증한다.",
+      title: "Redis 기반 장바구니 캐싱",
+      decision: "사용자별 장바구니 상태를 Redis에 저장하고 서비스 계층에서 추가·조회·삭제 흐름을 일관되게 다룬다.",
+      reason: "장바구니는 상품 탐색 중 반복 조회·수정되는 데이터라 DB만 거치면 응답 흐름이 무거워질 수 있었다.",
+      alternatives: ["DB 테이블 단독 저장", "클라이언트 local state 중심 처리"],
+      tradeOff: "Redis 키 스키마와 만료 정책을 관리해야 하지만 반복 조회와 수정 응답을 가볍게 만들 수 있다.",
+      verification: "장바구니 추가/조회/삭제 서비스 테스트와 인증 사용자 기준 API 테스트로 확인한다.",
+      ownership: "direct",
     },
     {
-      title: "JPA 위 Querydsl 사용",
-      decision: "기본 CRUD는 JPA를 쓰고 조건 검색은 Querydsl로 보완한다.",
-      reason: "상품 검색 조건이 늘어날 가능성이 있어 문자열 JPQL보다 타입 안정적인 조건 조합이 필요했다.",
-      alternatives: ["Spring Data method query", "직접 JPQL", "MyBatis"],
-      tradeOff: "Querydsl 설정 비용은 있지만 검색 조건 확장성이 좋아진다.",
-      verification: "상품 검색 조건별 repository/service 테스트로 SQL 결과를 확인한다.",
+      title: "JWT principal 기반 장바구니·알림 API",
+      decision: "장바구니와 알림 API는 요청 body의 회원 식별자보다 JWT 인증 주체를 기준으로 동작하게 한다.",
+      reason: "클라이언트가 넘긴 식별자와 실제 인증 사용자가 어긋나면 다른 사용자의 장바구니나 알림에 접근할 위험이 있었다.",
+      alternatives: ["요청 body memberId 사용", "path variable memberId 사용"],
+      tradeOff: "테스트에서 인증 컨텍스트를 구성해야 하지만 API 입력이 단순해지고 권한 경계가 명확해진다.",
+      verification: "Spring Security Test로 인증 사용자 기준 장바구니·알림 동작과 실패 케이스를 검증한다.",
+      ownership: "direct",
     },
     {
-      title: "주문 만료 15분",
-      decision: "주문 생성 후 결제 전 대기 상태는 15분 만료 정책을 둔다.",
-      reason: "장시간 대기 주문이 재고와 운영 상태를 붙잡지 않도록 해야 했다.",
-      alternatives: ["만료 없음", "사용자별 수동 취소", "더 짧은 만료 시간"],
-      tradeOff: "재고 점유는 줄지만 사용자가 늦게 결제하면 주문을 다시 만들어야 한다.",
-      verification: "order.expire-minutes 설정과 만료 처리 테스트로 확인한다.",
+      title: "FCM 알림과 테스트 보강",
+      decision: "FCM 토큰 등록과 알림 발송 실패 흐름을 테스트 대상에 포함한다.",
+      reason: "웹 알림은 외부 서비스와 연결되므로 토큰 저장, 발송 요청, 실패 예외를 분리해서 다뤄야 했다.",
+      alternatives: ["알림 기능 제외", "발송 실패를 로깅만 하고 테스트하지 않음"],
+      tradeOff: "외부 SDK 추상화와 테스트 setup 비용은 늘지만 알림 기능의 회귀를 줄일 수 있다.",
+      verification: "FCM 토큰 등록과 알림 발송 실패 예외 테스트로 확인한다.",
+      ownership: "direct",
     },
   ],
   problems: [
@@ -527,9 +536,9 @@ export const jsonstoreProject: PortfolioProject = {
     },
   ],
   metrics: [
-    { label: "권한 필터", value: "2개", note: "Member/Admin JWT 필터와 Provider를 분리." },
-    { label: "주문 만료 정책", value: "15분", note: "대기 주문이 재고를 오래 점유하지 않도록 제한." },
-    { label: "테스트 검증", value: "100%", note: "기존 포트폴리오 데이터 기준 Gradle 테스트 검증 완료 항목." },
+    { label: "권한 필터", value: "2개", note: "프로젝트 구조 분석 기준 Member/Admin JWT 필터와 Provider가 분리되어 있었다." },
+    { label: "주문 만료 정책", value: "15분", note: "프로젝트 설정 분석 기준 대기 주문 재고 점유 제한 정책." },
+    { label: "테스트 검증", value: "당시 Gradle test suite 통과", note: "기존 포트폴리오 기록의 검증 항목이며 전체 품질 보증률을 뜻하지 않는다." },
   ],
   visuals: [],
   retrospective: {
@@ -601,13 +610,13 @@ export const readAndShareProject: PortfolioProject = {
     ],
   },
   tech: [
-    { name: "Java 17", category: "backend" },
+    { name: "Java 17", category: "backend", reason: "독서 SNS 백엔드의 Spring Boot 런타임으로 사용했다." },
     { name: "Spring Boot 3.3.7", category: "backend", reason: "독서 SNS 도메인 API를 구성하기 위해 사용했다." },
     { name: "Spring Security + JWT", category: "backend", reason: "로그인, 토큰 재발급, 인증 사용자 접근 제어를 처리하기 위해 사용했다." },
     { name: "Spring Data JPA", category: "data", reason: "회원, 도서, 리뷰, 팔로우, 알림 도메인을 관계형 모델로 관리하기 위해 사용했다." },
     { name: "H2", category: "test", reason: "로컬 테스트에서 도메인 동작을 빠르게 검증하기 위해 사용했다." },
     { name: "Redis", category: "infra", reason: "인증·피드·알림 관련 상태 저장소로 사용했다." },
-    { name: "Spring Events", category: "backend", reason: "리뷰 좋아요와 알림 같은 부수효과를 도메인 이벤트로 분리하기 위해 사용했다." },
+    { name: "Spring Events", category: "backend", reason: "팀원이 구현한 알림 이벤트 구조를 분석하고 테스트 경계를 이해하는 데 사용된 프로젝트 기술이다." },
     { name: "FCM", category: "infra", reason: "알림 푸시 전송을 위해 사용했다." },
     { name: "Prometheus + Micrometer", category: "infra", reason: "서비스 관측 지표를 노출하기 위해 사용했다." },
     { name: "Swagger", category: "docs", reason: "프론트엔드와 백엔드 API 계약을 맞추기 위해 사용했다." },
@@ -616,28 +625,31 @@ export const readAndShareProject: PortfolioProject = {
   ],
   decisions: [
     {
-      title: "도메인 기반 패키지 구조",
-      decision: "domain/{도메인}/{controller,service,repository,domain,dto,event} 구조로 정리한다.",
-      reason: "팀원이 각 도메인 단위로 기능을 나누어 개발하고 충돌을 줄여야 했다.",
-      alternatives: ["계층형 패키지", "클린 아키텍처 풀세트"],
-      tradeOff: "도메인 경계는 읽기 쉬워지지만 공통 정책을 어디에 둘지 계속 합의해야 한다.",
-      verification: "Graphify와 코드 탐색으로 도메인 간 직접 참조가 과도하지 않은지 확인한다.",
+      title: "이메일 인증을 회원가입 흐름에서 분리",
+      decision: "회원가입 이후 이메일 인증 토큰을 발급하고 인증 상태 갱신을 별도 흐름으로 둔다.",
+      reason: "회원가입 직후 실제 이메일 소유 여부를 확인하지 않으면 잘못된 계정이 활성화될 수 있었다.",
+      alternatives: ["가입 즉시 활성화", "관리자 수동 승인", "소셜 로그인만 허용"],
+      tradeOff: "인증 토큰과 메일 발송 실패 처리가 추가되지만 계정 신뢰도를 높일 수 있다.",
+      verification: "EmailServiceTest와 MemberApiControllerTest에서 인증 성공·실패 케이스를 검증한다.",
+      ownership: "direct",
     },
     {
-      title: "Spring Events 기반 알림",
-      decision: "좋아요·리뷰 같은 도메인 행동에서 알림을 직접 호출하지 않고 이벤트 리스너로 분리한다.",
-      reason: "핵심 도메인 동작과 FCM 알림 실패를 느슨하게 분리해야 했다.",
-      alternatives: ["서비스 직접 호출", "메시지 큐 도입"],
-      tradeOff: "동기 이벤트 한계는 있지만 별도 인프라 없이 부수효과를 분리할 수 있다.",
-      verification: "이벤트 발행과 리스너 테스트로 알림 트리거를 검증한다.",
+      title: "BCrypt 기반 비밀번호 처리",
+      decision: "회원 비밀번호는 평문 저장 없이 BCrypt 해시로 저장하고 인증 흐름에서 검증한다.",
+      reason: "회원 도메인에서 가장 기본적인 보안 경계인 비밀번호 저장 방식을 코드로 보장해야 했다.",
+      alternatives: ["평문 저장", "단순 SHA 해시", "외부 인증 서비스 위임"],
+      tradeOff: "해시 비용과 테스트 setup이 생기지만 비밀번호 유출 위험을 크게 낮춘다.",
+      verification: "회원가입·로그인 테스트에서 해시 저장과 인증 성공/실패를 확인한다.",
+      ownership: "direct",
     },
     {
-      title: "Refresh token에 IP 포함",
-      decision: "Refresh token 저장 시 IP 정보를 함께 관리한다.",
-      reason: "토큰 탈취 시 재사용 탐지와 방어 가능성을 높이기 위한 팀 설계였다.",
-      alternatives: ["refresh token만 저장", "device fingerprint 추가"],
-      tradeOff: "보안 정보는 늘지만 네트워크 환경 변화에서 예외 처리가 필요하다.",
-      verification: "재발급 흐름 테스트와 인증 실패 케이스로 확인한다.",
+      title: "회원 생명주기 회귀 테스트 보강",
+      decision: "회원 검색, 정보 수정, 탈퇴, 이메일 인증처럼 상태가 바뀌는 기능을 서비스와 컨트롤러 테스트로 고정한다.",
+      reason: "짧은 기간에 기존 코드를 확장하면서 회원 상태 변화가 다른 API에 회귀를 만들 수 있었다.",
+      alternatives: ["수동 QA 중심 확인", "컨트롤러 테스트만 작성"],
+      tradeOff: "테스트 작성 시간이 늘지만 기능 추가 후 회귀를 빠르게 확인할 수 있다.",
+      verification: "MemberServiceTest와 MemberApiControllerTest로 정상·예외 흐름을 확인한다.",
+      ownership: "direct",
     },
   ],
   problems: [
@@ -660,7 +672,7 @@ export const readAndShareProject: PortfolioProject = {
   ],
   metrics: [
     { label: "본인 직접 PR", value: "8건", note: "member 도메인 전반과 테스트 보강 중심 PR." },
-    { label: "테스트 검증", value: "약 96%", note: "기존 포트폴리오 데이터 기준 전체 테스트 검증 범위." },
+    { label: "테스트 검증", value: "당시 Java 17 로컬 test suite 통과", note: "기존 포트폴리오 기록 기준이며 전체 품질 보증률을 뜻하지 않는다." },
     { label: "Graphify 노드", value: "1,030개", note: "vault Graphify readandshare AST-only 보고서 기준." },
   ],
   visuals: [],
@@ -733,7 +745,7 @@ export const theLastSupperProject: PortfolioProject = {
     ],
   },
   tech: [
-    { name: "Java 17", category: "backend" },
+    { name: "Java 17", category: "backend", reason: "예약·웨이팅 백엔드의 Spring Boot 런타임으로 사용했다." },
     { name: "Spring Boot 3.4.4", category: "backend", reason: "예약·웨이팅 API와 운영 모니터링을 구성하기 위해 사용했다." },
     { name: "Spring Security + JWT", category: "backend", reason: "고객과 운영자 인증을 처리하기 위해 사용했다." },
     { name: "Spring Data JPA", category: "data", reason: "예약, 매장, 계정, 웨이팅 이력을 관계형 모델로 관리하기 위해 사용했다." },
@@ -755,6 +767,7 @@ export const theLastSupperProject: PortfolioProject = {
       alternatives: ["DB pessimistic lock", "분산락", "단일 DB sequence"],
       tradeOff: "Redis 키 스키마와 복구 흐름을 관리해야 하지만 요청 초입의 동시성 처리가 단순해진다.",
       verification: "웨이팅 등록 동시성 테스트와 JMeter 부하 테스트로 확인한다.",
+      ownership: "direct",
     },
     {
       title: "JMeter + Prometheus + Grafana 부하 검증",
@@ -763,6 +776,7 @@ export const theLastSupperProject: PortfolioProject = {
       alternatives: ["수동 API 반복 호출", "k6", "테스트 없음"],
       tradeOff: "테스트 자산 관리 비용은 늘지만 성능 개선 전후를 증거로 남길 수 있다.",
       verification: "Thread Group, accountIds.csv, JMeter log, 메트릭 대시보드로 결과를 확인한다.",
+      ownership: "direct",
     },
     {
       title: "Spring Batch로 예약·웨이팅 생명주기 처리",
@@ -771,6 +785,8 @@ export const theLastSupperProject: PortfolioProject = {
       alternatives: ["수동 관리자 API", "단순 scheduler only"],
       tradeOff: "Batch Job 관리 비용은 생기지만 상태 전이를 반복 가능하게 만들 수 있다.",
       verification: "BatchMonitoringController와 job 실행 결과로 확인한다.",
+      ownership: "team",
+      ownershipNote: "프로젝트 구조에 포함된 운영 생명주기 결정이며, 포트폴리오에서는 웨이팅 운영 흐름과 연결해 설명한다.",
     },
   ],
   problems: [
@@ -780,7 +796,8 @@ export const theLastSupperProject: PortfolioProject = {
       approach: "2,000개 계정 데이터와 JMeter 시나리오로 요청 흐름을 재현했다.",
       cause: "API 응답 경로가 DB 저장과 강하게 결합되어 있었다.",
       solution: "API 응답 경로에서는 Redis 큐에 먼저 적재하고, 비동기 프로세서가 DB 저장을 맡도록 구조를 바꿨다.",
-      result: "기존 포트폴리오 데이터 기준 Spring 비동기 처리 후 응답 속도 약 97% 개선을 기록했다.",
+      result:
+        "기존 포트폴리오 기록의 웨이팅 등록 부하 테스트 기준으로 Spring 비동기 처리 후 응답 시간이 크게 줄어든 것을 확인했다.",
     },
     {
       title: "웨이팅 번호 중복 동시성 문제",
@@ -794,8 +811,13 @@ export const theLastSupperProject: PortfolioProject = {
   metrics: [
     { label: "JMeter 계정 데이터", value: "2,000개", note: "웨이팅 등록 부하 테스트용 계정 CSV 기준." },
     { label: "JMeter 로그", value: "28,661줄", note: "기존 포트폴리오 데이터의 실행 로그 규모." },
-    { label: "응답 속도", after: "약 97% 개선", note: "Spring 비동기 처리 도입 후 기존 포트폴리오에 기록된 개선 수치." },
-    { label: "테스트 검증", value: "100%", note: "기존 포트폴리오 데이터 기준 Gradle 테스트 검증 완료 항목." },
+    {
+      label: "응답 속도",
+      before: "동기 DB 저장 경로",
+      after: "Redis 큐 적재 후 비동기 DB 저장 경로",
+      note: "기존 포트폴리오 기록의 max response time 개선 사례이며 전체 성능 보증 수치로 일반화하지 않는다.",
+    },
+    { label: "테스트 검증", value: "당시 Gradle test suite 통과", note: "기존 포트폴리오 기록 기준이며 전체 품질 보증률을 뜻하지 않는다." },
   ],
   visuals: [],
   retrospective: {

@@ -1,4 +1,5 @@
 export type TechCategory = "backend" | "ai" | "data" | "infra" | "test" | "docs";
+export type DecisionOwnership = "direct" | "team" | "analyzed";
 
 export interface TechItem {
   name: string;
@@ -78,6 +79,8 @@ export interface PortfolioProject {
     alternatives: string[];
     tradeOff: string;
     verification: string;
+    ownership: DecisionOwnership;
+    ownershipNote?: string;
   }[];
   problems: ProjectProblem[];
   ai?: AiPortfolioDetail;
