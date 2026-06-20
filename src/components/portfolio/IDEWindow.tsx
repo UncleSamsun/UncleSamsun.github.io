@@ -6,6 +6,8 @@ import { ActivityBar } from "./ActivityBar";
 import { EditorPane } from "./EditorPane";
 import { EditorTabs } from "./EditorTabs";
 import { Explorer } from "./Explorer";
+import { Modal } from "./Modal";
+import { ProjectDetailBody } from "./ProjectDetail";
 import { TerminalPanel } from "./TerminalPanel";
 
 type Profile = typeof import("@/data/profile").profile;
@@ -23,7 +25,12 @@ function getActiveFile(activeFileId: string): PortfolioFile {
 
 export function IDEWindow({ profile, projects }: IDEWindowProps) {
   const [activeFileId, setActiveFileId] = useState(defaultFileId);
+  const [detailSlug, setDetailSlug] = useState<string | null>(null);
   const activeFile = useMemo(() => getActiveFile(activeFileId), [activeFileId]);
+  const detailProject = useMemo(
+    () => (detailSlug ? projects.find((project) => project.slug === detailSlug) ?? null : null),
+    [detailSlug, projects],
+  );
 
   return (
     <div className="portfolio-shell">
@@ -47,8 +54,13 @@ export function IDEWindow({ profile, projects }: IDEWindowProps) {
           <Explorer files={files} activeFileId={activeFile.id} onSelectFile={setActiveFileId} />
           <div className="editor-area">
             <EditorTabs files={files} activeFileId={activeFile.id} onSelectFile={setActiveFileId} />
-            <EditorPane activeFile={activeFile} profile={profile} projects={projects} onOpenFile={setActiveFileId} />
-            <TerminalPanel files={files} onOpenFile={setActiveFileId} />
+            <EditorPane
+              activeFile={activeFile}
+              profile={profile}
+              projects={projects}
+              onOpenFile={setActiveFileId}
+              onOpenDetail={setDetailSlug}
+            />
           </div>
         </div>
 
@@ -59,7 +71,21 @@ export function IDEWindow({ profile, projects }: IDEWindowProps) {
           <span>{activeFile.id}</span>
           <span>UTF-8</span>
         </div>
+
+        <TerminalPanel files={files} onOpenFile={setActiveFileId} />
       </section>
+
+      <Modal
+        open={detailProject !== null}
+        title={detailProject ? `${detailProject.name} — detail` : "detail"}
+        onClose={() => setDetailSlug(null)}
+      >
+        {detailProject ? (
+          <div className="detail-shell detail-shell--modal">
+            <ProjectDetailBody project={detailProject} />
+          </div>
+        ) : null}
+      </Modal>
     </div>
   );
 }

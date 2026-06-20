@@ -4,6 +4,7 @@ import type { PortfolioProject } from "@/data/types";
 import { getVisibleTechStack } from "@/lib/tech";
 import { CodeLikeSection } from "./CodeLikeSection";
 import { ProjectCard } from "./ProjectCard";
+import { RichText } from "./RichText";
 
 type Profile = typeof import("@/data/profile").profile;
 
@@ -12,6 +13,7 @@ interface EditorPaneProps {
   profile: Profile;
   projects: PortfolioProject[];
   onOpenFile: (fileId: string) => void;
+  onOpenDetail: (slug: string) => void;
 }
 
 function findProject(activeFile: PortfolioFile, projects: PortfolioProject[]) {
@@ -22,19 +24,23 @@ function renderList(items: string[]) {
   return (
     <ul className="portfolio-list">
       {items.map((item) => (
-        <li key={item}>{item}</li>
+        <li key={item}>
+          <RichText text={item} />
+        </li>
       ))}
     </ul>
   );
 }
 
-function AboutView({ profile, projects, onOpenFile }: Omit<EditorPaneProps, "activeFile">) {
+function AboutView({ profile, projects, onOpenFile, onOpenDetail }: Omit<EditorPaneProps, "activeFile">) {
   return (
     <article className="editor-document portfolio-reading">
       <header className="editor-hero">
         <p className="editor-eyebrow">// README.md</p>
         <h1>{profile.headline}</h1>
-        <p>{profile.intro}</p>
+        <p>
+          <RichText text={profile.intro} />
+        </p>
       </header>
 
       <div className="editor-grid">
@@ -65,14 +71,20 @@ function AboutView({ profile, projects, onOpenFile }: Omit<EditorPaneProps, "act
       </section>
       <div className="project-card-grid">
         {projects.map((project) => (
-          <ProjectCard key={project.slug} project={project} onOpen={onOpenFile} />
+          <ProjectCard key={project.slug} project={project} onOpen={onOpenFile} onOpenDetail={onOpenDetail} />
         ))}
       </div>
     </article>
   );
 }
 
-function ProjectCompactView({ project }: { project: PortfolioProject }) {
+function ProjectCompactView({
+  project,
+  onOpenDetail,
+}: {
+  project: PortfolioProject;
+  onOpenDetail: (slug: string) => void;
+}) {
   const visibleTech = getVisibleTechStack(project.tech);
 
   return (
@@ -81,9 +93,19 @@ function ProjectCompactView({ project }: { project: PortfolioProject }) {
         <div className="compact-project-title">
           <p className="editor-eyebrow">// Projects/{project.slug}.md</p>
           <h2>{project.name}</h2>
-          <p>{project.summary}</p>
+          <p>
+            <RichText text={project.summary} />
+          </p>
         </div>
-        <a className="portfolio-link-button" href={`/projects/${project.slug}/`}>
+        <a
+          className="portfolio-link-button portfolio-link-button--primary"
+          href={`/projects/${project.slug}/`}
+          onClick={(event) => {
+            if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) return;
+            event.preventDefault();
+            onOpenDetail(project.slug);
+          }}
+        >
           detail route
         </a>
       </header>
@@ -98,22 +120,30 @@ function ProjectCompactView({ project }: { project: PortfolioProject }) {
           </div>
           <div className="code-map-row">
             <span className="code-map-key">purpose</span>
-            <span className="code-map-value">{project.common.purpose}</span>
+            <span className="code-map-value">
+              <RichText text={project.common.purpose} />
+            </span>
           </div>
           <div className="code-map-row">
             <span className="code-map-key">goal</span>
-            <span className="code-map-value">{project.common.goal}</span>
+            <span className="code-map-value">
+              <RichText text={project.common.goal} />
+            </span>
           </div>
           <div className="code-map-row">
             <span className="code-map-key">issue</span>
-            <span className="code-map-value">{project.common.developmentIssue}</span>
+            <span className="code-map-value">
+              <RichText text={project.common.developmentIssue} />
+            </span>
           </div>
         </div>
         {renderList(project.common.results)}
       </CodeLikeSection>
 
       <CodeLikeSection heading="// ROLE AND CONTRIBUTION">
-        <p>{project.role.contribution}</p>
+        <p>
+          <RichText text={project.role.contribution} />
+        </p>
         {renderList(project.role.implementedFeatures.slice(0, 6))}
       </CodeLikeSection>
 
@@ -126,7 +156,9 @@ function ProjectCompactView({ project }: { project: PortfolioProject }) {
         {project.decisions.slice(0, 3).map((decision) => (
           <div className="decision-card" key={decision.title}>
             <h3>{decision.title}</h3>
-            <p>{decision.decision}</p>
+            <p>
+              <RichText text={decision.decision} />
+            </p>
             <p className="ownership-note">
               ownership: {decision.ownership}
               {decision.ownershipNote ? ` / ${decision.ownershipNote}` : ""}
@@ -139,8 +171,12 @@ function ProjectCompactView({ project }: { project: PortfolioProject }) {
         {project.problems.map((problem) => (
           <div className="problem-card" key={problem.title}>
             <h3>{problem.title}</h3>
-            <p>{problem.problem}</p>
-            <p>{problem.solution}</p>
+            <p>
+              <RichText text={problem.problem} />
+            </p>
+            <p>
+              <RichText text={problem.solution} />
+            </p>
           </div>
         ))}
       </CodeLikeSection>
@@ -154,11 +190,15 @@ function ProjectCompactView({ project }: { project: PortfolioProject }) {
             </div>
             <div className="code-map-row">
               <span className="code-map-key">input</span>
-              <span className="code-map-value">{project.ai.inputData}</span>
+              <span className="code-map-value">
+                <RichText text={project.ai.inputData} />
+              </span>
             </div>
             <div className="code-map-row">
               <span className="code-map-key">output</span>
-              <span className="code-map-value">{project.ai.outputData}</span>
+              <span className="code-map-value">
+                <RichText text={project.ai.outputData} />
+              </span>
             </div>
           </div>
           {renderList(project.ai.resultDrivenImprovements)}
@@ -171,14 +211,18 @@ function ProjectCompactView({ project }: { project: PortfolioProject }) {
             <div className="metric-card" key={metric.label}>
               <h3>{metric.label}</h3>
               <p className="metric-value">{metric.value ?? `${metric.before} -> ${metric.after}`}</p>
-              <p>{metric.note}</p>
+              <p>
+                <RichText text={metric.note} />
+              </p>
             </div>
           ))}
         </div>
       </CodeLikeSection>
 
       <CodeLikeSection heading="// RETROSPECTIVE">
-        <p>{project.retrospective.collaboration}</p>
+        <p>
+          <RichText text={project.retrospective.collaboration} />
+        </p>
         {renderList(project.retrospective.learned)}
       </CodeLikeSection>
     </article>
@@ -203,7 +247,9 @@ function ContactView({ profile }: { profile: Profile }) {
       <header className="editor-hero">
         <p className="editor-eyebrow">// Contact.txt</p>
         <h1>연락처</h1>
-        <p>백엔드와 AI 파이프라인 경계를 명확히 나누는 프로젝트 이야기를 이어갈 수 있습니다.</p>
+        <p>
+          <RichText text="백엔드와 **AI 파이프라인 경계**를 명확히 나누는 프로젝트 이야기를 이어갈 수 있습니다." />
+        </p>
       </header>
       <CodeBlock filename="contact.json" language="json" code={code} />
       <div className="contact-links">
@@ -218,15 +264,17 @@ function ContactView({ profile }: { profile: Profile }) {
   );
 }
 
-export function EditorPane({ activeFile, profile, projects, onOpenFile }: EditorPaneProps) {
+export function EditorPane({ activeFile, profile, projects, onOpenFile, onOpenDetail }: EditorPaneProps) {
   const project = findProject(activeFile, projects);
 
   return (
     <section className="editor-pane" aria-label={`${activeFile.label} editor`}>
       {activeFile.view === "about" ? (
-        <AboutView profile={profile} projects={projects} onOpenFile={onOpenFile} />
+        <AboutView profile={profile} projects={projects} onOpenFile={onOpenFile} onOpenDetail={onOpenDetail} />
       ) : null}
-      {activeFile.view === "project" && project ? <ProjectCompactView project={project} /> : null}
+      {activeFile.view === "project" && project ? (
+        <ProjectCompactView project={project} onOpenDetail={onOpenDetail} />
+      ) : null}
       {activeFile.view === "contact" ? <ContactView profile={profile} /> : null}
       {activeFile.view === "project" && !project ? (
         <article className="editor-document portfolio-reading">
