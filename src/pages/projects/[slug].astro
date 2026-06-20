@@ -1,0 +1,25 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { ProjectDetail } from "@/components/portfolio/ProjectDetail";
+import { getProjectBySlug, getProjectSlugs } from "@/lib/portfolio";
+
+export function getStaticPaths() {
+  return getProjectSlugs().map((slug) => ({ params: { slug } }));
+}
+
+const project = getProjectBySlug(Astro.params.slug ?? "");
+
+if (!project) {
+  return Astro.redirect("/");
+}
+---
+
+<BaseLayout
+  title={`${project.name} | 김민준 Portfolio`}
+  description={project.summary}
+  canonical={`https://minjoon.me/projects/${project.slug}/`}
+>
+  <main id="main">
+    <ProjectDetail project={project} />
+  </main>
+</BaseLayout>

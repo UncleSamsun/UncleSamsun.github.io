@@ -1,0 +1,240 @@
+import { Badge, CodeBlock } from "@/design-system/portello/components";
+import type { PortfolioFile } from "@/data/navigation";
+import type { PortfolioProject } from "@/data/types";
+import { getVisibleTechStack } from "@/lib/tech";
+import { CodeLikeSection } from "./CodeLikeSection";
+import { ProjectCard } from "./ProjectCard";
+
+type Profile = typeof import("@/data/profile").profile;
+
+interface EditorPaneProps {
+  activeFile: PortfolioFile;
+  profile: Profile;
+  projects: PortfolioProject[];
+  onOpenFile: (fileId: string) => void;
+}
+
+function findProject(activeFile: PortfolioFile, projects: PortfolioProject[]) {
+  return activeFile.slug ? projects.find((project) => project.slug === activeFile.slug) : undefined;
+}
+
+function renderList(items: string[]) {
+  return (
+    <ul className="portfolio-list">
+      {items.map((item) => (
+        <li key={item}>{item}</li>
+      ))}
+    </ul>
+  );
+}
+
+function AboutView({ profile, projects, onOpenFile }: Omit<EditorPaneProps, "activeFile">) {
+  return (
+    <article className="editor-document portfolio-reading">
+      <header className="editor-hero">
+        <p className="editor-eyebrow">// README.md</p>
+        <h1>{profile.headline}</h1>
+        <p>{profile.intro}</p>
+      </header>
+
+      <div className="editor-grid">
+        <section className="portfolio-card">
+          <h2>backend_ai_focus.ts</h2>
+          {renderList(profile.about)}
+        </section>
+        <section className="portfolio-card">
+          <h2>core_stack.json</h2>
+          <div className="profile-stack-grid">
+            {profile.skillGroups.map((group) => (
+              <div key={group.title}>
+                <p className="section-kicker">{group.title}</p>
+                <div className="badge-row">
+                  {group.items.map((item) => (
+                    <Badge key={item}>{item}</Badge>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      </div>
+
+      <section className="editor-hero" aria-labelledby="projects-title">
+        <p className="editor-eyebrow">// projects</p>
+        <h1 id="projects-title">프로젝트 파일</h1>
+      </section>
+      <div className="project-card-grid">
+        {projects.map((project) => (
+          <ProjectCard key={project.slug} project={project} onOpen={onOpenFile} />
+        ))}
+      </div>
+    </article>
+  );
+}
+
+function ProjectCompactView({ project }: { project: PortfolioProject }) {
+  const visibleTech = getVisibleTechStack(project.tech);
+
+  return (
+    <article className="editor-document compact-project portfolio-reading">
+      <header className="compact-project-header">
+        <div className="compact-project-title">
+          <p className="editor-eyebrow">// Projects/{project.slug}.md</p>
+          <h2>{project.name}</h2>
+          <p>{project.summary}</p>
+        </div>
+        <a className="portfolio-link-button" href={`/projects/${project.slug}/`}>
+          detail route
+        </a>
+      </header>
+
+      <CodeLikeSection heading="// PROJECT RESULT">
+        <div className="code-map">
+          <div className="code-map-row">
+            <span className="code-map-key">period_team</span>
+            <span className="code-map-value">
+              {project.period} / {project.team}
+            </span>
+          </div>
+          <div className="code-map-row">
+            <span className="code-map-key">purpose</span>
+            <span className="code-map-value">{project.common.purpose}</span>
+          </div>
+          <div className="code-map-row">
+            <span className="code-map-key">goal</span>
+            <span className="code-map-value">{project.common.goal}</span>
+          </div>
+          <div className="code-map-row">
+            <span className="code-map-key">issue</span>
+            <span className="code-map-value">{project.common.developmentIssue}</span>
+          </div>
+        </div>
+        {renderList(project.common.results)}
+      </CodeLikeSection>
+
+      <CodeLikeSection heading="// ROLE AND CONTRIBUTION">
+        <p>{project.role.contribution}</p>
+        {renderList(project.role.implementedFeatures.slice(0, 6))}
+      </CodeLikeSection>
+
+      <CodeLikeSection heading="// TECHNICAL DECISIONS">
+        <div className="badge-row">
+          {visibleTech.map((item) => (
+            <Badge key={item.name}>{item.name}</Badge>
+          ))}
+        </div>
+        {project.decisions.slice(0, 3).map((decision) => (
+          <div className="decision-card" key={decision.title}>
+            <h3>{decision.title}</h3>
+            <p>{decision.decision}</p>
+            <p className="ownership-note">
+              ownership: {decision.ownership}
+              {decision.ownershipNote ? ` / ${decision.ownershipNote}` : ""}
+            </p>
+          </div>
+        ))}
+      </CodeLikeSection>
+
+      <CodeLikeSection heading="// PROBLEM SOLVING">
+        {project.problems.map((problem) => (
+          <div className="problem-card" key={problem.title}>
+            <h3>{problem.title}</h3>
+            <p>{problem.problem}</p>
+            <p>{problem.solution}</p>
+          </div>
+        ))}
+      </CodeLikeSection>
+
+      {project.ai ? (
+        <CodeLikeSection heading="// AI PIPELINE">
+          <div className="code-map">
+            <div className="code-map-row">
+              <span className="code-map-key">model</span>
+              <span className="code-map-value">{project.ai.model}</span>
+            </div>
+            <div className="code-map-row">
+              <span className="code-map-key">input</span>
+              <span className="code-map-value">{project.ai.inputData}</span>
+            </div>
+            <div className="code-map-row">
+              <span className="code-map-key">output</span>
+              <span className="code-map-value">{project.ai.outputData}</span>
+            </div>
+          </div>
+          {renderList(project.ai.resultDrivenImprovements)}
+        </CodeLikeSection>
+      ) : null}
+
+      <CodeLikeSection heading="// EVIDENCE">
+        <div className="metric-grid">
+          {project.metrics.map((metric) => (
+            <div className="metric-card" key={metric.label}>
+              <h3>{metric.label}</h3>
+              <p className="metric-value">{metric.value ?? `${metric.before} -> ${metric.after}`}</p>
+              <p>{metric.note}</p>
+            </div>
+          ))}
+        </div>
+      </CodeLikeSection>
+
+      <CodeLikeSection heading="// RETROSPECTIVE">
+        <p>{project.retrospective.collaboration}</p>
+        {renderList(project.retrospective.learned)}
+      </CodeLikeSection>
+    </article>
+  );
+}
+
+function ContactView({ profile }: { profile: Profile }) {
+  const code = JSON.stringify(
+    {
+      name: profile.name,
+      role: profile.role,
+      email: profile.email,
+      github: profile.github,
+      focus: ["backend", "AI pipeline", "data", "infra", "test", "docs"],
+    },
+    null,
+    2,
+  );
+
+  return (
+    <article className="editor-document portfolio-reading">
+      <header className="editor-hero">
+        <p className="editor-eyebrow">// Contact.txt</p>
+        <h1>연락처</h1>
+        <p>백엔드와 AI 파이프라인 경계를 명확히 나누는 프로젝트 이야기를 이어갈 수 있습니다.</p>
+      </header>
+      <CodeBlock filename="contact.json" language="json" code={code} />
+      <div className="contact-links">
+        <a className="portfolio-link-button" href={`mailto:${profile.email}`}>
+          Email
+        </a>
+        <a className="portfolio-link-button" href={profile.github} target="_blank" rel="noreferrer">
+          GitHub
+        </a>
+      </div>
+    </article>
+  );
+}
+
+export function EditorPane({ activeFile, profile, projects, onOpenFile }: EditorPaneProps) {
+  const project = findProject(activeFile, projects);
+
+  return (
+    <section className="editor-pane" aria-label={`${activeFile.label} editor`}>
+      {activeFile.view === "about" ? (
+        <AboutView profile={profile} projects={projects} onOpenFile={onOpenFile} />
+      ) : null}
+      {activeFile.view === "project" && project ? <ProjectCompactView project={project} /> : null}
+      {activeFile.view === "contact" ? <ContactView profile={profile} /> : null}
+      {activeFile.view === "project" && !project ? (
+        <article className="editor-document portfolio-reading">
+          <CodeLikeSection heading="// PROJECT NOT FOUND">
+            <p>프로젝트 데이터가 아직 연결되지 않았습니다.</p>
+          </CodeLikeSection>
+        </article>
+      ) : null}
+    </section>
+  );
+}
