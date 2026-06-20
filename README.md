@@ -1,67 +1,60 @@
 # 김민준 Backend Developer Portfolio
 
-백엔드 개발자 **김민준**의 포트폴리오 사이트입니다.  
-기존 디자인을 전면 교체하고, 프로젝트 카드는 메인에서 간결하게 보여주며 각 프로젝트 상세 페이지에서 개요, 역할, 기술, 기능, 문제 해결 경험, 구조, 성과를 정리합니다.
+백엔드 개발자 **김민준**의 포트폴리오 사이트입니다.
+
+이 사이트는 **Astro + React**로 빌드하며, GitHub Pages는 GitHub Actions에서 생성한 `dist/` 산출물을 서비스합니다.
 
 ## 접속 주소
 
 <https://minjoon.me>
 
-## 페이지 구조
+## 구조
 
-- `/`: 메인 포트폴리오 페이지
-- `/projects/cafe-gamsugwang/`: 카페감수광 상세
-- `/projects/jsonstore/`: JsonStore 상세
-- `/projects/readandshare/`: ReadAndShare 상세
-- `/projects/the-last-supper/`: The Last Supper 상세
+- `src/pages`: Astro 라우트
+- `src/components/portfolio`: 포트폴리오 UI 컴포넌트
+- `src/design-system/portello`: vendored Portello design system
+- `src/data`: 프로필, 내비게이션, 프로젝트 포트폴리오 콘텐츠
+- `public/`: 정적 자산 원본. Astro 빌드 시 `dist/`로 복사됩니다.
+- `dist/`: `npm run build`가 생성하는 배포 산출물
 
-## 구현 방향
+## 현재 라우트
 
-- 흰색, 검정, 회색 중심의 미니멀 모노톤 UI
-- 정적 GitHub Pages에서 직접 접근 가능한 실제 디렉토리 라우팅
-- 프로젝트 정보는 `assets/projects.js`에 분리
-- 기존 인적 사항, 연락처, 교육, 경력 정보 유지
-- 프로젝트 설명은 로컬 프로젝트 README, 코드, 설정 파일, 원격 저장소 정보를 근거로 작성
-- 개발 기간이나 팀 규모처럼 README에서 확인하지 못한 항목은 TODO placeholder로 표기
+- `/`
+- `/projects/hola-climbing/`
+- `/projects/cafe-gamsugwang/`
+- `/projects/jsonstore/`
+- `/projects/readandshare/`
+- `/projects/the-last-supper/`
 
-## 참고한 로컬 프로젝트
-
-- `/Users/minjoun/Workspace/projects/cafe-gamsugwang`
-- `/Users/minjoun/Workspace/projects/JsonStore`
-- `/Users/minjoun/Workspace/projects/ReadAndShare`
-- `/Users/minjoun/Workspace/projects/TheLastSupper`
-
-## 주요 파일
-
-```text
-.
-├── index.html
-├── styles.css
-├── script.js
-├── assets
-│   ├── favicon.svg
-│   ├── og-image.svg
-│   └── projects.js
-├── projects
-│   ├── cafe-gamsugwang
-│   │   └── index.html
-│   ├── jsonstore
-│   │   └── index.html
-│   ├── readandshare
-│   │   └── index.html
-│   └── the-last-supper
-│       └── index.html
-├── sitemap.xml
-├── robots.txt
-└── README.md
-```
-
-## 로컬 실행
-
-별도 패키지 설치 없이 실행할 수 있습니다.
+## 로컬 개발
 
 ```bash
-python3 -m http.server 4173
+npm install
+npm run dev
 ```
 
-브라우저에서 `http://127.0.0.1:4173`을 열면 됩니다.
+기본 개발 서버는 `http://127.0.0.1:4321`에서 실행됩니다.
+
+## 확인 및 빌드
+
+```bash
+npm run check
+npm run build
+npm run test:e2e
+```
+
+- `npm run check`: `astro check`와 Vitest를 실행합니다.
+- `npm run build`: Astro 정적 사이트를 `dist/`에 빌드합니다.
+- `npm run test:e2e`: Playwright smoke 테스트를 실행합니다.
+
+## 미리보기
+
+```bash
+npm run preview
+```
+
+## GitHub Pages 배포
+
+`.github/workflows/deploy.yml`은 `main` 브랜치 push 또는 수동 실행 시 Node 22로 의존성을 설치하고, `npm run check`, `npm run build`를 통과한 뒤 `dist/`를 GitHub Pages artifact로 업로드합니다.
+
+루트의 레거시 정적 HTML/CSS/JS 파일은 retired 상태입니다. `CNAME`, `robots.txt`, `sitemap.xml`, favicon, Open Graph image 같은 정적 배포 메타데이터는 `public/` 아래 원본을 유지하고 Astro가 `dist/`로 복사합니다.

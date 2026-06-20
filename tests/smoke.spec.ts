@@ -9,8 +9,13 @@ async function expectNoHorizontalOverflow(page: import("@playwright/test").Page)
   expect(widths.scrollWidth).toBeLessThanOrEqual(widths.viewportWidth);
 }
 
+async function waitForPortfolioHydration(page: import("@playwright/test").Page) {
+  await expect(page.locator("astro-island[ssr]")).toHaveCount(0);
+}
+
 test("home renders IDE shell and Hola project", async ({ page }) => {
   await page.goto("/");
+  await waitForPortfolioHydration(page);
 
   await expect(page.getByText("PROJECTS", { exact: true })).toBeVisible();
   await expect(page.getByLabel("Portfolio file explorer").getByText("hola-climbing.md", { exact: true })).toBeVisible();
@@ -48,6 +53,7 @@ test("not-found page renders local 404 content", async ({ page }) => {
 
 test("terminal invalid open command explains the missing file", async ({ page }) => {
   await page.goto("/");
+  await waitForPortfolioHydration(page);
 
   const terminal = page.getByLabel("Terminal command");
   await terminal.fill("open missing.md");
@@ -59,6 +65,7 @@ test("terminal invalid open command explains the missing file", async ({ page })
 
 test("terminal valid open command switches to the Hola project file", async ({ page }) => {
   await page.goto("/");
+  await waitForPortfolioHydration(page);
 
   const terminal = page.getByLabel("Terminal command");
   await terminal.fill("open Projects/hola-climbing.md");
