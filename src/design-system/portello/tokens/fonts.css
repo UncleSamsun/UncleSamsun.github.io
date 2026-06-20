@@ -1,0 +1,14 @@
+/* ── Fonts ───────────────────────────────────────────────────────────────
+   Portello ships one webfont: JetBrains Mono — the IDE/terminal signature.
+   UI chrome (status bar, tiny labels) uses the native system-ui stack, the
+   same way a real editor renders its chrome.
+
+   NOTE → SUBSTITUTION: JetBrains Mono is loaded from the Google Fonts CDN
+   rather than self-hosted .woff2 binaries. Swap in self-hosted @font-face
+   rules if you need offline / locked-down delivery.
+
+   Nanum Gothic Coding is paired in as the Hangul fallback — JetBrains Mono has
+   no Korean glyphs, so Hangul falls through to this monospace Korean coding
+   face (keeps the fixed-width IDE feel for 한글 content). */
+
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;0,800;1,400;1,500&family=Nanum+Gothic+Coding:wght@400;700&display=swap');

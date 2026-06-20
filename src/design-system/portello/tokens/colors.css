@@ -1,0 +1,125 @@
+/* ════════════════════════════════════════════════════════════════════════
+   COLORS — Portello IDE/terminal palette
+   Modeled on a modern dark editor (VS Code Dark+ lineage), tuned for a
+   backend-developer portfolio. Surfaces are near-black neutrals; meaning is
+   carried by syntax, terminal-ANSI, and tech-badge accents.
+   ════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* ── Base neutral ramp (near-black → light) ───────────────────────────── */
+  --gray-1000: #121212;   /* deepest — panel/terminal void            */
+  --gray-950:  #181818;   /* terminal background                      */
+  --gray-900:  #1e1e1e;   /* editor canvas                            */
+  --gray-850:  #232324;   /* sidebar / explorer                       */
+  --gray-800:  #252526;   /* sidebar alt                              */
+  --gray-750:  #2d2d30;   /* elevated widget / card                   */
+  --gray-700:  #323233;   /* title bar / hover row                    */
+  --gray-650:  #37373d;   /* active selection row                     */
+  --gray-600:  #3c3c3c;   /* borders / dividers                       */
+  --gray-500:  #5a5a5a;   /* disabled stroke                          */
+  --gray-400:  #6a6a6a;   /* line numbers / comments                  */
+  --gray-300:  #858585;   /* muted UI text                            */
+  --gray-200:  #9d9d9d;   /* secondary UI text                        */
+  --gray-100:  #cccccc;   /* terminal foreground                      */
+  --gray-50:   #d4d4d4;   /* editor default foreground                */
+  --gray-0:    #f3f3f3;   /* brightest text                           */
+
+  /* ── Surfaces (semantic) ──────────────────────────────────────────────── */
+  --surface-editor:      var(--gray-900);
+  --surface-sidebar:     var(--gray-850);
+  --surface-activitybar: #2b2b2c;   /* the slim icon rail            */
+  --surface-panel:       var(--gray-950);   /* terminal / output      */
+  --surface-titlebar:    var(--gray-700);
+  --surface-card:        var(--gray-750);
+  --surface-hover:       #2a2a2b;
+  --surface-active:      var(--gray-650);
+  --surface-input:       #2b2b2c;
+  --surface-overlay:     rgba(0,0,0,0.55);
+
+  /* ── Borders ──────────────────────────────────────────────────────────── */
+  --border-default:  var(--gray-600);
+  --border-subtle:   #2b2b2b;
+  --border-strong:   #4a4a4a;
+  --border-focus:    var(--accent-focus);
+
+  /* ── Text (semantic) ──────────────────────────────────────────────────── */
+  --text-primary:    var(--gray-50);
+  --text-secondary:  var(--gray-200);
+  --text-muted:      var(--gray-300);
+  --text-faint:      var(--gray-400);
+  --text-inverse:    #1e1e1e;
+  --text-bright:     var(--gray-0);
+
+  /* ── Brand accents ────────────────────────────────────────────────────── */
+  /* Primary action — VS Code button lineage */
+  --accent:          #0e639c;
+  --accent-hover:    #1177bb;
+  --accent-active:   #0d5a8f;
+  --accent-focus:    #007acc;
+  --accent-on:       #ffffff;        /* text on accent fills */
+  --link:            #3794ff;
+  --link-hover:      #4ba0ff;
+
+  /* Signature terminal green — the portfolio's spark (prompts, success) */
+  --terminal-green:  #23d18b;
+  --terminal-green-bright: #4ee59a;
+
+  /* ── Syntax (Dark+ token colors) ──────────────────────────────────────── */
+  --syntax-keyword:   #569cd6;   /* keywords, storage          */
+  --syntax-string:    #ce9178;   /* string literals            */
+  --syntax-number:    #b5cea8;   /* numbers, constants         */
+  --syntax-function:  #dcdcaa;   /* function names             */
+  --syntax-property:  #9cdcfe;   /* object keys, params        */
+  --syntax-type:      #4ec9b0;   /* types, classes             */
+  --syntax-comment:   #6a9955;   /* comments                   */
+  --syntax-constant:  #4fc1ff;   /* language constants         */
+  --syntax-operator:  #d4d4d4;   /* punctuation, operators     */
+  --syntax-regexp:    #d16969;   /* regex, escapes             */
+  --syntax-tag:       #569cd6;   /* markup tags                */
+
+  /* ── Terminal ANSI ────────────────────────────────────────────────────── */
+  --ansi-black:    #1e1e1e;
+  --ansi-red:      #f14c4c;
+  --ansi-green:    #23d18b;
+  --ansi-yellow:   #e5c07b;
+  --ansi-blue:     #3b8eea;
+  --ansi-magenta:  #d670d6;
+  --ansi-cyan:     #29b8db;
+  --ansi-white:    #cccccc;
+  --ansi-bright-black: #5a5a5a;
+
+  /* ── Semantic status ──────────────────────────────────────────────────── */
+  --success:  #23d18b;
+  --warning:  #e5c07b;
+  --error:    #f14c4c;
+  --info:     #3794ff;
+
+  /* ── Status bar ───────────────────────────────────────────────────────── */
+  --statusbar-bg:    #0d5a8f;     /* the classic blue ribbon */
+  --statusbar-fg:    #ffffff;
+  --statusbar-bg-alt: #232324;    /* neutral variant when no folder open */
+
+  /* ── Tech-badge palette (language / tool brand cues) ──────────────────── */
+  /* Each tech uses a tinted text + matching translucent border/fill */
+  --tech-java:       #e76f00;
+  --tech-spring:     #6db33f;
+  --tech-mysql:      #4479a1;
+  --tech-redis:      #d82c20;
+  --tech-aws:        #ff9900;
+  --tech-nginx:      #009639;
+  --tech-docker:     #2496ed;
+  --tech-kubernetes: #326ce5;
+  --tech-python:     #ffd43b;
+  --tech-go:         #00add8;
+  --tech-node:       #83cd29;
+  --tech-postgres:   #4169e1;
+  --tech-kafka:      #b1b1b1;
+  --tech-graphql:    #e10098;
+  --tech-typescript: #3178c6;
+  --tech-default:    #9d9d9d;
+
+  /* ── Traffic-light (window controls) ──────────────────────────────────── */
+  --traffic-close:    #ff5f57;
+  --traffic-minimize: #febc2e;
+  --traffic-maximize: #28c840;
+}

@@ -1,0 +1,57 @@
+/* ════════════════════════════════════════════════════════════════════════
+   BASE — Portello
+   Light element defaults + IDE-flavored scrollbars and selection. Kept thin
+   so consumers can opt into the look without fighting heavy resets.
+   ════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  background: var(--surface-editor);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  line-height: var(--leading-code);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: rgba(0, 122, 204, 0.40);
+  color: var(--text-bright);
+}
+
+/* IDE-style thin scrollbars (overlay, low-contrast thumb) */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #424242 transparent;
+}
+*::-webkit-scrollbar { width: 10px; height: 10px; }
+*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar-thumb {
+  background: #424242;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  border-radius: 6px;
+}
+*::-webkit-scrollbar-thumb:hover { background: #5a5a5a; background-clip: padding-box; }
+
+a { color: var(--link); text-decoration: none; }
+a:hover { color: var(--link-hover); text-decoration: underline; }
+
+code, pre { font-family: var(--font-code); }
+
+/* Terminal caret blink, available to any consumer */
+@keyframes portello-caret {
+  0%, 49%  { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+/* Popup entrance for floating panels (terminal, command palette) */
+@keyframes portello-pop {
+  from { opacity: 0; transform: translateY(8px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
