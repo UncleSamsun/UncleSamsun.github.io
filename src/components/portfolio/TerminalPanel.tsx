@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState, type KeyboardEvent as ReactKeyboardEvent } from "react";
 import { PortelloIconView } from "@/design-system/portello/components";
 import type { PortfolioFile } from "@/data/navigation";
-import { completeTerminalInput, runTerminalCommand } from "@/lib/terminal";
+import { completeTerminalInput, runTerminalCommand, terminalHelpLines } from "@/lib/terminal";
 
 interface TerminalPanelProps {
   files: PortfolioFile[];
@@ -16,7 +16,7 @@ interface TerminalEntry {
 export function TerminalPanel({ files, onOpenFile }: TerminalPanelProps) {
   const [open, setOpen] = useState(false);
   const [entries, setEntries] = useState<TerminalEntry[]>([
-    { command: "help", lines: ["help, ls, cat Contact.txt, open <file>, whoami, neofetch, clear"] },
+    { command: "help", lines: terminalHelpLines },
   ]);
   const [command, setCommand] = useState("");
   const [history, setHistory] = useState<string[]>([]);

@@ -1,4 +1,4 @@
-export type PortfolioFileView = "about" | "project" | "contact";
+export type PortfolioFileView = "summary" | "profile" | "project" | "contact";
 
 export interface PortfolioFile {
   id: string;
@@ -9,7 +9,8 @@ export interface PortfolioFile {
 }
 
 export const portfolioFiles: PortfolioFile[] = [
-  { id: "README.md", folder: "ABOUT", label: "README.md", view: "about" },
+  { id: "README.md", folder: "ABOUT", label: "README.md", view: "summary" },
+  { id: "Profile.md", folder: "ABOUT", label: "Profile.md", view: "profile" },
   {
     id: "Projects/hola-climbing.md",
     folder: "PROJECTS",

@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { portfolioFiles } from "../src/data/navigation";
+import { profile } from "../src/data/profile";
 import { projects } from "../src/data/projects";
 import { getProjectBySlug, getProjectSlugs, getProjectsByPriority } from "../src/lib/portfolio";
 
@@ -44,6 +45,25 @@ describe("portfolio project data", () => {
       .map((file) => file.slug);
 
     expect(navigationSlugs).toEqual(getProjectSlugs());
+  });
+
+  it("keeps project summary and profile pages in navigation", () => {
+    expect(portfolioFiles.map((file) => file.id)).toEqual(
+      expect.arrayContaining(["README.md", "Profile.md"]),
+    );
+    expect(portfolioFiles.map((file) => file.id)).not.toEqual(
+      expect.arrayContaining(["Education.md", "Career.md"]),
+    );
+  });
+
+  it("keeps timeline profile sections in latest-first order", () => {
+    expect(profile.education.map((item) => item.title)).toEqual([
+      "SSAFY - 삼성청년SW아카데미",
+      "구름톤 딥다이브 - 카카오 연계 백엔드 부트캠프",
+    ]);
+    expect(profile.career.map((item) => item.title)).toEqual([
+      "샬롬엔지니어링(주) - 하드웨어 및 소프트웨어 개발 대리",
+    ]);
   });
 
   it("includes every required attachment checklist section", () => {

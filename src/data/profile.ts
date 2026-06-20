@@ -54,16 +54,16 @@ export const profile = {
   ],
   education: [
     {
-      period: "2024.11 ~ 2025.06",
-      title: "구름톤 딥다이브 - 카카오 연계 백엔드 부트캠프",
-      description:
-        "Java/Spring Boot 기반 서비스 개발, 도메인 모델링, 테스트, 모니터링, 배포 흐름을 학습하고 팀 프로젝트로 적용했습니다.",
-    },
-    {
       period: "2026.01 ~ 현재",
       title: "SSAFY - 삼성청년SW아카데미",
       description:
         "Java 트랙에서 객체지향, 알고리즘, SQL, Spring Boot, CS 기초를 학습하고 있습니다.",
+    },
+    {
+      period: "2024.11 ~ 2025.06",
+      title: "구름톤 딥다이브 - 카카오 연계 백엔드 부트캠프",
+      description:
+        "Java/Spring Boot 기반 서비스 개발, 도메인 모델링, 테스트, 모니터링, 배포 흐름을 학습하고 팀 프로젝트로 적용했습니다.",
     },
   ],
   career: [

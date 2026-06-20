@@ -86,7 +86,7 @@ export function FileTreeItem({
         <PortelloIconView
           icon={open ? "folder-open" : "folder"}
           size={15}
-          style={{ flex: "none", color: "var(--ansi-yellow)" }}
+          style={{ flex: "none", color: "var(--portfolio-accent-cool)" }}
         />
       ) : icon ? (
         <PortelloIconView icon={icon} size={15} style={{ flex: "none", color: glyphColor }} />

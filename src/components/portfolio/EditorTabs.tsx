@@ -36,7 +36,7 @@ export function EditorTabs({ files, activeFileId, onSelectFile }: EditorTabsProp
             size={14}
             style={{
               flex: "none",
-              color: file.view === "project" ? "var(--portfolio-accent-warm)" : "var(--text-muted)",
+              color: file.view === "project" ? "var(--portfolio-accent-cool)" : "var(--text-muted)",
             }}
           />
           <span>{file.label}</span>

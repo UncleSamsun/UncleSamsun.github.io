@@ -5,14 +5,45 @@ describe("terminal commands", () => {
   it("prints help commands", () => {
     expect(runTerminalCommand("help")).toEqual({
       type: "output",
-      lines: ["help, ls, cat Contact.txt, open <file>, whoami, neofetch, clear"],
+      lines: [
+        "Portfolio terminal 사용법",
+        "ls                 파일과 폴더를 봅니다.",
+        "ls projects        프로젝트 파일만 봅니다.",
+        "open <file>        보이는 파일명을 그대로 엽니다. 예: open hola-climbing.md",
+        "open Profile.md    소개, 경력, 교육을 한 번에 봅니다.",
+        "cat Contact.txt    연락처를 출력합니다.",
+        "Tab 자동완성, ↑/↓ 이전 명령어, Ctrl+` 터미널 열기/닫기",
+      ],
     });
   });
 
   it("lists portfolio root files", () => {
     expect(runTerminalCommand("ls")).toEqual({
       type: "output",
-      lines: ["README.md", "Projects/", "Contact.txt"],
+      lines: [
+        "Files",
+        "  README.md",
+        "  Profile.md",
+        "  Contact.txt",
+        "Folders",
+        "  projects/ (ls projects)",
+        "Tip: open Profile.md 또는 open hola-climbing.md",
+      ],
+    });
+  });
+
+  it("lists project files with short open examples", () => {
+    expect(runTerminalCommand("ls projects")).toEqual({
+      type: "output",
+      lines: [
+        "Projects",
+        "  hola-climbing.md",
+        "  cafe-gamsugwang.md",
+        "  jsonstore.md",
+        "  readandshare.md",
+        "  the-last-supper.md",
+        "Tip: Projects/ 없이 open hola-climbing.md 로 열 수 있습니다.",
+      ],
     });
   });
 
@@ -25,17 +56,46 @@ describe("terminal commands", () => {
   });
 
   it("opens Hola project files", () => {
+    expect(runTerminalCommand("open hola-climbing.md")).toEqual({
+      type: "open",
+      fileId: "Projects/hola-climbing.md",
+      lines: ["opened hola-climbing.md"],
+    });
+  });
+
+  it("keeps full project paths working as a compatibility alias", () => {
     expect(runTerminalCommand("open Projects/hola-climbing.md")).toEqual({
       type: "open",
       fileId: "Projects/hola-climbing.md",
-      lines: ["opened Projects/hola-climbing.md"],
+      lines: ["opened hola-climbing.md"],
+    });
+  });
+
+  it("opens the combined profile file", () => {
+    expect(runTerminalCommand("open Profile.md")).toEqual({
+      type: "open",
+      fileId: "Profile.md",
+      lines: ["opened Profile.md"],
+    });
+  });
+
+  it("opens markdown files without typing the extension", () => {
+    expect(runTerminalCommand("open profile")).toEqual({
+      type: "open",
+      fileId: "Profile.md",
+      lines: ["opened Profile.md"],
+    });
+    expect(runTerminalCommand("open hola-climbing")).toEqual({
+      type: "open",
+      fileId: "Projects/hola-climbing.md",
+      lines: ["opened hola-climbing.md"],
     });
   });
 
   it("returns output for invalid open targets", () => {
     expect(runTerminalCommand("open missing.md")).toEqual({
       type: "output",
-      lines: ["open: missing.md: file not found", "try: ls"],
+      lines: ["open: missing.md: file not found", "try: ls 또는 ls projects"],
     });
   });
 
@@ -52,11 +112,14 @@ describe("terminal commands", () => {
 
   it("suggests command and file completions by prefix", () => {
     expect(getTerminalCompletions("op")).toEqual(["open "]);
+    expect(getTerminalCompletions("open ho")).toEqual(["open hola-climbing.md"]);
     expect(getTerminalCompletions("open Projects/ho")).toEqual(["open Projects/hola-climbing.md"]);
+    expect(getTerminalCompletions("open Pr")).toEqual(["open Profile.md"]);
   });
 
   it("completes unambiguous prefixes and keeps ambiguous input unchanged", () => {
+    expect(completeTerminalInput("open ho")).toBe("open hola-climbing.md");
     expect(completeTerminalInput("open Projects/ho")).toBe("open Projects/hola-climbing.md");
-    expect(completeTerminalInput("open Projects/")).toBe("open Projects/");
+    expect(completeTerminalInput("open ")).toBe("open ");
   });
 });
