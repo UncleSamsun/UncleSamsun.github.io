@@ -1,9 +1,12 @@
-import { readFile } from "node:fs/promises";
 import { expect, test } from "@playwright/test";
 
-test("legacy home metadata uses the production canonical URL", async () => {
-  const html = await readFile("index.html", "utf8");
+test("home metadata uses the production canonical URL", async ({ page }) => {
+  await page.goto("/");
 
-  expect(html).toContain('<link rel="canonical" href="https://minjoon.me/" />');
-  expect(html).toContain('<meta property="og:url" content="https://minjoon.me/" />');
+  await expect(page).toHaveTitle("김민준 | Backend & AI Portfolio");
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", "https://minjoon.me/");
+  await expect(page.locator('meta[property="og:image"]')).toHaveAttribute(
+    "content",
+    "https://minjoon.me/assets/og-image.svg",
+  );
 });
