@@ -31,10 +31,12 @@ test("hola detail route renders backend and AI content", async ({ page }) => {
 });
 
 test("frontend-only stacks are not shown as project tech badges", async ({ page }) => {
-  await page.goto("/projects/hola-climbing/");
+  await page.goto("/");
 
-  await expect(page.getByText("Vue 3")).toHaveCount(0);
-  await expect(page.getByText("Capacitor")).toHaveCount(0);
+  const holaTechBadges = page.getByLabel("Hola Climbing 기술 스택");
+  await expect(holaTechBadges.getByText("Spring Boot 4")).toBeVisible();
+  await expect(holaTechBadges.getByText("Vue 3")).toHaveCount(0);
+  await expect(holaTechBadges.getByText("Capacitor")).toHaveCount(0);
 });
 
 test("not-found page renders local 404 content", async ({ page }) => {
