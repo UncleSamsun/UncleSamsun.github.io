@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { runTerminalCommand } from "../src/lib/terminal";
+import { completeTerminalInput, getTerminalCompletions, runTerminalCommand } from "../src/lib/terminal";
 
 describe("terminal commands", () => {
   it("prints help commands", () => {
@@ -48,5 +48,15 @@ describe("terminal commands", () => {
       type: "output",
       lines: ["command not found: deploy", "try: help"],
     });
+  });
+
+  it("suggests command and file completions by prefix", () => {
+    expect(getTerminalCompletions("op")).toEqual(["open "]);
+    expect(getTerminalCompletions("open Projects/ho")).toEqual(["open Projects/hola-climbing.md"]);
+  });
+
+  it("completes unambiguous prefixes and keeps ambiguous input unchanged", () => {
+    expect(completeTerminalInput("open Projects/ho")).toBe("open Projects/hola-climbing.md");
+    expect(completeTerminalInput("open Projects/")).toBe("open Projects/");
   });
 });

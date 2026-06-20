@@ -2,6 +2,7 @@ import { Badge } from "@/design-system/portello/components";
 import type { PortfolioProject, TechCategory } from "@/data/types";
 import { groupTechByCategory } from "@/lib/tech";
 import { ProjectEvidence } from "./ProjectEvidence";
+import { RichText } from "./RichText";
 import type { ReactNode } from "react";
 
 interface ProjectDetailProps {
@@ -21,7 +22,9 @@ function ListBlock({ items }: { items: string[] }) {
   return (
     <ul className="portfolio-list">
       {items.map((item) => (
-        <li key={item}>{item}</li>
+        <li key={item}>
+          <RichText text={item} />
+        </li>
       ))}
     </ul>
   );
@@ -31,7 +34,9 @@ function Field({ label, children }: { label: string; children: ReactNode }) {
   return (
     <div className="code-map-row">
       <span className="code-map-key">{label}</span>
-      <span className="code-map-value">{children}</span>
+      <span className="code-map-value">
+        {typeof children === "string" ? <RichText text={children} /> : children}
+      </span>
     </div>
   );
 }
@@ -50,15 +55,26 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
 }
 
 export function ProjectDetail({ project }: ProjectDetailProps) {
-  const groupedTech = groupTechByCategory(project.tech);
-
   return (
     <article className="project-detail-page portfolio-reading">
       <div className="detail-shell">
+        <ProjectDetailBody project={project} />
+      </div>
+    </article>
+  );
+}
+
+export function ProjectDetailBody({ project }: ProjectDetailProps) {
+  const groupedTech = groupTechByCategory(project.tech);
+
+  return (
+    <>
         <header className="detail-hero">
           <p className="code-comment">// projects/{project.slug}</p>
           <h1>{project.name}</h1>
-          <p>{project.summary}</p>
+          <p>
+            <RichText text={project.summary} />
+          </p>
           <div className="badge-row">
             <Badge variant="status" status={project.status === "active" ? "success" : "neutral"}>
               {project.status}
@@ -110,7 +126,9 @@ export function ProjectDetail({ project }: ProjectDetailProps) {
                     ))}
                   </div>
                 ) : (
-                  <p>이 범주의 대표 기술은 없습니다.</p>
+                  <p>
+                    <RichText text="이 범주의 대표 기술은 없습니다." />
+                  </p>
                 )}
               </div>
             ))}
@@ -179,7 +197,9 @@ export function ProjectDetail({ project }: ProjectDetailProps) {
               <div className="metric-card" key={metric.label}>
                 <h3>{metric.label}</h3>
                 <p className="metric-value">{metric.value ?? `${metric.before} -> ${metric.after}`}</p>
-                <p>{metric.note}</p>
+                <p>
+                  <RichText text={metric.note} />
+                </p>
               </div>
             ))}
           </div>
@@ -201,7 +221,9 @@ export function ProjectDetail({ project }: ProjectDetailProps) {
             </div>
             <div>
               <p className="section-kicker">collaboration</p>
-              <p>{project.retrospective.collaboration}</p>
+              <p>
+                <RichText text={project.retrospective.collaboration} />
+              </p>
             </div>
           </div>
         </Section>
@@ -221,7 +243,6 @@ export function ProjectDetail({ project }: ProjectDetailProps) {
             ))}
           </div>
         </Section>
-      </div>
-    </article>
+    </>
   );
 }

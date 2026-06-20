@@ -6,6 +6,27 @@ export type TerminalResult =
   | { type: "clear" };
 
 const validOpenFileIds = new Set(portfolioFiles.map((file) => file.id));
+const commands = ["help", "ls", "cat Contact.txt", "whoami", "neofetch", "clear", "open "] as const;
+const openTargets = portfolioFiles.map((file) => file.id);
+
+export function getTerminalCompletions(input: string): string[] {
+  const normalized = input.trimStart();
+
+  if (normalized.startsWith("open ")) {
+    const targetPrefix = normalized.slice(5);
+    return openTargets
+      .filter((target) => target.startsWith(targetPrefix))
+      .map((target) => `open ${target}`);
+  }
+
+  return commands.filter((command) => command.startsWith(normalized));
+}
+
+export function completeTerminalInput(input: string): string {
+  const completions = getTerminalCompletions(input);
+
+  return completions.length === 1 ? completions[0] : input;
+}
 
 export function runTerminalCommand(command: string): TerminalResult {
   const normalized = command.trim();

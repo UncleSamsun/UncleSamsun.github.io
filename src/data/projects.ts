@@ -9,25 +9,25 @@ export const holaClimbingProject: PortfolioProject = {
   team: "2명",
   status: "active",
   summary:
-    "클라이밍 영상을 업로드하면 AI가 동작 기술과 동적/정적 성향을 분석하고, SNS 피드·암장·기록·채팅 경험으로 연결하는 서비스",
+    "클라이밍 영상을 업로드하면 AI가 ==동작 기술과 동적/정적 성향==을 분석하고, SNS 피드·암장·기록·채팅 경험으로 연결하는 서비스",
   common: {
     purpose:
       "클라이머가 영상을 단순 공유하는 데서 끝나지 않고, 자신의 동작을 데이터로 되돌아보며 성장 흐름을 추적하도록 돕는다.",
     goal:
-      "대용량 영상 업로드, AI 분석, 실시간 진행률, 추천 피드, 암장 데이터, 기록·통계 API를 하나의 백엔드/AI 파이프라인으로 연결한다.",
+      "대용량 영상 업로드, AI 분석, 실시간 진행률, 추천 피드, 암장 데이터, 기록·통계 API를 하나의 `백엔드/AI 파이프라인`으로 연결한다.",
     developmentIssue:
-      "영상 파일은 수십~수백 MB라 애플리케이션 서버를 경유하면 WAS 대역폭과 스레드가 포화될 수 있고, AI 분석은 긴 작업이라 요청/응답 흐름과 분리해야 했다.",
+      "영상 파일은 수십~수백 MB라 애플리케이션 서버를 경유하면 WAS 대역폭과 스레드가 포화될 수 있고, AI 분석은 긴 작업이라 ==요청/응답 흐름과 분리==해야 했다.",
     results: [
-      "GCS v4 Signed URL로 영상 바이너리 업로드를 백엔드에서 분리했다.",
-      "Redis Streams + Pub/Sub + SSE로 AI 분석 요청, 진행률, 결과 저장 흐름을 분리했다.",
+      "`GCS v4 Signed URL`로 영상 바이너리 업로드를 백엔드에서 분리했다.",
+      "`Redis Streams + Pub/Sub + SSE`로 AI 분석 요청, 진행률, 결과 저장 흐름을 분리했다.",
       "Spring Boot 서버와 Python AI 워커 간 callback 계약을 정리하고 E2E smoke를 검증했다.",
-      "추천 피드 성능 테스트에서 snapshot cursor cache와 public thumbnail URL 전환으로 cursor page p95 약 9.8ms 수준의 증거를 확보했다.",
+      "추천 피드 성능 테스트에서 snapshot cursor cache와 public thumbnail URL 전환으로 ==cursor page p95 약 9.8ms== 수준의 증거를 확보했다.",
     ],
   },
   role: {
     title: "Backend & AI pipeline",
     contribution:
-      "Spring Boot 백엔드와 Python AI 워커 파이프라인을 단독 담당했다. 프론트엔드는 팀원이 맡았고, 백엔드 API 계약과 AI 워커 입출력 계약 정합을 책임졌다.",
+      "**Spring Boot 백엔드와 Python AI 워커 파이프라인을 단독 담당**했다. 프론트엔드는 팀원이 맡았고, 백엔드 API 계약과 AI 워커 입출력 계약 정합을 책임졌다.",
     implementedFeatures: [
       "회원·인증·OAuth·JWT·약관·프로필 API",
       "영상 메타데이터, GCS Signed URL, 댓글, 좋아요 API",
@@ -39,7 +39,7 @@ export const holaClimbingProject: PortfolioProject = {
       "Flyway, Testcontainers, Swagger/ErrorCode 문서화",
     ],
     achievements: [
-      "Spring REST/STOMP 100개 이상 API와 AI worker health/readiness 계약을 코드 기준으로 정리했다.",
+      "Spring REST/STOMP ==100개 이상 API==와 AI worker health/readiness 계약을 코드 기준으로 정리했다.",
       "PostgreSQL·Redis·GCS·AI worker가 연결된 분석 E2E 흐름을 검증했다.",
       "추천 피드 성능 evidence를 raw 결과와 presentation 이미지로 분리해 포트폴리오용 근거를 만들었다.",
     ],
@@ -149,9 +149,9 @@ export const holaClimbingProject: PortfolioProject = {
       approach: "k6, SQL explain, presentation evidence를 분리해 DB와 API 레이어를 따로 해석했다.",
       cause: "추천 피드 응답마다 streamUrl과 thumbnailUrl signed URL을 반복 생성하는 비용이 컸다.",
       solution:
-        "추천 피드에서는 streamUrl을 제거하고, 썸네일은 public GCS bucket URL로 제공했다. cursor page는 Redis snapshot으로 ranking SQL 재계산을 피했다.",
+        "추천 피드에서는 streamUrl을 제거하고, 썸네일은 public GCS bucket URL로 제공했다. cursor page는 `Redis snapshot`으로 ranking SQL 재계산을 피했다.",
       result:
-        "baseline 대비 current p95와 cursor page p95가 개선되었고, cursor aggregate p95는 약 9.8ms 수준으로 측정되었다.",
+        "baseline 대비 current p95와 cursor page p95가 개선되었고, cursor aggregate p95는 ==약 9.8ms== 수준으로 측정되었다.",
     },
     {
       title: "AI worker callback 계약 정합",
@@ -165,8 +165,8 @@ export const holaClimbingProject: PortfolioProject = {
   ],
   ai: {
     model: "rule_v3 + flow_rf_v2",
-    inputData: "GCS에 업로드된 클라이밍 영상과 MediaPipe Pose keypoint sequence",
-    outputData: "techniques, isDynamic, dynamicProbability, segment start/end/confidence",
+    inputData: "GCS에 업로드된 클라이밍 영상과 `MediaPipe Pose keypoint sequence`",
+    outputData: "`techniques`, `isDynamic`, `dynamicProbability`, segment start/end/confidence",
     preprocessing: [
       "GCS object 다운로드",
       "OpenCV frame sampling",
@@ -192,18 +192,18 @@ export const holaClimbingProject: PortfolioProject = {
       label: "추천 피드 HTTP p95",
       before: "251.233ms",
       after: "122.642ms",
-      note: "local-baseline 대비 current 측정. 같은 조건 반복 측정 결과로만 최종 문구 확정.",
+      note: "local-baseline 대비 current 측정. ==같은 조건 반복 측정 결과==로만 최종 문구 확정.",
     },
     {
       label: "추천 피드 SQL execution",
       before: "181.086ms",
       after: "80.966ms",
-      note: "temp blocks written 9,138 -> 0.",
+      note: "`temp blocks written` 9,138 -> 0.",
     },
     {
       label: "cursor aggregate p95",
       value: "9.794ms",
-      note: "Redis snapshot cursor cache 적용 후 2~3페이지 호출 기준.",
+      note: "`Redis snapshot cursor cache` 적용 후 2~3페이지 호출 기준.",
     },
     {
       label: "AI worker model version",
@@ -216,8 +216,8 @@ export const holaClimbingProject: PortfolioProject = {
       kind: "architecture",
       title: "Backend/AI Architecture",
       src: "/assets/projects/hola-climbing/architecture.svg",
-      caption: "GCS direct upload, Redis Streams, AI worker, Spring callback, SSE 흐름",
-      highlight: "Minjoun 담당: Spring backend, Redis dispatch, AI worker pipeline",
+      caption: "`GCS direct upload`, Redis Streams, AI worker, Spring callback, SSE 흐름",
+      highlight: "**Minjoun 담당**: Spring backend, Redis dispatch, AI worker pipeline",
     },
     {
       kind: "erd",
@@ -258,7 +258,7 @@ export const holaClimbingProject: PortfolioProject = {
     improvements: [
       "성능 테스트는 같은 조건으로 3회 이상 반복 측정해 최종 수치로 고정한다.",
       "AI 모델은 post-MVP에서 fine-tuning 또는 재촬영 UX와 함께 재평가한다.",
-      "발표용 아키텍처 도식에는 담당 영역을 명확히 하이라이트한다.",
+      "발표용 아키텍처 도식에는 ==담당 영역==을 명확히 하이라이트한다.",
     ],
     collaboration:
       "프론트 담당자와 API 명세, OAuth callback, 영상 업로드 완료 후 메타데이터 등록, 분석 상태 vocabulary를 맞추며 협업했다.",
@@ -288,25 +288,25 @@ export const cafeGamsugwangProject: PortfolioProject = {
   period: "2025.05.12 ~ 2025.06.10",
   team: "5명",
   status: "completed",
-  summary: "제주 카페 리뷰와 위치 데이터를 기반으로 취향에 맞는 카페를 추천하는 서비스",
+  summary: "제주 카페 리뷰와 위치 데이터를 기반으로 ==취향에 맞는 카페==를 추천하는 서비스",
   common: {
     purpose:
       "제주도 카페를 위치와 리뷰 키워드만으로 나열하지 않고, 사용자의 취향과 현재 탐색 맥락에 맞게 찾을 수 있도록 돕는다.",
     goal:
-      "카카오맵 API, 웹 크롤링, 한국어 리뷰 키워드 추출, 추천 API를 연결해 지도·키워드·테마·위치 기반 탐색 흐름을 만든다.",
+      "`카카오맵 API`, 웹 크롤링, 한국어 리뷰 키워드 추출, 추천 API를 연결해 지도·키워드·테마·위치 기반 탐색 흐름을 만든다.",
     developmentIssue:
-      "카카오맵 API 응답량 제한과 크롤링 실패, 짧고 반복적인 한국어 리뷰 텍스트 때문에 추천에 쓸 수 있는 정제 데이터가 바로 나오지 않았다.",
+      "카카오맵 API 응답량 제한과 크롤링 실패, 짧고 반복적인 한국어 리뷰 텍스트 때문에 추천에 쓸 수 있는 ==정제 데이터==가 바로 나오지 않았다.",
     results: [
       "FastAPI 데이터 처리 서버와 Spring Boot 서비스 서버를 분리했다.",
-      "제주도 검색 좌표 47,190개를 기준으로 카페 데이터를 수집했다.",
-      "카페 3,950개와 리뷰 22,144개를 정리했다.",
-      "80,601개 원천 키워드를 30,336개 최종 키워드로 정제했다.",
+      "제주도 검색 좌표 ==47,190개==를 기준으로 카페 데이터를 수집했다.",
+      "카페 ==3,950개==와 리뷰 ==22,144개==를 정리했다.",
+      "80,601개 원천 키워드를 ==30,336개 최종 키워드==로 정제했다.",
     ],
   },
   role: {
     title: "Data pipeline & recommendation backend",
     contribution:
-      "데이터 수집과 추천 품질을 담당했다. FastAPI 기반 데이터 처리 서버와 Spring Boot 서비스 서버를 분리하고, 리뷰 키워드 추출 파이프라인과 실시간 작업 상태 조회 흐름을 설계했다.",
+      "**데이터 수집과 추천 품질을 담당**했다. FastAPI 기반 데이터 처리 서버와 Spring Boot 서비스 서버를 분리하고, 리뷰 키워드 추출 파이프라인과 실시간 작업 상태 조회 흐름을 설계했다.",
     implementedFeatures: [
       "카카오맵 기반 카페 검색과 Selenium 상세 크롤링",
       "카페 목록/상세 조회, 검색, 자동완성, 수정 제안",
@@ -316,7 +316,7 @@ export const cafeGamsugwangProject: PortfolioProject = {
     ],
     achievements: [
       "제주 전체 수집 범위를 격자 기반으로 나눠 API 응답 제한을 보완했다.",
-      "짧은 한국어 리뷰를 추천 가능한 키워드 데이터로 정제하는 흐름을 만들었다.",
+      "짧은 한국어 리뷰를 ==추천 가능한 키워드 데이터==로 정제하는 흐름을 만들었다.",
       "장기 실행 크롤링 작업을 Redis 상태 저장으로 분리해 사용자 대기 흐름을 줄였다.",
     ],
   },
@@ -364,7 +364,7 @@ export const cafeGamsugwangProject: PortfolioProject = {
     },
     {
       title: "키워드 정제 후 추천 데이터로 사용",
-      decision: "리뷰 원문을 바로 쓰지 않고 형태소 분석, 임베딩, 클러스터링, TF-IDF를 거쳐 키워드로 정제한다.",
+      decision: "리뷰 원문을 바로 쓰지 않고 형태소 분석, 임베딩, 클러스터링, `TF-IDF`를 거쳐 키워드로 정제한다.",
       reason: "리뷰는 짧고 반복 표현이 많아 원문 그대로는 추천 특징으로 쓰기 어려웠다.",
       alternatives: ["리뷰 전문 임베딩만 사용", "수동 태그 입력"],
       tradeOff: "파이프라인은 복잡해지지만 사람이 이해할 수 있는 추천 근거 키워드를 만들 수 있다.",
@@ -386,18 +386,18 @@ export const cafeGamsugwangProject: PortfolioProject = {
       problem: "리뷰 원문은 표현이 짧고 반복어가 많아 바로 추천에 쓰기 어려웠다.",
       approach: "형태소 분석, 불용어 필터링, 임베딩, 클러스터링, 대표 키워드 선정을 단계로 나눴다.",
       cause: "카페 리뷰 특성상 감성 표현과 일반 단어가 섞여 추천 품질을 흔들 수 있었다.",
-      solution: "KiwiPipy, KR-SBERT, HDBSCAN, TF-IDF를 연결해 추천 가능한 키워드 데이터로 정리했다.",
-      result: "80,601개 원천 키워드를 30,336개 최종 정제 키워드로 축소했다.",
+      solution: "`KiwiPipy`, KR-SBERT, HDBSCAN, TF-IDF를 연결해 추천 가능한 키워드 데이터로 정리했다.",
+      result: "80,601개 원천 키워드를 ==30,336개 최종 정제 키워드==로 축소했다.",
     },
   ],
   metrics: [
     { label: "카페 데이터", value: "3,950개", note: "카카오맵 API와 크롤링으로 정리한 제주 카페 수." },
-    { label: "리뷰 데이터", value: "22,144개", note: "추천 키워드 추출에 사용한 리뷰 데이터 수." },
+    { label: "리뷰 데이터", value: "22,144개", note: "==추천 키워드 추출==에 사용한 리뷰 데이터 수." },
     {
       label: "키워드 정제",
       before: "80,601개",
       after: "30,336개",
-      note: "원천 추출 키워드에서 최종 정제 키워드로 축소.",
+      note: "원천 추출 키워드에서 ==최종 정제 키워드==로 축소.",
     },
     { label: "검색 좌표", value: "47,190개", note: "200m 격자와 GeoJSON 육지 필터링 기반 좌표 수." },
   ],
@@ -442,23 +442,23 @@ export const jsonstoreProject: PortfolioProject = {
   period: "2025.03.31 ~ 2025.04.16",
   team: "5명",
   status: "completed",
-  summary: "상품 등록부터 장바구니, 배송지, 주문, 관리자 처리까지 이어지는 커머스 MVP",
+  summary: "상품 등록부터 장바구니, 배송지, 주문, 관리자 처리까지 이어지는 ==커머스 MVP==",
   common: {
-    purpose: "고객 쇼핑 흐름과 관리자 상품·주문 처리 흐름을 하나의 커머스 MVP 안에서 검증한다.",
+    purpose: "고객 쇼핑 흐름과 관리자 상품·주문 처리 흐름을 하나의 `커머스 MVP` 안에서 검증한다.",
     goal: "고객/관리자 인증을 분리하고, 상품·장바구니·배송지·주문·알림 흐름을 끝까지 연결한다.",
     developmentIssue:
-      "고객과 관리자가 같은 서비스에 존재해 인증 필터, 권한, 장바구니 캐싱, 주문 재고 동시성 경계가 흐려질 수 있었다.",
+      "고객과 관리자가 같은 서비스에 존재해 인증 필터, 권한, 장바구니 캐싱, 주문 재고 ==동시성 경계==가 흐려질 수 있었다.",
     results: [
       "팀 프로젝트의 고객/관리자 인증 분리 구조를 분석하고, 본인 담당 API는 JWT 인증 주체 기준으로 정리했다.",
-      "Redis 기반 장바구니 캐싱 흐름을 구성했다.",
-      "Firebase Cloud Messaging 기반 웹 알림을 구현했다.",
+      "`Redis` 기반 장바구니 캐싱 흐름을 구성했다.",
+      "`Firebase Cloud Messaging` 기반 웹 알림을 구현했다.",
       "주문·재고 동시성 테스트와 JUnit/Mockito 테스트를 보강했다.",
     ],
   },
   role: {
     title: "Cart, notification & test coverage",
     contribution:
-      "장바구니 캐싱, 웹 알림, 테스트 코드를 담당했다. 고객 쇼핑 흐름과 관리자 주문 처리 흐름이 끊기지 않도록 API 계약과 도메인 책임을 정리했다.",
+      "**장바구니 캐싱, 웹 알림, 테스트 코드**를 담당했다. 고객 쇼핑 흐름과 관리자 주문 처리 흐름이 끊기지 않도록 API 계약과 도메인 책임을 정리했다.",
     implementedFeatures: [
       "장바구니 추가/조회/삭제",
       "FCM 토큰 등록과 웹 알림 발송",
@@ -467,7 +467,7 @@ export const jsonstoreProject: PortfolioProject = {
       "고객/관리자 권한 경계 테스트",
     ],
     achievements: [
-      "장바구니를 Redis 저장소로 분리해 반복 조회·수정 흐름을 가볍게 만들었다.",
+      "장바구니를 `Redis` 저장소로 분리해 반복 조회·수정 흐름을 가볍게 만들었다.",
       "요청 파라미터가 아니라 JWT 인증 주체 기준으로 사용자 API가 동작하도록 정리했다.",
       "주문과 재고 차감 흐름의 동시성 위험을 테스트로 드러냈다.",
     ],
@@ -491,7 +491,7 @@ export const jsonstoreProject: PortfolioProject = {
   decisions: [
     {
       title: "Redis 기반 장바구니 캐싱",
-      decision: "사용자별 장바구니 상태를 Redis에 저장하고 서비스 계층에서 추가·조회·삭제 흐름을 일관되게 다룬다.",
+      decision: "사용자별 장바구니 상태를 `Redis`에 저장하고 서비스 계층에서 추가·조회·삭제 흐름을 일관되게 다룬다.",
       reason: "장바구니는 상품 탐색 중 반복 조회·수정되는 데이터라 DB만 거치면 응답 흐름이 무거워질 수 있었다.",
       alternatives: ["DB 테이블 단독 저장", "클라이언트 local state 중심 처리"],
       tradeOff: "Redis 키 스키마와 만료 정책을 관리해야 하지만 반복 조회와 수정 응답을 가볍게 만들 수 있다.",
@@ -532,11 +532,11 @@ export const jsonstoreProject: PortfolioProject = {
       approach: "상품 재고 처리 책임을 분리하고 동시성 테스트로 주문 생성 흐름을 재현했다.",
       cause: "주문 생성과 재고 차감이 함께 움직여야 하는데 동시 요청에서 경계가 약해질 수 있었다.",
       solution: "재고 처리 서비스를 분리하고 주문 생성 테스트에서 동시 요청 케이스를 검증했다.",
-      result: "동시성 위험을 테스트 시나리오로 남겨 이후 주문 처리 수정의 회귀 기준을 만들었다.",
+      result: "동시성 위험을 테스트 시나리오로 남겨 이후 주문 처리 수정의 ==회귀 기준==을 만들었다.",
     },
   ],
   metrics: [
-    { label: "권한 필터", value: "2개", note: "프로젝트 구조 분석 기준 Member/Admin JWT 필터와 Provider가 분리되어 있었다." },
+    { label: "권한 필터", value: "2개", note: "프로젝트 구조 분석 기준 `Member/Admin JWT 필터`와 Provider가 분리되어 있었다." },
     { label: "주문 만료 정책", value: "15분", note: "프로젝트 설정 분석 기준 대기 주문 재고 점유 제한 정책." },
     { label: "테스트 검증", value: "당시 Gradle test suite 통과", note: "기존 포트폴리오 기록의 검증 항목이며 전체 품질 보증률을 뜻하지 않는다." },
   ],
@@ -580,22 +580,22 @@ export const readAndShareProject: PortfolioProject = {
   period: "2025.03.13 ~ 2025.03.31",
   team: "4명",
   status: "completed",
-  summary: "독서 기록 공유 서비스의 인증, 검색, 탈퇴 기능을 확장한 커뮤니티 백엔드",
+  summary: "독서 기록 공유 서비스의 ==인증, 검색, 탈퇴 기능==을 확장한 커뮤니티 백엔드",
   common: {
     purpose: "독서 기록과 리뷰를 공유하는 커뮤니티에서 회원, 리뷰, 팔로우, 알림 흐름을 안정적으로 운영한다.",
-    goal: "기존 백엔드에 이메일 인증, 사용자 검색, 회원 탈퇴, 테스트와 Swagger 문서화를 보강한다.",
+    goal: "기존 백엔드에 이메일 인증, 사용자 검색, 회원 탈퇴, 테스트와 `Swagger` 문서화를 보강한다.",
     developmentIssue:
       "짧은 기간 안에 기존 코드를 이어받아 기능을 확장해야 했고, 인증·회원·리뷰 도메인의 예외 흐름을 함께 검증해야 했다.",
     results: [
       "이메일 인증, 사용자 검색, 회원 탈퇴 기능을 구현했다.",
       "Auth, Book, Favorite, Review, Member 도메인 테스트를 보강했다.",
-      "Swagger 기반 API 문서화를 추가해 협업 정합을 높였다.",
+      "`Swagger` 기반 API 문서화를 추가해 협업 정합을 높였다.",
     ],
   },
   role: {
     title: "Member domain & regression tests",
     contribution:
-      "이메일 인증, 사용자 검색, 회원 탈퇴 기능을 구현하고 주요 기능 테스트를 작성했다. 기능 추가 과정에서 발생할 수 있는 예외와 실패 흐름을 테스트로 검증하는 데 집중했다.",
+      "**이메일 인증, 사용자 검색, 회원 탈퇴 기능**을 구현하고 주요 기능 테스트를 작성했다. 기능 추가 과정에서 발생할 수 있는 예외와 실패 흐름을 테스트로 검증하는 데 집중했다.",
     implementedFeatures: [
       "회원가입과 이메일 인증 토큰 발급·검증",
       "이메일 기반 사용자 검색",
@@ -605,7 +605,7 @@ export const readAndShareProject: PortfolioProject = {
     ],
     achievements: [
       "member 도메인 전반을 직접 구현하며 인증·회원 생명주기를 정리했다.",
-      "PR 단위로 테스트를 추가해 기존 기능 회귀를 줄였다.",
+      "PR 단위로 테스트를 추가해 ==기존 기능 회귀==를 줄였다.",
       "팀원이 이어서 볼 수 있도록 문서화와 테스트를 함께 남겼다.",
     ],
   },
@@ -644,7 +644,7 @@ export const readAndShareProject: PortfolioProject = {
     },
     {
       title: "회원 생명주기 회귀 테스트 보강",
-      decision: "회원 검색, 정보 수정, 탈퇴, 이메일 인증처럼 상태가 바뀌는 기능을 서비스와 컨트롤러 테스트로 고정한다.",
+      decision: "회원 검색, 정보 수정, 탈퇴, 이메일 인증처럼 상태가 바뀌는 기능을 `서비스와 컨트롤러 테스트`로 고정한다.",
       reason: "짧은 기간에 기존 코드를 확장하면서 회원 상태 변화가 다른 API에 회귀를 만들 수 있었다.",
       alternatives: ["수동 QA 중심 확인", "컨트롤러 테스트만 작성"],
       tradeOff: "테스트 작성 시간이 늘지만 기능 추가 후 회귀를 빠르게 확인할 수 있다.",
@@ -667,11 +667,11 @@ export const readAndShareProject: PortfolioProject = {
       approach: "이메일 기반 검색과 탈퇴 흐름을 서비스 계층에 분리하고 테스트 케이스를 보강했다.",
       cause: "회원 생명주기와 검색 API가 같은 회원 데이터를 다루지만 실패 조건이 달랐다.",
       solution: "탈퇴 후 조회·인증 흐름에 영향을 주지 않도록 예외와 테스트를 정리했다.",
-      result: "회원 도메인 기능 추가 이후에도 주요 회귀를 자동 테스트로 확인할 수 있게 되었다.",
+      result: "회원 도메인 기능 추가 이후에도 주요 회귀를 ==자동 테스트==로 확인할 수 있게 되었다.",
     },
   ],
   metrics: [
-    { label: "본인 직접 PR", value: "8건", note: "member 도메인 전반과 테스트 보강 중심 PR." },
+    { label: "본인 직접 PR", value: "8건", note: "`member` 도메인 전반과 테스트 보강 중심 PR." },
     { label: "테스트 검증", value: "당시 Java 17 로컬 test suite 통과", note: "기존 포트폴리오 기록 기준이며 전체 품질 보증률을 뜻하지 않는다." },
     { label: "Graphify 노드", value: "1,030개", note: "vault Graphify readandshare AST-only 보고서 기준." },
   ],
@@ -712,15 +712,15 @@ export const theLastSupperProject: PortfolioProject = {
   period: "2025.04.17 ~ 2025.05.09",
   team: "5명",
   status: "completed",
-  summary: "식당 예약과 현장 웨이팅을 함께 관리하는 백엔드 서비스",
+  summary: "식당 예약과 ==현장 웨이팅==을 함께 관리하는 백엔드 서비스",
   common: {
     purpose: "식당 이용자가 예약 또는 현장 웨이팅으로 방문을 신청하고, 운영자가 대기열과 예약 슬롯을 관리하도록 돕는다.",
-    goal: "예약 슬롯, 웨이팅 큐, 고객 호출, 이력 처리, 모니터링을 하나의 운영 흐름으로 연결한다.",
+    goal: "예약 슬롯, 웨이팅 큐, 고객 호출, 이력 처리, 모니터링을 하나의 `운영 흐름`으로 연결한다.",
     developmentIssue:
-      "웨이팅 등록 요청이 몰릴 때 대기번호 중복, DB 저장 병목, 실패 요청 복구, 운영 종료 후 이력 처리 문제가 함께 발생할 수 있었다.",
+      "웨이팅 등록 요청이 몰릴 때 대기번호 중복, DB 저장 병목, 실패 요청 복구, 운영 종료 후 이력 처리 문제가 ==함께 발생==할 수 있었다.",
     results: [
       "JMeter 부하 테스트로 웨이팅 등록 병목을 확인했다.",
-      "Redis Atomic 연산으로 중복 진입과 대기번호 발급 문제를 단순화했다.",
+      "`Redis Atomic` 연산으로 중복 진입과 대기번호 발급 문제를 단순화했다.",
       "Spring 비동기 처리로 응답 경로와 DB 저장 경로를 분리했다.",
       "Prometheus/Grafana와 Spring Batch 기반 운영 흐름을 구성했다.",
     ],
@@ -728,7 +728,7 @@ export const theLastSupperProject: PortfolioProject = {
   role: {
     title: "Waiting queue backend",
     contribution:
-      "웨이팅 파트를 담당했다. 부하 테스트와 단위 테스트로 병목과 동시성 문제를 발견하고, DB Lock과 분산락을 비교한 뒤 Redis Atomic 연산 기반 해결책을 적용했다.",
+      "**웨이팅 파트**를 담당했다. 부하 테스트와 단위 테스트로 병목과 동시성 문제를 발견하고, DB Lock과 분산락을 비교한 뒤 Redis Atomic 연산 기반 해결책을 적용했다.",
     implementedFeatures: [
       "웨이팅 오픈/중단/종료",
       "고객 웨이팅 등록/취소/미루기",
@@ -740,7 +740,7 @@ export const theLastSupperProject: PortfolioProject = {
     ],
     achievements: [
       "동시 요청에서 대기번호 중복 가능성을 테스트로 드러냈다.",
-      "DB Lock과 분산락을 비교한 뒤 Redis SETNX/INCR로 단순한 해결책을 선택했다.",
+      "DB Lock과 분산락을 비교한 뒤 `Redis SETNX/INCR`로 단순한 해결책을 선택했다.",
       "응답 경로에서 DB 저장을 분리해 웨이팅 등록 체감 성능을 개선했다.",
     ],
   },
@@ -804,12 +804,12 @@ export const theLastSupperProject: PortfolioProject = {
       problem: "동시에 같은 고객이 웨이팅을 등록하거나 대기번호가 발급될 때 중복 접수 가능성이 있었다.",
       approach: "DB Lock, 분산락, Redis atomic 연산을 비교했다.",
       cause: "동시 요청 초입에서 같은 사용자와 같은 매장에 대한 중복 진입을 충분히 막지 못했다.",
-      solution: "Redis SETNX 기반 pending key로 중복 진입을 막고 Redis INCR로 대기번호를 발급했다.",
-      result: "동시성 문제를 단순한 Redis atomic 연산으로 해결하고 테스트로 회귀 기준을 남겼다.",
+      solution: "`Redis SETNX` 기반 pending key로 중복 진입을 막고 Redis INCR로 대기번호를 발급했다.",
+      result: "동시성 문제를 단순한 Redis atomic 연산으로 해결하고 테스트로 ==회귀 기준==을 남겼다.",
     },
   ],
   metrics: [
-    { label: "JMeter 계정 데이터", value: "2,000개", note: "웨이팅 등록 부하 테스트용 계정 CSV 기준." },
+    { label: "JMeter 계정 데이터", value: "2,000개", note: "웨이팅 등록 `부하 테스트용 계정 CSV` 기준." },
     { label: "JMeter 로그", value: "28,661줄", note: "기존 포트폴리오 데이터의 실행 로그 규모." },
     {
       label: "응답 속도",

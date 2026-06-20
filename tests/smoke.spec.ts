@@ -13,6 +13,11 @@ async function waitForPortfolioHydration(page: import("@playwright/test").Page) 
   await expect(page.locator("astro-island[ssr]")).toHaveCount(0);
 }
 
+async function openTerminal(page: import("@playwright/test").Page) {
+  await page.getByRole("button", { name: "Open terminal" }).click();
+  await expect(page.getByLabel("Terminal command")).toBeVisible();
+}
+
 test("home renders IDE shell and Hola project", async ({ page }) => {
   await page.goto("/");
   await waitForPortfolioHydration(page);
@@ -20,6 +25,7 @@ test("home renders IDE shell and Hola project", async ({ page }) => {
   await expect(page.getByText("PROJECTS", { exact: true })).toBeVisible();
   await expect(page.getByLabel("Portfolio file explorer").getByText("hola-climbing.md", { exact: true })).toBeVisible();
 
+  await openTerminal(page);
   const terminal = page.getByLabel("Terminal command");
   await terminal.fill("whoami");
   await terminal.press("Enter");
@@ -55,6 +61,7 @@ test("terminal invalid open command explains the missing file", async ({ page })
   await page.goto("/");
   await waitForPortfolioHydration(page);
 
+  await openTerminal(page);
   const terminal = page.getByLabel("Terminal command");
   await terminal.fill("open missing.md");
   await terminal.press("Enter");
@@ -67,6 +74,7 @@ test("terminal valid open command switches to the Hola project file", async ({ p
   await page.goto("/");
   await waitForPortfolioHydration(page);
 
+  await openTerminal(page);
   const terminal = page.getByLabel("Terminal command");
   await terminal.fill("open Projects/hola-climbing.md");
   await terminal.press("Enter");
@@ -74,6 +82,59 @@ test("terminal valid open command switches to the Hola project file", async ({ p
   await expect(page.getByText("opened Projects/hola-climbing.md")).toBeVisible();
   await expect(page.getByText("// Projects/hola-climbing.md")).toBeVisible();
   await expect(page.getByText("// AI PIPELINE")).toBeVisible();
+});
+
+test("terminal supports keyboard shortcut, history, and tab completion", async ({ page, isMobile }) => {
+  await page.goto("/");
+  await waitForPortfolioHydration(page);
+
+  const launcher = page.getByRole("button", { name: "Open terminal" });
+  await expect(launcher).toHaveAttribute("title", /Ctrl\+`/);
+  if (isMobile) {
+    await launcher.click();
+  } else {
+    await page.keyboard.press("Control+Backquote");
+  }
+
+  const terminal = page.getByLabel("Terminal command");
+  await expect(terminal).toBeVisible();
+  await terminal.fill("whoami");
+  await terminal.press("Enter");
+  await terminal.fill("neofetch");
+  await terminal.press("Enter");
+
+  await terminal.press("ArrowUp");
+  await expect(terminal).toHaveValue("neofetch");
+  await terminal.press("ArrowUp");
+  await expect(terminal).toHaveValue("whoami");
+  await terminal.press("ArrowDown");
+  await expect(terminal).toHaveValue("neofetch");
+
+  await terminal.fill("open Projects/ho");
+  await terminal.press("Tab");
+  await expect(terminal).toHaveValue("open Projects/hola-climbing.md");
+  await terminal.press("Enter");
+  await expect(page.getByText("opened Projects/hola-climbing.md")).toBeVisible();
+  await expect(page.getByRole("region", { name: "Portfolio terminal" }).getByLabel("Close terminal")).toBeVisible();
+});
+
+test("detail route opens project detail as an in-shell modal", async ({ page }) => {
+  await page.goto("/");
+  await waitForPortfolioHydration(page);
+
+  await page
+    .locator(".project-card")
+    .filter({ has: page.getByRole("heading", { name: "Hola Climbing" }) })
+    .getByRole("link", { name: "detail route" })
+    .click();
+
+  const dialog = page.getByRole("dialog", { name: /Hola Climbing/ });
+  await expect(dialog).toBeVisible();
+  await expect(dialog.getByRole("heading", { name: "STAR.md" })).toBeVisible();
+  expect(new URL(page.url()).pathname).toBe("/");
+
+  await page.keyboard.press("Escape");
+  await expect(dialog).toHaveCount(0);
 });
 
 test("home and Hola detail avoid horizontal overflow", async ({ page }) => {
