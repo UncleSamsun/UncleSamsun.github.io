@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" fill="none">
+  <rect width="1200" height="630" fill="#FFFFFF"/>
+  <rect x="72" y="72" width="1056" height="486" fill="#FFFFFF" stroke="#111111" stroke-width="3"/>
+  <rect x="96" y="96" width="72" height="72" fill="#FFFFFF" stroke="#111111" stroke-width="3"/>
+  <text x="132" y="142" text-anchor="middle" fill="#111111" font-family="Arial, sans-serif" font-size="25" font-weight="900">MJ</text>
+  <text x="96" y="242" fill="#777777" font-family="Arial, sans-serif" font-size="24" font-weight="800">BACKEND DEVELOPER</text>
+  <text x="96" y="338" fill="#111111" font-family="Arial, sans-serif" font-size="82" font-weight="900">김민준</text>
+  <text x="96" y="424" fill="#111111" font-family="Arial, sans-serif" font-size="46" font-weight="800">검증 가능한 구조와 안정적인 흐름</text>
+  <text x="96" y="492" fill="#666666" font-family="Arial, sans-serif" font-size="28" font-weight="600">Java · Spring Boot · MySQL · Redis · Testing · Monitoring</text>
+</svg>
