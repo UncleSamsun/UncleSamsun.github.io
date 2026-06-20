@@ -8,3 +8,7 @@ dist/
 !.env.example
 test-results/
 playwright-report/
+.DS_Store
+.idea/
+AGENTS.md
+CLAUDE.md

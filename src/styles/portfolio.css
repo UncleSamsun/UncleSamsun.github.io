@@ -3,6 +3,13 @@
   --portfolio-accent-warm: #e5c07b;
   --portfolio-accent-green: #23d18b;
   --portfolio-accent-red: #f14c4c;
+
+  /* Text-level emphasis (color + weight, no highlighter boxes) */
+  --emphasis-key: #e5c07b;        /* key terms — warm amber, editor-constant feel */
+  --emphasis-code: var(--syntax-property); /* inline values / identifiers — calm blue */
+
+  /* Reading size for long Korean prose */
+  --text-reading: 0.9375rem;      /* 15px */
 }
 
 * {
@@ -43,20 +50,16 @@ input {
 }
 
 .rich-text-mark {
-  padding: 0 0.2em;
-  border-radius: var(--radius-sm);
-  background: color-mix(in srgb, var(--portfolio-accent-warm) 18%, transparent);
-  color: var(--text-bright);
+  background: none;
+  color: var(--emphasis-key);
+  font-weight: var(--weight-medium);
 }
 
 .rich-text-code {
-  padding: 0.1em 0.35em;
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-sm);
-  background: color-mix(in srgb, var(--surface-panel) 72%, var(--portfolio-accent-green));
-  color: var(--portfolio-accent-green);
+  color: var(--emphasis-code);
   font-family: var(--font-mono);
-  font-size: 0.94em;
+  font-size: 0.92em;
+  font-weight: var(--weight-medium);
 }
 
 .skip-link {
@@ -282,7 +285,7 @@ input {
   max-width: 860px;
   margin: 0;
   color: var(--text-primary);
-  font-size: var(--text-base);
+  font-size: var(--text-md);
   line-height: var(--leading-relaxed);
 }
 
@@ -302,6 +305,18 @@ input {
 
 .project-card-grid {
   grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.project-card {
+  display: grid;
+  gap: 12px;
+  align-content: start;
+}
+
+.project-card .contact-links {
+  margin-top: 4px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-subtle);
 }
 
 .metric-grid {
@@ -353,6 +368,7 @@ input {
 .not-found-panel p {
   margin: 0;
   color: var(--gray-100);
+  font-size: var(--text-reading);
   line-height: var(--leading-relaxed);
 }
 
@@ -368,6 +384,7 @@ input {
   position: relative;
   padding-left: 16px;
   color: var(--gray-100);
+  font-size: var(--text-reading);
   line-height: var(--leading-relaxed);
 }
 
@@ -393,38 +410,50 @@ input {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 34px;
-  padding: 0 14px;
-  border: 1px solid var(--border-strong);
+  gap: 6px;
+  min-height: 32px;
+  padding: 0 13px;
+  border: 1px solid var(--border-default);
   border-radius: var(--radius-md);
-  background: var(--surface-panel);
-  color: var(--text-primary);
+  background: transparent;
+  color: var(--text-secondary);
   font-family: var(--font-mono);
   font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
   line-height: 1.2;
-  white-space: normal;
+  white-space: nowrap;
+  transition: background var(--dur-fast) var(--ease-standard),
+    border-color var(--dur-fast) var(--ease-standard),
+    color var(--dur-fast) var(--ease-standard);
 }
 
 .project-card-link:hover,
 .portfolio-link-button:hover {
   color: var(--text-bright);
-  border-color: var(--accent-focus);
-  background: var(--surface-active);
+  border-color: var(--border-strong);
+  background: var(--surface-hover);
   text-decoration: none;
+}
+
+.project-card-link:focus-visible,
+.portfolio-link-button:focus-visible {
+  outline: none;
+  border-color: var(--accent-focus);
+  box-shadow: 0 0 0 1px var(--accent-focus);
 }
 
 .project-card-link--primary,
 .portfolio-link-button--primary {
-  border-color: transparent;
-  background: var(--accent);
-  color: var(--accent-on);
+  border-color: color-mix(in srgb, var(--portfolio-accent-green) 38%, transparent);
+  background: color-mix(in srgb, var(--portfolio-accent-green) 12%, transparent);
+  color: var(--terminal-green-bright);
 }
 
 .project-card-link--primary:hover,
 .portfolio-link-button--primary:hover {
-  border-color: transparent;
-  background: var(--accent-hover);
-  color: var(--accent-on);
+  border-color: color-mix(in srgb, var(--portfolio-accent-green) 60%, transparent);
+  background: color-mix(in srgb, var(--portfolio-accent-green) 20%, transparent);
+  color: var(--terminal-green-bright);
 }
 
 .project-card-meta,
@@ -496,6 +525,7 @@ input {
 .code-map-value {
   min-width: 0;
   color: var(--gray-100);
+  font-size: var(--text-reading);
   line-height: var(--leading-relaxed);
 }
 
