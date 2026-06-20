@@ -14,7 +14,9 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
-    "check": "astro check && vitest run"
+    "check": "astro check && vitest run",
+    "audit:high": "npm audit --audit-level=high",
+    "audit:prod": "npm audit --omit=dev --audit-level=moderate"
   },
   "dependencies": {
     "@astrojs/react": "^5.0.7",

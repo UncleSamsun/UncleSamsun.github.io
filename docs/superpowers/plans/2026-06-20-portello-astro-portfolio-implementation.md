@@ -448,12 +448,20 @@ export const holaClimbingProject: PortfolioProject = {
 - Create: `src/env.d.ts`
 - Move later: `CNAME`, `robots.txt`, `sitemap.xml`, `assets/*` into `public/`
 
-- [ ] **Step 1: Create `package.json`**
+- [x] **Step 1: Create `package.json`**
 
 Use this exact package shape:
 
 ```json
 {
+  "name": "portello-astro-portfolio",
+  "version": "0.0.0",
+  "private": true,
+  "packageManager": "npm@11.11.0",
+  "engines": {
+    "node": ">=22.12.0",
+    "npm": ">=11.0.0"
+  },
   "scripts": {
     "dev": "astro dev --host 127.0.0.1",
     "build": "astro check && astro build",
@@ -461,18 +469,21 @@ Use this exact package shape:
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
-    "check": "astro check && vitest run"
+    "check": "astro check && vitest run",
+    "audit:high": "npm audit --audit-level=high",
+    "audit:prod": "npm audit --omit=dev --audit-level=moderate"
   },
   "dependencies": {
-    "@astrojs/react": "^4.3.0",
-    "astro": "^5.10.0",
+    "@astrojs/react": "^5.0.7",
+    "astro": "^6.4.8",
     "lucide-react": "^0.468.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },
   "devDependencies": {
-    "@astrojs/check": "^0.9.4",
+    "@astrojs/check": "^0.9.9",
     "@playwright/test": "^1.53.0",
+    "@types/node": "^26.0.0",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
     "typescript": "^5.8.3",
@@ -481,7 +492,7 @@ Use this exact package shape:
 }
 ```
 
-- [ ] **Step 2: Install dependencies**
+- [x] **Step 2: Install dependencies**
 
 Run:
 
@@ -494,7 +505,7 @@ Expected:
 - `package-lock.json` is created.
 - `node_modules/` is not committed.
 
-- [ ] **Step 3: Create `astro.config.mjs`**
+- [x] **Step 3: Create `astro.config.mjs`**
 
 ```js
 import { defineConfig } from "astro/config";
@@ -507,7 +518,7 @@ export default defineConfig({
 });
 ```
 
-- [ ] **Step 4: Create `tsconfig.json`**
+- [x] **Step 4: Create `tsconfig.json`**
 
 ```json
 {
@@ -523,14 +534,14 @@ export default defineConfig({
 }
 ```
 
-- [ ] **Step 5: Create `src/env.d.ts`**
+- [x] **Step 5: Create `src/env.d.ts`**
 
 ```ts
 /// <reference path="../.astro/types.d.ts" />
 /// <reference types="astro/client" />
 ```
 
-- [ ] **Step 6: Build smoke**
+- [x] **Step 6: Build smoke**
 
 Run:
 
@@ -544,12 +555,26 @@ Expected at this point:
 - If it fails only because pages are missing, proceed to Task 5.
 - If it fails because dependency install failed, stop and fix package setup.
 
-- [ ] **Step 7: Commit scaffold**
+- [x] **Step 7: Commit scaffold**
 
 ```bash
 git add package.json package-lock.json astro.config.mjs tsconfig.json src/env.d.ts
 git commit -m "chore: scaffold astro react portfolio"
 ```
+
+Task 1 hardening commits also added `.gitignore`, `vitest.config.ts`,
+`playwright.config.ts`, scaffold smoke tests, canonical `https://minjoon.me`
+metadata cleanup, and Astro 6 dependency updates.
+
+Audit policy after Task 1:
+
+- `npm run audit:high` exits 0. It can still print low/moderate advisories.
+- `npm run audit:prod` exits 0 at the moderate threshold. It currently prints a
+  low-severity `esbuild` development-server advisory via Astro.
+- `npm audit --audit-level=moderate` exits non-zero because it includes
+  dev-tooling advisories through `@astrojs/check`/`yaml-language-server` and the
+  `esbuild` advisory. Do not downgrade Astro to satisfy `npm audit fix --force`;
+  revisit when upstream packages publish non-breaking fixes.
 
 ## Task 2: Vendor Portello Design System
 
