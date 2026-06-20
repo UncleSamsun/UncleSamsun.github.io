@@ -1,8 +1,9 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, test, vi } from "vitest";
-import { activateOnKeyboard, type KeyboardActivationEvent } from "./events";
+import { activateOnKeyboard, stopEventPropagation, type KeyboardActivationEvent } from "./events";
 import { FileTreeItem } from "./FileTreeItem";
 import { PortelloIconView, type PortelloIconName } from "./icons";
+import { Card } from "./Card";
 import { StatusBarItem } from "./StatusBarItem";
 import { Tab } from "./Tab";
 import { Terminal } from "./Terminal";
@@ -16,6 +17,24 @@ describe("Portello primitive accessibility contracts", () => {
     expect(activeMarkup).toContain('aria-selected="true"');
     expect(activeMarkup).toContain('tabindex="0"');
     expect(inactiveMarkup).not.toContain("lucide-x");
+  });
+
+  test("dirty closable tabs still render a keyboard-reachable close button", () => {
+    const markup = renderToStaticMarkup(<Tab label="draft.md" dirty onClose={() => undefined} />);
+
+    expect(markup).toContain('aria-label="Close tab"');
+    expect(markup).toContain('type="button"');
+    expect(markup).toContain("lucide-x");
+  });
+
+  test("card is only button-like when clickable", () => {
+    const clickable = renderToStaticMarkup(<Card onClick={() => undefined}>Open project</Card>);
+    const staticCard = renderToStaticMarkup(<Card interactive>Metric</Card>);
+
+    expect(clickable).toContain('role="button"');
+    expect(clickable).toContain('tabindex="0"');
+    expect(staticCard).not.toContain('role="button"');
+    expect(staticCard).not.toContain("tabindex");
   });
 
   test("file tree rows expose selection and folder expansion semantics", () => {
@@ -53,6 +72,32 @@ describe("Portello primitive accessibility contracts", () => {
 
     expect(click).toHaveBeenCalledTimes(2);
     expect(preventDefault).toHaveBeenCalledTimes(2);
+  });
+
+  test("keyboard activation only runs from the focused primitive itself", () => {
+    const click = vi.fn();
+    const preventDefault = vi.fn();
+    const childTarget = {};
+    const currentTarget = { click };
+    const nestedEvent: KeyboardActivationEvent = {
+      key: "Enter",
+      target: childTarget,
+      currentTarget,
+      preventDefault,
+    };
+
+    activateOnKeyboard(nestedEvent);
+
+    expect(click).not.toHaveBeenCalled();
+    expect(preventDefault).not.toHaveBeenCalled();
+  });
+
+  test("close affordance event isolation stops parent bubbling", () => {
+    const stopPropagation = vi.fn();
+
+    stopEventPropagation({ stopPropagation });
+
+    expect(stopPropagation).toHaveBeenCalledTimes(1);
   });
 });
 

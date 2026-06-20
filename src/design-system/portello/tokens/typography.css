@@ -47,7 +47,7 @@
   --leading-relaxed: 1.7;
 
   /* ── Letter spacing ───────────────────────────────────────────────────── */
-  --tracking-tight:  -0.02em;
+  --tracking-tight:  0;
   --tracking-normal: 0;
   --tracking-wide:   0.04em;
   --tracking-caps:   0.08em;   /* SECTION LABELS                    */

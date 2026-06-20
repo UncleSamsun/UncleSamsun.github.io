@@ -1,6 +1,6 @@
 import type { CSSProperties, HTMLAttributes, MouseEventHandler, ReactNode } from "react";
 import { useState } from "react";
-import { activateOnKeyboard, composeEventHandlers } from "./events";
+import { activateOnKeyboard, composeEventHandlers, stopEventPropagation } from "./events";
 import { PortelloIconView, type PortelloIcon } from "./icons";
 
 export interface TabProps extends HTMLAttributes<HTMLDivElement> {
@@ -27,6 +27,7 @@ export function Tab({
   ...rest
 }: TabProps) {
   const [hover, setHover] = useState(false);
+  const [closeFocused, setCloseFocused] = useState(false);
   const tabStyle: CSSProperties = {
     position: "relative",
     display: "flex",
@@ -90,16 +91,19 @@ export function Tab({
           event.currentTarget.style.background = "transparent";
         }}
       >
-        {dirty && (!hover || !onClose) ? (
+        {dirty && !onClose ? (
           <span style={{ width: 8, height: 8, borderRadius: "50%", background: "var(--text-secondary)" }} />
         ) : onClose ? (
           <button
             type="button"
             aria-label="Close tab"
             onClick={(event) => {
-              event.stopPropagation();
+              stopEventPropagation(event);
               onClose(event);
             }}
+            onKeyDown={stopEventPropagation}
+            onFocus={() => setCloseFocused(true)}
+            onBlur={() => setCloseFocused(false)}
             style={{
               width: 16,
               height: 16,
@@ -113,7 +117,7 @@ export function Tab({
               cursor: "pointer",
             }}
           >
-            <PortelloIconView icon="x" size={13} style={{ opacity: hover ? 1 : 0 }} />
+            <PortelloIconView icon="x" size={13} style={{ opacity: hover || closeFocused || dirty ? 1 : 0 }} />
           </button>
         ) : (
           null

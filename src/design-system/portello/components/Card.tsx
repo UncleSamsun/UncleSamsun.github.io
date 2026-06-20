@@ -1,6 +1,6 @@
 import type { CSSProperties, HTMLAttributes, MouseEventHandler, ReactNode } from "react";
 import { useState } from "react";
-import { composeEventHandlers } from "./events";
+import { activateOnKeyboard, composeEventHandlers } from "./events";
 import { PortelloIconView } from "./icons";
 
 export interface CardProps extends Omit<HTMLAttributes<HTMLDivElement>, "title"> {
@@ -21,11 +21,16 @@ export function Card({
   interactive = false,
   children,
   style,
+  onClick,
+  onKeyDown,
   onMouseEnter,
   onMouseLeave,
+  role,
+  tabIndex,
   ...rest
 }: CardProps) {
   const [hover, setHover] = useState(false);
+  const clickable = !!onClick;
 
   const cardStyle: CSSProperties = {
     background: "var(--surface-card)",
@@ -37,16 +42,23 @@ export function Card({
     color: "var(--text-primary)",
     transition:
       "border-color var(--dur-fast) var(--ease-standard), box-shadow var(--dur-fast) var(--ease-standard)",
+    cursor: clickable ? "pointer" : undefined,
     boxSizing: "border-box",
     ...style,
   };
 
   return (
     <div
-      style={cardStyle}
       {...rest}
+      role={role ?? (clickable ? "button" : undefined)}
+      tabIndex={tabIndex ?? (clickable ? 0 : undefined)}
+      onClick={onClick}
+      onKeyDown={composeEventHandlers(onKeyDown, (event) => {
+        if (clickable) activateOnKeyboard(event);
+      })}
       onMouseEnter={composeEventHandlers(onMouseEnter, () => interactive && setHover(true))}
       onMouseLeave={composeEventHandlers(onMouseLeave, () => interactive && setHover(false))}
+      style={cardStyle}
     >
       {(title || menu) && (
         <div
