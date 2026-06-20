@@ -67,21 +67,52 @@ test("terminal invalid open command explains the missing file", async ({ page })
   await terminal.press("Enter");
 
   await expect(page.getByText("open: missing.md: file not found")).toBeVisible();
-  await expect(page.getByText("try: ls")).toBeVisible();
+  await expect(page.getByText("try: ls 또는 ls projects")).toBeVisible();
 });
 
-test("terminal valid open command switches to the Hola project file", async ({ page }) => {
+test("terminal ls guides users and short open command switches to the Hola project file", async ({ page }) => {
   await page.goto("/");
   await waitForPortfolioHydration(page);
 
   await openTerminal(page);
   const terminal = page.getByLabel("Terminal command");
-  await terminal.fill("open Projects/hola-climbing.md");
+  await terminal.fill("ls");
+  await terminal.press("Enter");
+  await expect(page.getByText("Tip: open Profile.md 또는 open hola-climbing.md")).toBeVisible();
+
+  await terminal.fill("ls projects");
+  await terminal.press("Enter");
+  await expect(page.getByText("Tip: Projects/ 없이 open hola-climbing.md 로 열 수 있습니다.")).toBeVisible();
+
+  await terminal.fill("open hola-climbing.md");
   await terminal.press("Enter");
 
-  await expect(page.getByText("opened Projects/hola-climbing.md")).toBeVisible();
+  await expect(page.getByText("opened hola-climbing.md")).toBeVisible();
   await expect(page.getByText("// Projects/hola-climbing.md")).toBeVisible();
   await expect(page.getByText("// AI PIPELINE")).toBeVisible();
+});
+
+test("terminal opens the combined profile page with education and career", async ({ page }) => {
+  await page.goto("/");
+  await waitForPortfolioHydration(page);
+
+  await openTerminal(page);
+  const terminal = page.getByLabel("Terminal command");
+
+  await terminal.fill("open Profile.md");
+  await terminal.press("Enter");
+  await expect(page.getByRole("heading", { name: "프로필" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "SSAFY - 삼성청년SW아카데미" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "샬롬엔지니어링(주) - 하드웨어 및 소프트웨어 개발 대리" })).toBeVisible();
+});
+
+test("README acts as a project summary rather than a mixed profile page", async ({ page }) => {
+  await page.goto("/");
+  await waitForPortfolioHydration(page);
+
+  await expect(page.getByRole("heading", { name: "프로젝트 요약" })).toBeVisible();
+  await expect(page.getByText("// README.md")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "SSAFY - 삼성청년SW아카데미" })).toHaveCount(0);
 });
 
 test("terminal supports keyboard shortcut, history, and tab completion", async ({ page, isMobile }) => {
@@ -110,11 +141,11 @@ test("terminal supports keyboard shortcut, history, and tab completion", async (
   await terminal.press("ArrowDown");
   await expect(terminal).toHaveValue("neofetch");
 
-  await terminal.fill("open Projects/ho");
+  await terminal.fill("open ho");
   await terminal.press("Tab");
-  await expect(terminal).toHaveValue("open Projects/hola-climbing.md");
+  await expect(terminal).toHaveValue("open hola-climbing.md");
   await terminal.press("Enter");
-  await expect(page.getByText("opened Projects/hola-climbing.md")).toBeVisible();
+  await expect(page.getByText("opened hola-climbing.md")).toBeVisible();
   await expect(page.getByRole("region", { name: "Portfolio terminal" }).getByLabel("Close terminal")).toBeVisible();
 });
 
@@ -135,6 +166,51 @@ test("detail route opens project detail as an in-shell modal", async ({ page }) 
 
   await page.keyboard.press("Escape");
   await expect(dialog).toHaveCount(0);
+});
+
+test("project detail evidence media stays inside the media frame", async ({ page }) => {
+  await page.goto("/projects/hola-climbing/");
+
+  const cards = page.locator(".evidence-card");
+  const count = await cards.count();
+  expect(count).toBeGreaterThan(0);
+
+  for (let index = 0; index < count; index += 1) {
+    const card = cards.nth(index);
+    const mediaBox = await card.locator(".evidence-media").boundingBox();
+    const imageBox = await card.locator(".evidence-media img").first().boundingBox();
+    const bodyBox = await card.locator(".evidence-body").boundingBox();
+
+    expect(mediaBox).not.toBeNull();
+    expect(imageBox).not.toBeNull();
+    expect(bodyBox).not.toBeNull();
+    if (!mediaBox || !imageBox || !bodyBox) continue;
+
+    expect(imageBox.x).toBeGreaterThanOrEqual(mediaBox.x - 1);
+    expect(imageBox.y).toBeGreaterThanOrEqual(mediaBox.y - 1);
+    expect(imageBox.x + imageBox.width).toBeLessThanOrEqual(mediaBox.x + mediaBox.width + 1);
+    expect(imageBox.y + imageBox.height).toBeLessThanOrEqual(mediaBox.y + mediaBox.height + 1);
+    expect(mediaBox.y + mediaBox.height).toBeLessThanOrEqual(bodyBox.y + 1);
+  }
+});
+
+test("mobile navigator toggles the explorer as a drawer", async ({ page }) => {
+  await page.goto("/");
+  await waitForPortfolioHydration(page);
+
+  const toggle = page.getByRole("button", { name: "Open file navigator" });
+  test.skip(!(await toggle.isVisible()), "navigator toggle is only shown on the mobile layout");
+
+  const explorer = page.getByLabel("Portfolio file explorer");
+  const explorerBox = await explorer.boundingBox();
+  expect(explorerBox?.x ?? 0).toBeLessThan(0); // drawer parked off-screen
+
+  await toggle.click();
+  await expect.poll(async () => (await explorer.boundingBox())?.x ?? -1).toBe(0);
+
+  await explorer.getByText("readandshare.md", { exact: true }).click();
+  await expect(page.getByText("// Projects/readandshare.md")).toBeVisible();
+  await expect.poll(async () => (await explorer.boundingBox())?.x ?? 0).toBeLessThan(0);
 });
 
 test("home and Hola detail avoid horizontal overflow", async ({ page }) => {

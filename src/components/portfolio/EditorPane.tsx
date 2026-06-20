@@ -7,6 +7,9 @@ import { ProjectCard } from "./ProjectCard";
 import { RichText } from "./RichText";
 
 type Profile = typeof import("@/data/profile").profile;
+type ProfileTimelineItem = (Profile["education"][number] | Profile["career"][number]) & {
+  category: "교육" | "경력";
+};
 
 interface EditorPaneProps {
   activeFile: PortfolioFile;
@@ -32,12 +35,41 @@ function renderList(items: string[]) {
   );
 }
 
-function AboutView({ profile, projects, onOpenFile, onOpenDetail }: Omit<EditorPaneProps, "activeFile">) {
+function ProjectSummaryView({ projects, onOpenFile, onOpenDetail }: Omit<EditorPaneProps, "activeFile" | "profile">) {
   return (
     <article className="editor-document portfolio-reading">
       <header className="editor-hero">
         <p className="editor-eyebrow">// README.md</p>
-        <h1>{profile.headline}</h1>
+        <h1>프로젝트 요약</h1>
+        <p>
+          <RichText text="백엔드와 **AI 파이프라인** 프로젝트를 문제, 기술 선택, 결과 중심으로 정리했습니다." />
+        </p>
+      </header>
+
+      <div className="project-card-grid">
+        {projects.map((project) => (
+          <ProjectCard key={project.slug} project={project} onOpen={onOpenFile} onOpenDetail={onOpenDetail} />
+        ))}
+      </div>
+    </article>
+  );
+}
+
+function createProfileTimeline(profile: Profile): ProfileTimelineItem[] {
+  return [
+    ...profile.education.map((item) => ({ ...item, category: "교육" as const })),
+    ...profile.career.map((item) => ({ ...item, category: "경력" as const })),
+  ];
+}
+
+function ProfileView({ profile }: { profile: Profile }) {
+  const timeline = createProfileTimeline(profile);
+
+  return (
+    <article className="editor-document portfolio-reading">
+      <header className="editor-hero">
+        <p className="editor-eyebrow">// Profile.md</p>
+        <h1>프로필</h1>
         <p>
           <RichText text={profile.intro} />
         </p>
@@ -65,13 +97,22 @@ function AboutView({ profile, projects, onOpenFile, onOpenDetail }: Omit<EditorP
         </section>
       </div>
 
-      <section className="editor-hero" aria-labelledby="projects-title">
-        <p className="editor-eyebrow">// projects</p>
-        <h1 id="projects-title">프로젝트 파일</h1>
+      <section className="editor-hero editor-hero--compact">
+        <p className="editor-eyebrow">// timeline</p>
+        <h1>경력 · 교육</h1>
       </section>
-      <div className="project-card-grid">
-        {projects.map((project) => (
-          <ProjectCard key={project.slug} project={project} onOpen={onOpenFile} onOpenDetail={onOpenDetail} />
+      <div className="timeline-list">
+        {timeline.map((item) => (
+          <section className="timeline-card" key={`${item.period}-${item.title}`}>
+            <div className="timeline-meta">
+              <p className="timeline-period">{item.period}</p>
+              <span className="timeline-category">{item.category}</span>
+            </div>
+            <h2>{item.title}</h2>
+            <p>
+              <RichText text={item.description} />
+            </p>
+          </section>
         ))}
       </div>
     </article>
@@ -269,9 +310,10 @@ export function EditorPane({ activeFile, profile, projects, onOpenFile, onOpenDe
 
   return (
     <section className="editor-pane" aria-label={`${activeFile.label} editor`}>
-      {activeFile.view === "about" ? (
-        <AboutView profile={profile} projects={projects} onOpenFile={onOpenFile} onOpenDetail={onOpenDetail} />
+      {activeFile.view === "summary" ? (
+        <ProjectSummaryView projects={projects} onOpenFile={onOpenFile} onOpenDetail={onOpenDetail} />
       ) : null}
+      {activeFile.view === "profile" ? <ProfileView profile={profile} /> : null}
       {activeFile.view === "project" && project ? (
         <ProjectCompactView project={project} onOpenDetail={onOpenDetail} />
       ) : null}

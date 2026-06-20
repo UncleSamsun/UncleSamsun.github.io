@@ -6,6 +6,7 @@ interface ExplorerProps {
   files: PortfolioFile[];
   activeFileId: string;
   onSelectFile: (fileId: string) => void;
+  isOpen?: boolean;
 }
 
 const folders = ["ABOUT", "PROJECTS", "CONTACT"] as const;
@@ -33,7 +34,7 @@ function FolderRow({ label }: { label: string }) {
   return (
     <div style={{ ...rowBaseStyle, paddingLeft: 8 }}>
       <PortelloIconView icon="chevron-down" size={14} style={{ flex: "none", color: "var(--text-faint)" }} />
-      <PortelloIconView icon="folder-open" size={15} style={{ flex: "none", color: "var(--ansi-yellow)" }} />
+      <PortelloIconView icon="folder-open" size={15} style={{ flex: "none", color: "var(--portfolio-accent-cool)" }} />
       <span style={{ flex: 1, overflow: "hidden", textOverflow: "ellipsis" }}>{label}</span>
     </div>
   );
@@ -68,7 +69,7 @@ function FileRow({
         size={15}
         style={{
           flex: "none",
-          color: file.view === "project" ? "var(--portfolio-accent-warm)" : "var(--text-muted)",
+          color: file.view === "project" ? "var(--portfolio-accent-cool)" : "var(--text-muted)",
         }}
       />
       <span style={{ flex: 1, overflow: "hidden", textOverflow: "ellipsis" }}>{file.label}</span>
@@ -76,9 +77,13 @@ function FileRow({
   );
 }
 
-export function Explorer({ files, activeFileId, onSelectFile }: ExplorerProps) {
+export function Explorer({ files, activeFileId, onSelectFile, isOpen = false }: ExplorerProps) {
   return (
-    <aside className="explorer" aria-label="Portfolio file explorer">
+    <aside
+      id="portfolio-explorer"
+      className={`explorer${isOpen ? " explorer--open" : ""}`}
+      aria-label="Portfolio file explorer"
+    >
       <div className="explorer-header">
         <span>EXPLORER</span>
       </div>
