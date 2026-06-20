@@ -3,6 +3,6 @@ import react from "@astrojs/react";
 
 export default defineConfig({
   integrations: [react()],
-  site: "https://unclesamsun.github.io",
+  site: "https://minjoon.me",
   output: "static",
 });

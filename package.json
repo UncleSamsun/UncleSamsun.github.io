@@ -1,4 +1,7 @@
 {
+  "name": "portello-astro-portfolio",
+  "version": "0.0.0",
+  "private": true,
   "scripts": {
     "dev": "astro dev --host 127.0.0.1",
     "build": "astro check && astro build",
