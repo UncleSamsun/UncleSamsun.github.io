@@ -735,7 +735,7 @@ export const theLastSupperProject: PortfolioProject = {
       "내 대기 순번 조회와 다음 고객 호출",
       "Redis 기반 웨이팅 큐와 pending key",
       "실패 요청 dead-letter 큐",
-      "Spring Batch 기반 웨이팅 이력 처리",
+      "팀 구조에 포함된 Spring Batch 기반 웨이팅 이력 처리 흐름 분석/연동",
       "JMeter 부하 테스트와 Prometheus/Grafana 모니터링",
     ],
     achievements: [

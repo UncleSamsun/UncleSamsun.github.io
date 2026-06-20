@@ -85,6 +85,10 @@ describe("portfolio project data", () => {
         expectNonEmpty(decision.tradeOff);
         expectNonEmpty(decision.verification);
         expect(["direct", "team", "analyzed"]).toContain(decision.ownership);
+        if (decision.ownership === "team" || decision.ownership === "analyzed") {
+          expect(typeof decision.ownershipNote).toBe("string");
+          expectNonEmpty(decision.ownershipNote ?? "");
+        }
       }
 
       for (const problem of project.problems) {
