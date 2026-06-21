@@ -22,8 +22,8 @@ describe("terminal commands", () => {
       type: "output",
       lines: [
         "Files",
-        "  README.md",
         "  Profile.md",
+        "  README.md",
         "  Contact.txt",
         "Folders",
         "  projects/ (ls projects)",

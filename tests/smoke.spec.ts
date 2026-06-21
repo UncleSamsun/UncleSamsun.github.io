@@ -18,6 +18,15 @@ async function openTerminal(page: import("@playwright/test").Page) {
   await expect(page.getByLabel("Terminal command")).toBeVisible();
 }
 
+async function openFileWithTerminal(page: import("@playwright/test").Page, fileName: string) {
+  await openTerminal(page);
+  const terminal = page.getByLabel("Terminal command");
+  await terminal.fill(`open ${fileName}`);
+  await terminal.press("Enter");
+  await expect(page.getByText(`opened ${fileName}`)).toBeVisible();
+  await page.getByRole("region", { name: "Portfolio terminal" }).getByLabel("Close terminal").click();
+}
+
 test("home renders IDE shell and Hola project", async ({ page }) => {
   await page.goto("/");
   await waitForPortfolioHydration(page);
@@ -32,6 +41,15 @@ test("home renders IDE shell and Hola project", async ({ page }) => {
   await expect(page.getByText("김민준 - Backend Developer")).toBeVisible();
 });
 
+test("home opens Profile.md before the project summary", async ({ page }) => {
+  await page.goto("/");
+  await waitForPortfolioHydration(page);
+
+  await expect(page.getByText("// Profile.md")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "프로필" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "프로젝트 요약" })).toHaveCount(0);
+});
+
 test("hola detail route renders backend and AI content", async ({ page }) => {
   await page.goto("/projects/hola-climbing/");
 
@@ -43,6 +61,8 @@ test("hola detail route renders backend and AI content", async ({ page }) => {
 
 test("frontend-only stacks are not shown as project tech badges", async ({ page }) => {
   await page.goto("/");
+  await waitForPortfolioHydration(page);
+  await openFileWithTerminal(page, "README.md");
 
   const holaTechBadges = page.getByLabel("Hola Climbing 기술 스택");
   await expect(holaTechBadges.getByText("Spring Boot 4")).toBeVisible();
@@ -109,6 +129,7 @@ test("terminal opens the combined profile page with education and career", async
 test("README acts as a project summary rather than a mixed profile page", async ({ page }) => {
   await page.goto("/");
   await waitForPortfolioHydration(page);
+  await openFileWithTerminal(page, "README.md");
 
   await expect(page.getByRole("heading", { name: "프로젝트 요약" })).toBeVisible();
   await expect(page.getByText("// README.md")).toBeVisible();
@@ -152,6 +173,7 @@ test("terminal supports keyboard shortcut, history, and tab completion", async (
 test("detail route opens project detail as an in-shell modal", async ({ page }) => {
   await page.goto("/");
   await waitForPortfolioHydration(page);
+  await openFileWithTerminal(page, "README.md");
 
   await page
     .locator(".project-card")

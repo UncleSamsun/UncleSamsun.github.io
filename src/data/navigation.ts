@@ -9,8 +9,8 @@ export interface PortfolioFile {
 }
 
 export const portfolioFiles: PortfolioFile[] = [
-  { id: "README.md", folder: "ABOUT", label: "README.md", view: "summary" },
   { id: "Profile.md", folder: "ABOUT", label: "Profile.md", view: "profile" },
+  { id: "README.md", folder: "ABOUT", label: "README.md", view: "summary" },
   {
     id: "Projects/hola-climbing.md",
     folder: "PROJECTS",
@@ -64,4 +64,4 @@ export const portfolioFolders = [
   },
 ];
 
-export const defaultFileId = "README.md";
+export const defaultFileId = "Profile.md";

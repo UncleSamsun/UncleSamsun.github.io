@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { portfolioFiles } from "../src/data/navigation";
+import { defaultFileId, portfolioFiles } from "../src/data/navigation";
 import { profile } from "../src/data/profile";
 import { projects } from "../src/data/projects";
 import { getProjectBySlug, getProjectSlugs, getProjectsByPriority } from "../src/lib/portfolio";
@@ -54,6 +54,15 @@ describe("portfolio project data", () => {
     expect(portfolioFiles.map((file) => file.id)).not.toEqual(
       expect.arrayContaining(["Education.md", "Career.md"]),
     );
+  });
+
+  it("opens Profile.md before the project summary by default", () => {
+    const aboutFiles = portfolioFiles
+      .filter((file) => file.folder === "ABOUT")
+      .map((file) => file.id);
+
+    expect(defaultFileId).toBe("Profile.md");
+    expect(aboutFiles).toEqual(["Profile.md", "README.md"]);
   });
 
   it("keeps timeline profile sections in latest-first order", () => {
