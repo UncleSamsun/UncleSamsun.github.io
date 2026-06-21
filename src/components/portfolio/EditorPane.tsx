@@ -289,7 +289,7 @@ function ContactView({ profile }: { profile: Profile }) {
         <p className="editor-eyebrow">// Contact.md</p>
         <h1>연락처</h1>
         <p>
-          <RichText text="프로젝트나 협업에 대해 **깔끔하게 이야기를 나누고 싶다면** 편하게 연락 주세요." />
+          <RichText text="프로젝트나 협업에 대해 이야기를 나누고 싶다면 편하게 연락 주세요." />
         </p>
       </header>
       <CodeBlock filename="contact.json" language="json" code={code} />

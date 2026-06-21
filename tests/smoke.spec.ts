@@ -171,7 +171,7 @@ test("Contact.md uses a clean invitation copy and spaced contact buttons", async
   await openFileWithTerminal(page, "Contact.md");
 
   await expect(page.getByText("// Contact.md")).toBeVisible();
-  await expect(page.getByText("프로젝트나 협업에 대해 깔끔하게 이야기를 나누고 싶다면 편하게 연락 주세요.")).toBeVisible();
+  await expect(page.getByText("프로젝트나 협업에 대해 이야기를 나누고 싶다면 편하게 연락 주세요.")).toBeVisible();
 
   const links = page.locator(".editor-pane .contact-links .portfolio-link-button");
   await expect(links).toHaveCount(2);
