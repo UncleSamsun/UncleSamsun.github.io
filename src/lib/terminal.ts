@@ -12,12 +12,12 @@ const commands = ["help", "ls", "ls projects", "cat Contact.txt", "whoami", "neo
 
 export const terminalHelpLines = [
   "Portfolio terminal 사용법",
-  "ls                 파일과 폴더를 봅니다.",
-  "ls projects        프로젝트 파일만 봅니다.",
-  "open <file>        보이는 파일명을 그대로 엽니다. 예: open hola-climbing.md",
-  "open Profile.md    소개, 경력, 교육을 한 번에 봅니다.",
-  "cat Contact.txt    연락처를 출력합니다.",
-  "Tab 자동완성, ↑/↓ 이전 명령어, Ctrl+` 터미널 열기/닫기",
+  "ls - 파일/폴더",
+  "ls projects - 프로젝트",
+  "open <file> - 파일 열기",
+  "open Profile.md - 프로필",
+  "cat Contact.txt - 연락처",
+  "Tab/↑↓/Ctrl+` - 완성/기록/토글",
 ];
 
 const rootListLines = [

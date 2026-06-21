@@ -90,6 +90,18 @@ test("terminal invalid open command explains the missing file", async ({ page })
   await expect(page.getByText("try: ls 또는 ls projects")).toBeVisible();
 });
 
+test("terminal presents a clean standalone shell window", async ({ page }) => {
+  await page.goto("/");
+  await waitForPortfolioHydration(page);
+
+  await openTerminal(page);
+
+  const terminalRegion = page.getByRole("region", { name: "Portfolio terminal" });
+  await expect(terminalRegion.getByText("minjoon@portfolio: ~")).toBeVisible();
+  await expect(terminalRegion.getByText("minjoon@portfolio:~$").first()).toBeVisible();
+  await expect(terminalRegion.getByLabel("Close terminal")).toBeVisible();
+});
+
 test("terminal ls guides users and short open command switches to the Hola project file", async ({ page }) => {
   await page.goto("/");
   await waitForPortfolioHydration(page);
