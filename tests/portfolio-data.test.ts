@@ -47,12 +47,12 @@ describe("portfolio project data", () => {
     expect(navigationSlugs).toEqual(getProjectSlugs());
   });
 
-  it("keeps project summary and profile pages in navigation", () => {
+  it("keeps visible portfolio filenames aligned with their content", () => {
     expect(portfolioFiles.map((file) => file.id)).toEqual(
-      expect.arrayContaining(["README.md", "Profile.md"]),
+      expect.arrayContaining(["Profile.md", "Projects/ProjectSummary.md", "Contact.md"]),
     );
     expect(portfolioFiles.map((file) => file.id)).not.toEqual(
-      expect.arrayContaining(["Education.md", "Career.md"]),
+      expect.arrayContaining(["README.md", "Education.md", "Career.md", "Contact.txt"]),
     );
   });
 
@@ -62,7 +62,7 @@ describe("portfolio project data", () => {
       .map((file) => file.id);
 
     expect(defaultFileId).toBe("Profile.md");
-    expect(aboutFiles).toEqual(["Profile.md", "README.md"]);
+    expect(aboutFiles).toEqual(["Profile.md"]);
   });
 
   it("keeps timeline profile sections in latest-first order", () => {

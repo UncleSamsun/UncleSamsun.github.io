@@ -10,7 +10,7 @@ export interface PortfolioFile {
 
 export const portfolioFiles: PortfolioFile[] = [
   { id: "Profile.md", folder: "ABOUT", label: "Profile.md", view: "profile" },
-  { id: "README.md", folder: "ABOUT", label: "README.md", view: "summary" },
+  { id: "Projects/ProjectSummary.md", folder: "PROJECTS", label: "ProjectSummary.md", view: "summary" },
   {
     id: "Projects/hola-climbing.md",
     folder: "PROJECTS",
@@ -46,7 +46,7 @@ export const portfolioFiles: PortfolioFile[] = [
     view: "project",
     slug: "the-last-supper",
   },
-  { id: "Contact.txt", folder: "CONTACT", label: "Contact.txt", view: "contact" },
+  { id: "Contact.md", folder: "CONTACT", label: "Contact.md", view: "contact" },
 ];
 
 export const portfolioFolders = [

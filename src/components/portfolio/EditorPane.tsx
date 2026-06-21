@@ -39,7 +39,7 @@ function ProjectSummaryView({ projects, onOpenFile, onOpenDetail }: Omit<EditorP
   return (
     <article className="editor-document portfolio-reading">
       <header className="editor-hero">
-        <p className="editor-eyebrow">// README.md</p>
+        <p className="editor-eyebrow">// Projects/ProjectSummary.md</p>
         <h1>프로젝트 요약</h1>
         <p>
           <RichText text="백엔드와 **AI 파이프라인** 프로젝트를 문제, 기술 선택, 결과 중심으로 정리했습니다." />
@@ -286,10 +286,10 @@ function ContactView({ profile }: { profile: Profile }) {
   return (
     <article className="editor-document portfolio-reading">
       <header className="editor-hero">
-        <p className="editor-eyebrow">// Contact.txt</p>
+        <p className="editor-eyebrow">// Contact.md</p>
         <h1>연락처</h1>
         <p>
-          <RichText text="백엔드와 **AI 파이프라인 경계**를 명확히 나누는 프로젝트 이야기를 이어갈 수 있습니다." />
+          <RichText text="프로젝트나 협업에 대해 **깔끔하게 이야기를 나누고 싶다면** 편하게 연락 주세요." />
         </p>
       </header>
       <CodeBlock filename="contact.json" language="json" code={code} />

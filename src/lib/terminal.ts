@@ -6,9 +6,9 @@ export type TerminalResult =
   | { type: "open"; fileId: string; lines: string[] }
   | { type: "clear" };
 
-const projectFiles = portfolioFiles.filter((file) => file.view === "project");
-const rootFiles = portfolioFiles.filter((file) => file.view !== "project");
-const commands = ["help", "ls", "ls projects", "cat Contact.txt", "whoami", "neofetch", "clear", "open "] as const;
+const projectFolderFiles = portfolioFiles.filter((file) => file.folder === "PROJECTS");
+const rootFiles = portfolioFiles.filter((file) => file.folder !== "PROJECTS");
+const commands = ["help", "ls", "ls projects", "cat Contact.md", "whoami", "neofetch", "clear", "open "] as const;
 
 export const terminalHelpLines = [
   "Portfolio terminal 사용법",
@@ -16,7 +16,7 @@ export const terminalHelpLines = [
   "ls projects - 프로젝트",
   "open <file> - 파일 열기",
   "open Profile.md - 프로필",
-  "cat Contact.txt - 연락처",
+  "cat Contact.md - 연락처",
   "Tab/↑↓/Ctrl+` - 완성/기록/토글",
 ];
 
@@ -25,12 +25,12 @@ const rootListLines = [
   ...rootFiles.map((file) => `  ${file.label}`),
   "Folders",
   "  projects/ (ls projects)",
-  "Tip: open Profile.md 또는 open hola-climbing.md",
+  "Tip: open Profile.md 또는 ls projects",
 ];
 
 const projectListLines = [
   "Projects",
-  ...projectFiles.map((file) => `  ${file.label}`),
+  ...projectFolderFiles.map((file) => `  ${file.label}`),
   "Tip: Projects/ 없이 open hola-climbing.md 로 열 수 있습니다.",
 ];
 
@@ -44,6 +44,12 @@ function stripMarkdownExtension(label: string) {
 
 function aliasesForFile(file: PortfolioFile) {
   const aliases = [file.id, file.label];
+  if (file.id === "Projects/ProjectSummary.md") {
+    aliases.push("README.md", "readme");
+  }
+  if (file.id === "Contact.md") {
+    aliases.push("Contact.txt");
+  }
   if (file.label.endsWith(".md")) {
     aliases.push(stripMarkdownExtension(file.label));
   }
@@ -102,7 +108,7 @@ export function runTerminalCommand(command: string): TerminalResult {
     return { type: "output", lines: projectListLines };
   }
 
-  if (normalized === "cat Contact.txt") {
+  if (normalize(normalized) === "cat contact.md" || normalize(normalized) === "cat contact.txt") {
     return {
       type: "output",
       lines: [

@@ -11,7 +11,7 @@ describe("terminal commands", () => {
         "ls projects - 프로젝트",
         "open <file> - 파일 열기",
         "open Profile.md - 프로필",
-        "cat Contact.txt - 연락처",
+        "cat Contact.md - 연락처",
         "Tab/↑↓/Ctrl+` - 완성/기록/토글",
       ],
     });
@@ -23,11 +23,10 @@ describe("terminal commands", () => {
       lines: [
         "Files",
         "  Profile.md",
-        "  README.md",
-        "  Contact.txt",
+        "  Contact.md",
         "Folders",
         "  projects/ (ls projects)",
-        "Tip: open Profile.md 또는 open hola-climbing.md",
+        "Tip: open Profile.md 또는 ls projects",
       ],
     });
   });
@@ -37,6 +36,7 @@ describe("terminal commands", () => {
       type: "output",
       lines: [
         "Projects",
+        "  ProjectSummary.md",
         "  hola-climbing.md",
         "  cafe-gamsugwang.md",
         "  jsonstore.md",
@@ -47,11 +47,11 @@ describe("terminal commands", () => {
     });
   });
 
-  it("opens README.md", () => {
-    expect(runTerminalCommand("open README.md")).toEqual({
+  it("opens the project summary file", () => {
+    expect(runTerminalCommand("open ProjectSummary.md")).toEqual({
       type: "open",
-      fileId: "README.md",
-      lines: ["opened README.md"],
+      fileId: "Projects/ProjectSummary.md",
+      lines: ["opened ProjectSummary.md"],
     });
   });
 
@@ -79,11 +79,28 @@ describe("terminal commands", () => {
     });
   });
 
+  it("prints contact details from Contact.md and keeps Contact.txt as a compatibility alias", () => {
+    expect(runTerminalCommand("cat Contact.md")).toEqual({
+      type: "output",
+      lines: [
+        "Email  : alswns5620@naver.com",
+        "GitHub : github.com/UncleSamsun",
+        "Role   : Backend Developer",
+      ],
+    });
+    expect(runTerminalCommand("cat Contact.txt").type).toBe("output");
+  });
+
   it("opens markdown files without typing the extension", () => {
     expect(runTerminalCommand("open profile")).toEqual({
       type: "open",
       fileId: "Profile.md",
       lines: ["opened Profile.md"],
+    });
+    expect(runTerminalCommand("open projectsummary")).toEqual({
+      type: "open",
+      fileId: "Projects/ProjectSummary.md",
+      lines: ["opened ProjectSummary.md"],
     });
     expect(runTerminalCommand("open hola-climbing")).toEqual({
       type: "open",
@@ -114,7 +131,8 @@ describe("terminal commands", () => {
     expect(getTerminalCompletions("op")).toEqual(["open "]);
     expect(getTerminalCompletions("open ho")).toEqual(["open hola-climbing.md"]);
     expect(getTerminalCompletions("open Projects/ho")).toEqual(["open Projects/hola-climbing.md"]);
-    expect(getTerminalCompletions("open Pr")).toEqual(["open Profile.md"]);
+    expect(getTerminalCompletions("open Prof")).toEqual(["open Profile.md"]);
+    expect(getTerminalCompletions("open ProjectS")).toEqual(["open ProjectSummary.md"]);
   });
 
   it("completes unambiguous prefixes and keeps ambiguous input unchanged", () => {

@@ -62,7 +62,7 @@ test("hola detail route renders backend and AI content", async ({ page }) => {
 test("frontend-only stacks are not shown as project tech badges", async ({ page }) => {
   await page.goto("/");
   await waitForPortfolioHydration(page);
-  await openFileWithTerminal(page, "README.md");
+  await openFileWithTerminal(page, "ProjectSummary.md");
 
   const holaTechBadges = page.getByLabel("Hola Climbing 기술 스택");
   await expect(holaTechBadges.getByText("Spring Boot 4")).toBeVisible();
@@ -127,7 +127,7 @@ test("terminal ls guides users and short open command switches to the Hola proje
   const terminal = page.getByLabel("Terminal command");
   await terminal.fill("ls");
   await terminal.press("Enter");
-  await expect(page.getByText("Tip: open Profile.md 또는 open hola-climbing.md")).toBeVisible();
+  await expect(page.getByText("Tip: open Profile.md 또는 ls projects")).toBeVisible();
 
   await terminal.fill("ls projects");
   await terminal.press("Enter");
@@ -155,14 +155,38 @@ test("terminal opens the combined profile page with education and career", async
   await expect(page.getByRole("heading", { name: "샬롬엔지니어링(주) - 하드웨어 및 소프트웨어 개발 대리" })).toBeVisible();
 });
 
-test("README acts as a project summary rather than a mixed profile page", async ({ page }) => {
+test("ProjectSummary.md acts as a project summary rather than a mixed profile page", async ({ page }) => {
   await page.goto("/");
   await waitForPortfolioHydration(page);
-  await openFileWithTerminal(page, "README.md");
+  await openFileWithTerminal(page, "ProjectSummary.md");
 
   await expect(page.getByRole("heading", { name: "프로젝트 요약" })).toBeVisible();
-  await expect(page.getByText("// README.md")).toBeVisible();
+  await expect(page.getByText("// Projects/ProjectSummary.md")).toBeVisible();
   await expect(page.getByRole("heading", { name: "SSAFY - 삼성청년SW아카데미" })).toHaveCount(0);
+});
+
+test("Contact.md uses a clean invitation copy and spaced contact buttons", async ({ page }) => {
+  await page.goto("/");
+  await waitForPortfolioHydration(page);
+  await openFileWithTerminal(page, "Contact.md");
+
+  await expect(page.getByText("// Contact.md")).toBeVisible();
+  await expect(page.getByText("프로젝트나 협업에 대해 깔끔하게 이야기를 나누고 싶다면 편하게 연락 주세요.")).toBeVisible();
+
+  const links = page.locator(".editor-pane .contact-links .portfolio-link-button");
+  await expect(links).toHaveCount(2);
+  const emailBox = await links.nth(0).boundingBox();
+  const githubBox = await links.nth(1).boundingBox();
+  expect(emailBox).not.toBeNull();
+  expect(githubBox).not.toBeNull();
+  if (!emailBox || !githubBox) return;
+
+  const sameRow = Math.abs(githubBox.y - emailBox.y) < 4;
+  if (sameRow) {
+    expect(githubBox.x - (emailBox.x + emailBox.width)).toBeGreaterThanOrEqual(14);
+  } else {
+    expect(githubBox.y - (emailBox.y + emailBox.height)).toBeGreaterThanOrEqual(14);
+  }
 });
 
 test("terminal supports keyboard shortcut, history, and tab completion", async ({ page, isMobile }) => {
@@ -202,7 +226,7 @@ test("terminal supports keyboard shortcut, history, and tab completion", async (
 test("detail route opens project detail as an in-shell modal", async ({ page }) => {
   await page.goto("/");
   await waitForPortfolioHydration(page);
-  await openFileWithTerminal(page, "README.md");
+  await openFileWithTerminal(page, "ProjectSummary.md");
 
   await page
     .locator(".project-card")
