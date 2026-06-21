@@ -90,7 +90,7 @@ test("terminal invalid open command explains the missing file", async ({ page })
   await expect(page.getByText("try: ls 또는 ls projects")).toBeVisible();
 });
 
-test("terminal presents a clean standalone shell window", async ({ page }) => {
+test("terminal presents a clean compact shell popover", async ({ page }) => {
   await page.goto("/");
   await waitForPortfolioHydration(page);
 
@@ -100,6 +100,23 @@ test("terminal presents a clean standalone shell window", async ({ page }) => {
   await expect(terminalRegion.getByText("minjoon@portfolio: ~")).toBeVisible();
   await expect(terminalRegion.getByText("minjoon@portfolio:~$").first()).toBeVisible();
   await expect(terminalRegion.getByLabel("Close terminal")).toBeVisible();
+
+  const placement = await terminalRegion.evaluate((element) => {
+    const rect = element.getBoundingClientRect();
+    return {
+      rightGap: window.innerWidth - rect.right,
+      bottomGap: window.innerHeight - rect.bottom,
+      width: rect.width,
+      height: rect.height,
+      viewportWidth: window.innerWidth,
+    };
+  });
+
+  expect(placement.rightGap).toBeLessThanOrEqual(32);
+  expect(placement.bottomGap).toBeGreaterThanOrEqual(80);
+  expect(placement.bottomGap).toBeLessThanOrEqual(130);
+  expect(placement.width).toBeLessThanOrEqual(Math.min(580, placement.viewportWidth - 24));
+  expect(placement.height).toBeLessThanOrEqual(390);
 });
 
 test("terminal ls guides users and short open command switches to the Hola project file", async ({ page }) => {

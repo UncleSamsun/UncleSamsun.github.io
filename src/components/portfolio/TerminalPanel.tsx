@@ -152,66 +152,64 @@ export function TerminalPanel({ files, onOpenFile }: TerminalPanelProps) {
       </button>
 
       {open ? (
-        <div className="terminal-overlay" aria-hidden={false}>
-          <section
-            ref={panelRef}
-            id="portfolio-terminal"
-            className="terminal-panel"
-            aria-label="Portfolio terminal"
-            onClick={() => inputRef.current?.focus()}
-          >
-            <div className="terminal-titlebar">
-              <div className="terminal-window-dots" aria-hidden="true">
-                <span className="terminal-dot terminal-dot--red" />
-                <span className="terminal-dot terminal-dot--yellow" />
-                <span className="terminal-dot terminal-dot--green" />
-              </div>
-              <span className="terminal-title">minjoon@portfolio: ~</span>
-              <button
-                type="button"
-                className="terminal-close"
-                aria-label="Close terminal"
-                onClick={(event) => {
-                  event.stopPropagation();
-                  setOpen(false);
-                }}
-              >
-                <PortelloIconView icon="x" size={15} />
-              </button>
+        <section
+          ref={panelRef}
+          id="portfolio-terminal"
+          className="terminal-panel"
+          aria-label="Portfolio terminal"
+          onClick={() => inputRef.current?.focus()}
+        >
+          <div className="terminal-titlebar">
+            <div className="terminal-window-dots" aria-hidden="true">
+              <span className="terminal-dot terminal-dot--red" />
+              <span className="terminal-dot terminal-dot--yellow" />
+              <span className="terminal-dot terminal-dot--green" />
             </div>
-            <div className="terminal-scroll" aria-live="polite" ref={scrollRef}>
-              {entries.map((entry, entryIndex) => (
-                <div className="terminal-entry" key={`${entry.command}-${entryIndex}`}>
-                  <div className="terminal-command-line">
-                    <span className="terminal-prompt">minjoon@portfolio:~$</span>
-                    <span className="terminal-command">{entry.command}</span>
-                  </div>
-                  {entry.lines.map((line, lineIndex) => (
-                    <div className={getOutputClassName(line)} key={`${line}-${lineIndex}`}>
-                      {line}
-                    </div>
-                  ))}
+            <span className="terminal-title">minjoon@portfolio: ~</span>
+            <button
+              type="button"
+              className="terminal-close"
+              aria-label="Close terminal"
+              onClick={(event) => {
+                event.stopPropagation();
+                setOpen(false);
+              }}
+            >
+              <PortelloIconView icon="x" size={15} />
+            </button>
+          </div>
+          <div className="terminal-scroll" aria-live="polite" ref={scrollRef}>
+            {entries.map((entry, entryIndex) => (
+              <div className="terminal-entry" key={`${entry.command}-${entryIndex}`}>
+                <div className="terminal-command-line">
+                  <span className="terminal-prompt">minjoon@portfolio:~$</span>
+                  <span className="terminal-command">{entry.command}</span>
                 </div>
-              ))}
-            </div>
-            <form className="terminal-form" onSubmit={handleSubmit}>
-              <span className="terminal-prompt">minjoon@portfolio:~$</span>
-              <input
-                ref={inputRef}
-                className="terminal-input"
-                value={command}
-                onChange={(event) => {
-                  setCommand(event.currentTarget.value);
-                  setHistoryIndex(null);
-                }}
-                onKeyDown={handleInputKeyDown}
-                aria-label="Terminal command"
-                autoComplete="off"
-                spellCheck={false}
-              />
-            </form>
-          </section>
-        </div>
+                {entry.lines.map((line, lineIndex) => (
+                  <div className={getOutputClassName(line)} key={`${line}-${lineIndex}`}>
+                    {line}
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+          <form className="terminal-form" onSubmit={handleSubmit}>
+            <span className="terminal-prompt">minjoon@portfolio:~$</span>
+            <input
+              ref={inputRef}
+              className="terminal-input"
+              value={command}
+              onChange={(event) => {
+                setCommand(event.currentTarget.value);
+                setHistoryIndex(null);
+              }}
+              onKeyDown={handleInputKeyDown}
+              aria-label="Terminal command"
+              autoComplete="off"
+              spellCheck={false}
+            />
+          </form>
+        </section>
       ) : null}
     </>
   );
