@@ -153,7 +153,8 @@ input {
   min-width: 0;
   font-family: var(--font-mono);
   font-size: var(--text-2xs);
-  color: var(--text-muted);
+  /* --text-secondary (gray-200) clears WCAG AA on the titlebar surface; --text-muted was 3.47:1 */
+  color: var(--text-secondary);
 }
 
 .nav-toggle {
