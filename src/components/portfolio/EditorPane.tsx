@@ -62,7 +62,7 @@ function createProfileTimeline(profile: Profile): ProfileTimelineItem[] {
   ];
 }
 
-function ProfileView({ profile }: { profile: Profile }) {
+function ProfileView({ profile, onOpenFile }: { profile: Profile; onOpenFile: (fileId: string) => void }) {
   const timeline = createProfileTimeline(profile);
 
   return (
@@ -70,10 +70,33 @@ function ProfileView({ profile }: { profile: Profile }) {
       <header className="editor-hero">
         <p className="editor-eyebrow">// Profile.md</p>
         <h1>프로필</h1>
+        <p className="editor-tagline">
+          <RichText text={profile.positioning} />
+        </p>
         <p>
           <RichText text={profile.intro} />
         </p>
       </header>
+
+      <section className="profile-highlights" aria-label="핵심 성과 요약">
+        <p className="section-kicker">// key evidence</p>
+        <div className="highlight-list">
+          {profile.highlights.map((highlight) => (
+            <button
+              key={highlight.slug}
+              type="button"
+              className="highlight-card"
+              onClick={() => onOpenFile(`Projects/${highlight.slug}.md`)}
+            >
+              <span className="highlight-title">{highlight.title}</span>
+              <span className="highlight-point">
+                <RichText text={highlight.point} />
+              </span>
+              <span className="highlight-cta">상세 근거 열기 →</span>
+            </button>
+          ))}
+        </div>
+      </section>
 
       <div className="editor-grid">
         <section className="portfolio-card">
@@ -147,7 +170,7 @@ function ProjectCompactView({
             onOpenDetail(project.slug);
           }}
         >
-          detail route
+          상세 페이지
         </a>
       </header>
 
@@ -313,7 +336,7 @@ export function EditorPane({ activeFile, profile, projects, onOpenFile, onOpenDe
       {activeFile.view === "summary" ? (
         <ProjectSummaryView projects={projects} onOpenFile={onOpenFile} onOpenDetail={onOpenDetail} />
       ) : null}
-      {activeFile.view === "profile" ? <ProfileView profile={profile} /> : null}
+      {activeFile.view === "profile" ? <ProfileView profile={profile} onOpenFile={onOpenFile} /> : null}
       {activeFile.view === "project" && project ? (
         <ProjectCompactView project={project} onOpenDetail={onOpenDetail} />
       ) : null}

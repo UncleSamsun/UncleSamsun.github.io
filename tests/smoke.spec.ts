@@ -231,7 +231,7 @@ test("detail route opens project detail as an in-shell modal", async ({ page }) 
   await page
     .locator(".project-card")
     .filter({ has: page.getByRole("heading", { name: "Hola Climbing" }) })
-    .getByRole("link", { name: "detail route" })
+    .getByRole("link", { name: "상세 페이지" })
     .click();
 
   const dialog = page.getByRole("dialog", { name: /Hola Climbing/ });

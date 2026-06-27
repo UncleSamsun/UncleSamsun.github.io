@@ -6,8 +6,31 @@ export const profile = {
   github: "https://github.com/UncleSamsun",
   blog: null,
   headline: "검증 가능한 구조와 안정적인 흐름을 만드는 백엔드 개발자",
+  positioning:
+    "철도 신호장치 **SIL4 인증 5년** 경험을 바탕으로, 기능보다 ==실패 가능성과 검증==을 먼저 설계하는 백엔드 개발자입니다.",
   intro:
     "**Java와 Spring Boot 기반 백엔드**를 중심으로 인증, 데이터 처리, Redis, 테스트, 모니터링을 다룹니다. ==AI 파이프라인과 백엔드 시스템의 경계==를 명확히 나누고, 운영에서 설명 가능한 구조를 만드는 데 집중합니다.",
+  // 첫 화면에서 클릭 전에 보이는 핵심 근거 요약. slug는 src/data/projects.ts와 일치해야 한다.
+  highlights: [
+    {
+      slug: "hola-climbing",
+      title: "Hola Climbing",
+      point:
+        "Kafka 대신 **Redis Streams**로 AI 분석 파이프라인을 분리하고, cursor 조회 ==p95 9.8ms==를 측정·검증",
+    },
+    {
+      slug: "cafe-gamsugwang",
+      title: "카페감수광",
+      point:
+        "리뷰 **22,144건**을 임베딩·클러스터링으로 정제해 취향 기반 카페 추천 파이프라인을 구축",
+    },
+    {
+      slug: "the-last-supper",
+      title: "The Last Supper",
+      point:
+        "웨이팅 부하를 **Redis 큐 비동기**로 분산하고 JMeter 부하 테스트로 응답 경로를 검증",
+    },
+  ],
   about: [
     "요구사항을 기능 목록으로만 보지 않고, 실패 가능성과 운영 흐름까지 함께 정리하려고 합니다.",
     "테스트와 문서화, `API 계약`, 모니터링을 통해 팀이 같은 상태를 보고 판단할 수 있는 개발 방식을 선호합니다.",

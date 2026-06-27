@@ -336,6 +336,79 @@ input {
   line-height: var(--leading-relaxed);
 }
 
+.editor-hero p.editor-tagline {
+  color: var(--text-bright);
+  font-size: var(--text-lg);
+  font-weight: var(--weight-bold);
+  line-height: var(--leading-snug);
+}
+
+.profile-highlights {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.highlight-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 12px;
+}
+
+.highlight-card {
+  display: grid;
+  gap: 8px;
+  padding: 14px 16px;
+  text-align: left;
+  border: 1px solid var(--border-default);
+  border-left: 2px solid color-mix(in srgb, var(--portfolio-accent-cool) 55%, transparent);
+  border-radius: var(--radius-lg);
+  background: color-mix(in srgb, var(--portfolio-accent-cool) 5%, transparent);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: border-color var(--dur-fast) var(--ease-standard),
+    background var(--dur-fast) var(--ease-standard),
+    transform var(--dur-fast) var(--ease-standard);
+}
+
+.highlight-card:hover {
+  border-color: var(--border-strong);
+  border-left-color: var(--portfolio-accent-cool);
+  background: color-mix(in srgb, var(--portfolio-accent-cool) 10%, transparent);
+  transform: translateY(-1px);
+}
+
+.highlight-card:focus-visible {
+  outline: none;
+  border-color: var(--accent-focus);
+  box-shadow: 0 0 0 1px var(--accent-focus);
+}
+
+.highlight-title {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--emphasis-key);
+}
+
+.highlight-point {
+  font-size: var(--text-reading);
+  line-height: var(--leading-relaxed);
+  color: var(--text-primary);
+}
+
+.highlight-cta {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  color: var(--terminal-green-bright);
+}
+
+.project-depth-meta {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  color: var(--text-muted);
+}
+
 .profile-stack-grid,
 .project-card-grid,
 .metric-grid,

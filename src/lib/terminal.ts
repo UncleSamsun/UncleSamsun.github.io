@@ -8,7 +8,7 @@ export type TerminalResult =
 
 const projectFolderFiles = portfolioFiles.filter((file) => file.folder === "PROJECTS");
 const rootFiles = portfolioFiles.filter((file) => file.folder !== "PROJECTS");
-const commands = ["help", "ls", "ls projects", "cat Contact.md", "whoami", "neofetch", "clear", "open "] as const;
+const commands = ["help", "ls", "ls projects", "cat Contact.md", "evidence", "whoami", "neofetch", "clear", "open "] as const;
 
 export const terminalHelpLines = [
   "Portfolio terminal 사용법",
@@ -17,7 +17,15 @@ export const terminalHelpLines = [
   "open <file> - 파일 열기",
   "open Profile.md - 프로필",
   "cat Contact.md - 연락처",
+  "evidence - 핵심 성과/근거 한눈에",
   "Tab/↑↓/Ctrl+` - 완성/기록/토글",
+];
+
+export const terminalEvidenceLines = [
+  "핵심 성과 (open <file> 로 아키텍처·트러블슈팅·성능 근거 확인)",
+  "Hola Climbing   : Redis Streams 분리, cursor p95 9.8ms   -> open hola-climbing.md",
+  "카페감수광       : 리뷰 22,144건 정제 추천 파이프라인       -> open cafe-gamsugwang.md",
+  "The Last Supper : Redis 큐 비동기 + JMeter 부하 검증        -> open the-last-supper.md",
 ];
 
 const rootListLines = [
@@ -106,6 +114,10 @@ export function runTerminalCommand(command: string): TerminalResult {
 
   if (normalize(normalized) === "ls projects") {
     return { type: "output", lines: projectListLines };
+  }
+
+  if (normalized === "evidence") {
+    return { type: "output", lines: terminalEvidenceLines };
   }
 
   if (normalize(normalized) === "cat contact.md" || normalize(normalized) === "cat contact.txt") {

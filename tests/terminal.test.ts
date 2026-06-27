@@ -12,9 +12,19 @@ describe("terminal commands", () => {
         "open <file> - 파일 열기",
         "open Profile.md - 프로필",
         "cat Contact.md - 연락처",
+        "evidence - 핵심 성과/근거 한눈에",
         "Tab/↑↓/Ctrl+` - 완성/기록/토글",
       ],
     });
+  });
+
+  it("prints key evidence pointing to project files", () => {
+    const result = runTerminalCommand("evidence");
+    expect(result.type).toBe("output");
+    if (result.type === "output") {
+      expect(result.lines[0]).toContain("핵심 성과");
+      expect(result.lines.some((line) => line.includes("open hola-climbing.md"))).toBe(true);
+    }
   });
 
   it("lists portfolio root files", () => {
