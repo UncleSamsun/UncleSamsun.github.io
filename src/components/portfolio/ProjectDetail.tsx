@@ -1,5 +1,6 @@
 import { Badge } from "@/design-system/portello/components";
 import type { PortfolioProject, TechCategory } from "@/data/types";
+import { profile } from "@/data/profile";
 import { groupTechByCategory } from "@/lib/tech";
 import { ProjectEvidence } from "./ProjectEvidence";
 import { RichText } from "./RichText";
@@ -58,6 +59,13 @@ export function ProjectDetail({ project }: ProjectDetailProps) {
   return (
     <article className="project-detail-page portfolio-reading">
       <div className="detail-shell">
+        <nav className="detail-topbar" aria-label="포트폴리오 네비게이션">
+          <a className="detail-home-link" href="/">
+            <span className="detail-home-name">{profile.name}</span>
+            <span className="detail-home-role">{profile.role}</span>
+          </a>
+          <a className="detail-back-link" href="/">← 포트폴리오로</a>
+        </nav>
         <ProjectDetailBody project={project} />
       </div>
     </article>
