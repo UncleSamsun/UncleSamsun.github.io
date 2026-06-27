@@ -20,6 +20,6 @@ if (!project) {
   canonical={`https://minjoon.me/projects/${project.slug}/`}
 >
   <main id="main">
-    <ProjectDetail project={project} />
+    <ProjectDetail client:load project={project} />
   </main>
 </BaseLayout>

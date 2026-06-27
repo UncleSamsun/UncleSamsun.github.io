@@ -1102,6 +1102,7 @@ input {
 }
 
 .evidence-media {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1112,6 +1113,7 @@ input {
   overflow: hidden;
   background: var(--surface-panel);
   border-bottom: 1px solid var(--border-subtle);
+  cursor: zoom-in;
 }
 
 .evidence-media img {
@@ -1121,6 +1123,113 @@ input {
   height: auto;
   display: block;
   object-fit: contain;
+  transition: transform var(--dur-fast) var(--ease-standard);
+}
+
+.evidence-media:hover img,
+.evidence-media:focus-visible img {
+  transform: scale(1.015);
+}
+
+.evidence-media:focus-visible {
+  outline: 2px solid var(--accent-focus);
+  outline-offset: -2px;
+}
+
+.evidence-zoom-hint {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--gray-900) 72%, transparent);
+  color: var(--text-bright);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  opacity: 0;
+  transition: opacity var(--dur-fast) var(--ease-standard);
+  pointer-events: none;
+}
+
+.evidence-media:hover .evidence-zoom-hint,
+.evidence-media:focus-visible .evidence-zoom-hint {
+  opacity: 1;
+}
+
+.lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal, 1000);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4vmin;
+  background: color-mix(in srgb, var(--gray-900) 88%, transparent);
+  backdrop-filter: blur(2px);
+}
+
+.lightbox-close {
+  position: absolute;
+  top: max(16px, env(safe-area-inset-top));
+  right: max(16px, env(safe-area-inset-right));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--gray-900) 60%, transparent);
+  color: var(--text-bright);
+  cursor: pointer;
+}
+
+.lightbox-close:hover {
+  border-color: var(--border-strong);
+  background: var(--surface-hover);
+}
+
+.lightbox-close:focus-visible {
+  outline: 2px solid var(--accent-focus);
+  outline-offset: 2px;
+}
+
+.lightbox-figure {
+  margin: 0;
+  display: grid;
+  gap: 12px;
+  justify-items: center;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.lightbox-image {
+  max-width: 92vw;
+  max-height: 80vh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: var(--radius-md);
+  background: var(--surface-panel);
+}
+
+.lightbox-caption {
+  display: grid;
+  gap: 4px;
+  max-width: min(640px, 92vw);
+  text-align: center;
+  font-size: var(--text-reading);
+  line-height: var(--leading-relaxed);
+  color: var(--text-secondary);
+}
+
+.lightbox-caption strong {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--text-bright);
 }
 
 .evidence-body {
