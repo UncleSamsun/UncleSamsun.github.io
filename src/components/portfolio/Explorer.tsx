@@ -15,11 +15,13 @@ const rowBaseStyle: CSSProperties = {
   display: "flex",
   alignItems: "center",
   gap: 6,
-  width: "100%",
+  width: "calc(100% - 12px)",
   height: "var(--row-height)",
   lineHeight: "var(--row-height)",
+  margin: "0 6px",
   paddingRight: 8,
   border: 0,
+  borderRadius: "var(--radius-sm)",
   fontFamily: "var(--font-mono)",
   fontSize: "var(--text-xs)",
   color: "var(--text-secondary)",
@@ -32,7 +34,7 @@ const rowBaseStyle: CSSProperties = {
 
 function FolderRow({ label }: { label: string }) {
   return (
-    <div style={{ ...rowBaseStyle, paddingLeft: 8 }}>
+    <div className="explorer-folder-row" style={{ ...rowBaseStyle, paddingLeft: 8 }}>
       <PortelloIconView icon="chevron-down" size={14} style={{ flex: "none", color: "var(--text-faint)" }} />
       <PortelloIconView icon="folder-open" size={15} style={{ flex: "none", color: "var(--portfolio-accent-cool)" }} />
       <span style={{ flex: 1, overflow: "hidden", textOverflow: "ellipsis" }}>{label}</span>
@@ -52,12 +54,15 @@ function FileRow({
   return (
     <button
       type="button"
+      className={`explorer-file-row${active ? " explorer-file-row--active" : ""}`}
       style={{
         ...rowBaseStyle,
         paddingLeft: 22,
         color: active ? "var(--text-bright)" : "var(--text-secondary)",
-        background: active ? "var(--surface-active)" : "transparent",
-        boxShadow: active ? "inset 0 0 0 1px var(--border-default)" : "none",
+        background: active ? "color-mix(in srgb, var(--portfolio-accent-cool) 11%, var(--surface-active))" : "transparent",
+        boxShadow: active
+          ? "inset 0 0 0 1px color-mix(in srgb, var(--portfolio-accent-cool) 32%, transparent)"
+          : "none",
         cursor: "pointer",
       }}
       aria-current={active ? "page" : undefined}
