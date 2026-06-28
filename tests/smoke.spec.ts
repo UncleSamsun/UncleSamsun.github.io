@@ -50,6 +50,37 @@ test("home opens Profile.md before the project summary", async ({ page }) => {
   await expect(page.getByRole("heading", { name: "프로젝트 요약" })).toHaveCount(0);
 });
 
+test("editor tabs group low-priority files behind an overflow menu", async ({ page }) => {
+  await page.goto("/");
+  await waitForPortfolioHydration(page);
+
+  await expect(page.locator(".editor-tabs .editor-tab")).toHaveCount(2);
+  await expect(page.locator(".editor-tabs .editor-tab")).toHaveText(["Profile.md", "ProjectSummary.md"]);
+
+  await page.locator(".editor-tabs-menu summary").click();
+  await page.locator(".editor-tabs-menu-popover").getByRole("button", { name: "jsonstore.md" }).click();
+
+  await expect(page.getByText("// Projects/jsonstore.md")).toBeVisible();
+  await expect(page.locator(".editor-tabs .editor-tab")).toHaveCount(3);
+});
+
+test("mobile editor tabs leave room for the document title", async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.goto("/");
+  await waitForPortfolioHydration(page);
+
+  const visibleTabCount = await page.locator(".editor-tabs .editor-tab").evaluateAll((tabs) =>
+    tabs.filter((tab) => {
+      const rect = tab.getBoundingClientRect();
+      return getComputedStyle(tab).display !== "none" && rect.width > 0 && rect.height > 0;
+    }).length,
+  );
+  expect(visibleTabCount).toBe(1);
+  await expect(page.locator(".editor-tabs-menu summary")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "프로필" })).toBeVisible();
+  await expectNoHorizontalOverflow(page);
+});
+
 test("hola detail route renders backend and AI content", async ({ page }) => {
   await page.goto("/projects/hola-climbing/");
 
@@ -71,6 +102,18 @@ test("frontend-only stacks are not shown as project tech badges", async ({ page 
   await expect(holaTechBadges.getByText("Spring Boot 4")).toBeVisible();
   await expect(holaTechBadges.getByText("Vue 3")).toHaveCount(0);
   await expect(holaTechBadges.getByText("Capacitor")).toHaveCount(0);
+});
+
+test("project overview exposes compact project links on the card", async ({ page }) => {
+  await page.goto("/");
+  await waitForPortfolioHydration(page);
+  await openFileWithTerminal(page, "ProjectSummary.md");
+
+  const holaCard = page.locator(".project-card").filter({ has: page.getByRole("heading", { name: "Hola Climbing" }) });
+
+  await expect(holaCard.getByRole("link", { name: "Live Service" })).toHaveAttribute("href", "https://hola-climb.app");
+  await expect(holaCard.locator(".project-link-chip")).toHaveCount(3);
+  await expectNoHorizontalOverflow(page);
 });
 
 test("not-found page renders local 404 content", async ({ page }) => {

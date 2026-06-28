@@ -1,4 +1,4 @@
-import { Badge, CodeBlock } from "@/design-system/portello/components";
+import { Badge, CodeBlock, PortelloIconView } from "@/design-system/portello/components";
 import type { PortfolioFile } from "@/data/navigation";
 import type { PortfolioProject } from "@/data/types";
 import { formatOwnership } from "@/lib/ownership";
@@ -165,17 +165,22 @@ function ProjectCompactView({
             <RichText text={project.summary} />
           </p>
         </div>
-        <a
-          className="portfolio-link-button portfolio-link-button--primary"
-          href={`/projects/${project.slug}/`}
-          onClick={(event) => {
-            if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) return;
-            event.preventDefault();
-            onOpenDetail(project.slug);
-          }}
-        >
-          상세 페이지
-        </a>
+        <div className="project-overview-actions">
+          <ProjectLinks links={project.links} variant="overview" />
+          <a
+            className="project-card-link project-card-link--primary"
+            href={`/projects/${project.slug}/`}
+            onClick={(event) => {
+              if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) return;
+              event.preventDefault();
+              onOpenDetail(project.slug);
+            }}
+            title={`${project.name} 상세 페이지`}
+          >
+            <span>상세 페이지</span>
+            <PortelloIconView icon="arrow-right" size={14} />
+          </a>
+        </div>
       </header>
 
       <RecruiterSummary summary={project.recruiterSummary} />
@@ -287,10 +292,6 @@ function ProjectCompactView({
             </div>
           ))}
         </div>
-      </CodeLikeSection>
-
-      <CodeLikeSection heading="// LINKS">
-        <ProjectLinks links={project.links} />
       </CodeLikeSection>
 
       <CodeLikeSection heading="// RETROSPECTIVE">

@@ -1,6 +1,7 @@
-import { Badge } from "@/design-system/portello/components";
+import { Badge, PortelloIconView } from "@/design-system/portello/components";
 import type { PortfolioProject } from "@/data/types";
 import { getVisibleTechStack } from "@/lib/tech";
+import { ProjectLinks } from "./ProjectLinks";
 import { RecruiterSummary } from "./RecruiterSummary";
 import { RichText } from "./RichText";
 
@@ -37,14 +38,17 @@ export function ProjectCard({ project, onOpen, onOpenDetail }: ProjectCardProps)
         ))}
       </div>
       <RecruiterSummary summary={project.recruiterSummary} variant="card" />
-      <div className="contact-links">
+      <ProjectLinks links={project.links} className="project-card-links" variant="overview" />
+      <div className="project-card-actions">
         {onOpen ? (
           <button
             className="project-card-link project-card-link--primary"
             type="button"
             onClick={() => onOpen(fileId)}
+            title={`${project.name} 상세 근거 열기`}
           >
-            상세 근거 열기 →
+            <PortelloIconView icon="file-text" size={14} />
+            <span>근거</span>
           </button>
         ) : null}
         <a
@@ -56,8 +60,10 @@ export function ProjectCard({ project, onOpen, onOpenDetail }: ProjectCardProps)
             event.preventDefault();
             onOpenDetail(project.slug);
           }}
+          title={`${project.name} 상세 페이지`}
         >
-          상세 페이지
+          <span>상세 페이지</span>
+          <PortelloIconView icon="arrow-right" size={14} />
         </a>
       </div>
     </article>

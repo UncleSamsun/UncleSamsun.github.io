@@ -1,4 +1,4 @@
-import type { CSSProperties } from "react";
+import { useMemo, useState } from "react";
 import { PortelloIconView } from "@/design-system/portello/components";
 import type { PortfolioFile } from "@/data/navigation";
 
@@ -8,61 +8,79 @@ interface EditorTabsProps {
   onSelectFile: (fileId: string) => void;
 }
 
+const pinnedTabIds = new Set(["Profile.md", "Projects/ProjectSummary.md"]);
+
 export function EditorTabs({ files, activeFileId, onSelectFile }: EditorTabsProps) {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const visibleTabs = useMemo(() => {
+    const pinnedTabs = files.filter((file) => pinnedTabIds.has(file.id));
+    const activeFile = files.find((file) => file.id === activeFileId);
+    if (!activeFile || pinnedTabIds.has(activeFile.id)) return pinnedTabs;
+    return [...pinnedTabs, activeFile];
+  }, [activeFileId, files]);
+  const visibleIds = new Set(visibleTabs.map((file) => file.id));
+  const overflowFiles = files.filter((file) => !visibleIds.has(file.id));
+
+  const selectFile = (fileId: string) => {
+    setMenuOpen(false);
+    onSelectFile(fileId);
+  };
+
   return (
     <nav className="editor-tabs" aria-label="Open portfolio files">
-      {files.map((file) => (
-        <button
-          key={file.id}
-          type="button"
-          aria-current={file.id === activeFileId ? "page" : undefined}
-          onClick={() => onSelectFile(file.id)}
-          style={getTabStyle(file.id === activeFileId)}
+      <div className="editor-tab-list">
+        {visibleTabs.map((file) => {
+          const active = file.id === activeFileId;
+
+          return (
+            <button
+              key={file.id}
+              type="button"
+              className={`editor-tab${active ? " editor-tab--active" : ""}`}
+              aria-current={active ? "page" : undefined}
+              onClick={() => selectFile(file.id)}
+            >
+              {active ? <span className="editor-tab-active-line" /> : null}
+              <PortelloIconView
+                icon="file-text"
+                size={14}
+                className={file.view === "project" ? "editor-tab-icon editor-tab-icon--project" : "editor-tab-icon"}
+              />
+              <span className="editor-tab-label">{file.label}</span>
+            </button>
+          );
+        })}
+      </div>
+      {overflowFiles.length > 0 ? (
+        <details
+          className="editor-tabs-menu"
+          open={menuOpen}
+          onToggle={(event) => setMenuOpen(event.currentTarget.open)}
         >
-          {file.id === activeFileId && (
-            <span
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                right: 0,
-                height: 1.5,
-                background: "var(--accent-focus)",
-              }}
-            />
-          )}
-          <PortelloIconView
-            icon="file-text"
-            size={14}
-            style={{
-              flex: "none",
-              color: file.view === "project" ? "var(--portfolio-accent-cool)" : "var(--text-muted)",
-            }}
-          />
-          <span>{file.label}</span>
-        </button>
-      ))}
+          <summary aria-label="Open more portfolio files">
+            <PortelloIconView icon="folder-open" size={14} />
+            <span className="editor-tabs-menu-label">Files</span>
+            <span className="editor-tabs-menu-count">{overflowFiles.length}</span>
+          </summary>
+          <div className="editor-tabs-menu-popover">
+            {overflowFiles.map((file) => (
+              <button
+                key={file.id}
+                type="button"
+                className="editor-tabs-menu-item"
+                onClick={() => selectFile(file.id)}
+              >
+                <PortelloIconView
+                  icon="file-text"
+                  size={15}
+                  className={file.view === "project" ? "editor-tab-icon editor-tab-icon--project" : "editor-tab-icon"}
+                />
+                <span>{file.label}</span>
+              </button>
+            ))}
+          </div>
+        </details>
+      ) : null}
     </nav>
   );
-}
-
-function getTabStyle(active: boolean): CSSProperties {
-  return {
-    position: "relative",
-    display: "flex",
-    alignItems: "center",
-    gap: 7,
-    height: "var(--tab-height)",
-    padding: "0 28px 0 12px",
-    border: 0,
-    borderRight: "1px solid var(--border-subtle)",
-    fontFamily: "var(--font-mono)",
-    fontSize: "var(--text-xs)",
-    color: active ? "var(--text-bright)" : "var(--text-muted)",
-    background: active ? "var(--surface-editor)" : "transparent",
-    cursor: "pointer",
-    userSelect: "none",
-    whiteSpace: "nowrap",
-    boxSizing: "border-box",
-  };
 }

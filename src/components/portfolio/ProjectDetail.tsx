@@ -95,6 +95,7 @@ export function ProjectDetailBody({ project }: ProjectDetailProps) {
             <Badge>{project.label}</Badge>
             <Badge>{project.team}</Badge>
           </div>
+          <ProjectLinks links={project.links} className="detail-hero-links" variant="overview" />
           <RecruiterSummary summary={project.recruiterSummary} />
           <ProofPreview metrics={project.metrics} visuals={project.visuals} href={`#${evidenceId}`} />
         </header>
@@ -215,10 +216,6 @@ export function ProjectDetailBody({ project }: ProjectDetailProps) {
               </div>
             ))}
           </div>
-        </Section>
-
-        <Section title="Links.md">
-          <ProjectLinks links={project.links} />
         </Section>
 
         <Section title="Retrospective.md">
