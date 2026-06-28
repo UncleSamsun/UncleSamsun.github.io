@@ -16,7 +16,7 @@ export function ProjectEvidence({ visuals }: ProjectEvidenceProps) {
   if (visuals.length === 0) {
     return (
       <p className="portfolio-reading">
-        <RichText text="정리된 시각 자료는 다음 업데이트에서 추가합니다." />
+        <RichText text="시각 자료 추가 예정." />
       </p>
     );
   }

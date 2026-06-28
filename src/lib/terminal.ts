@@ -39,7 +39,7 @@ const rootListLines = [
 const projectListLines = [
   "Projects",
   ...projectFolderFiles.map((file) => `  ${file.label}`),
-  "Tip: Projects/ 없이 open hola-climbing.md 로 열 수 있습니다.",
+  "Tip: Projects/ 생략 가능 - open hola-climbing.md",
 ];
 
 function normalize(value: string) {

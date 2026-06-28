@@ -42,7 +42,7 @@ function ProjectSummaryView({ projects, onOpenFile, onOpenDetail }: Omit<EditorP
         <p className="editor-eyebrow">// Projects/ProjectSummary.md</p>
         <h1>프로젝트 요약</h1>
         <p>
-          <RichText text="백엔드와 **AI 파이프라인** 프로젝트를 문제, 기술 선택, 결과 중심으로 정리했습니다." />
+          <RichText text="**백엔드/AI 파이프라인** 프로젝트. 문제, 기술 선택, 결과 중심 기록." />
         </p>
       </header>
 
@@ -312,7 +312,7 @@ function ContactView({ profile }: { profile: Profile }) {
         <p className="editor-eyebrow">// Contact.md</p>
         <h1>연락처</h1>
         <p>
-          <RichText text="프로젝트나 협업에 대해 이야기를 나누고 싶다면 편하게 연락 주세요." />
+          <RichText text="프로젝트 · 협업 문의. 편한 연락 환영." />
         </p>
       </header>
       <CodeBlock filename="contact.json" language="json" code={code} />
@@ -344,7 +344,7 @@ export function EditorPane({ activeFile, profile, projects, onOpenFile, onOpenDe
       {activeFile.view === "project" && !project ? (
         <article className="editor-document portfolio-reading">
           <CodeLikeSection heading="// PROJECT NOT FOUND">
-            <p>프로젝트 데이터가 아직 연결되지 않았습니다.</p>
+            <p>프로젝트 데이터 미연결.</p>
           </CodeLikeSection>
         </article>
       ) : null}

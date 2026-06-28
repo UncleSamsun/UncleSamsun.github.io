@@ -131,7 +131,7 @@ test("terminal ls guides users and short open command switches to the Hola proje
 
   await terminal.fill("ls projects");
   await terminal.press("Enter");
-  await expect(page.getByText("Tip: Projects/ 없이 open hola-climbing.md 로 열 수 있습니다.")).toBeVisible();
+  await expect(page.getByText("Tip: Projects/ 생략 가능 - open hola-climbing.md")).toBeVisible();
 
   await terminal.fill("open hola-climbing.md");
   await terminal.press("Enter");
@@ -171,7 +171,7 @@ test("Contact.md uses a clean invitation copy and spaced contact buttons", async
   await openFileWithTerminal(page, "Contact.md");
 
   await expect(page.getByText("// Contact.md")).toBeVisible();
-  await expect(page.getByText("프로젝트나 협업에 대해 이야기를 나누고 싶다면 편하게 연락 주세요.")).toBeVisible();
+  await expect(page.getByText("프로젝트 · 협업 문의. 편한 연락 환영.")).toBeVisible();
 
   const links = page.locator(".editor-pane .contact-links .portfolio-link-button");
   await expect(links).toHaveCount(2);

@@ -52,7 +52,7 @@ describe("terminal commands", () => {
         "  jsonstore.md",
         "  readandshare.md",
         "  the-last-supper.md",
-        "Tip: Projects/ 없이 open hola-climbing.md 로 열 수 있습니다.",
+        "Tip: Projects/ 생략 가능 - open hola-climbing.md",
       ],
     });
   });

@@ -5,7 +5,7 @@ import { RichText } from "./RichText";
 describe("RichText", () => {
   it("renders emphasis, highlights, and inline code markers", () => {
     const html = renderToStaticMarkup(
-      <RichText text="**단독 담당**으로 ==p95 9.8ms== 근거와 `Redis Streams`를 정리했다." />,
+      <RichText text="**단독 담당**. ==p95 9.8ms== 근거와 `Redis Streams` 정리." />,
     );
 
     expect(html).toContain('<strong class="rich-text-strong">단독 담당</strong>');
@@ -14,8 +14,8 @@ describe("RichText", () => {
   });
 
   it("renders plain text without wrappers when markers are absent", () => {
-    expect(renderToStaticMarkup(<RichText text="마킹 없는 문장은 그대로 출력된다." />)).toBe(
-      "마킹 없는 문장은 그대로 출력된다.",
+    expect(renderToStaticMarkup(<RichText text="마킹 없는 문장 그대로 출력." />)).toBe(
+      "마킹 없는 문장 그대로 출력.",
     );
   });
 
