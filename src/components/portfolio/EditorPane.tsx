@@ -6,6 +6,7 @@ import { getVisibleTechStack } from "@/lib/tech";
 import { CodeLikeSection } from "./CodeLikeSection";
 import { ProofPreview } from "./ProofPreview";
 import { ProjectCard } from "./ProjectCard";
+import { ProjectLinks } from "./ProjectLinks";
 import { RecruiterSummary } from "./RecruiterSummary";
 import { RichText } from "./RichText";
 
@@ -286,6 +287,10 @@ function ProjectCompactView({
             </div>
           ))}
         </div>
+      </CodeLikeSection>
+
+      <CodeLikeSection heading="// LINKS">
+        <ProjectLinks links={project.links} />
       </CodeLikeSection>
 
       <CodeLikeSection heading="// RETROSPECTIVE">

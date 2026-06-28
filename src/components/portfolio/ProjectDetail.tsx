@@ -4,6 +4,7 @@ import { profile } from "@/data/profile";
 import { formatOwnership } from "@/lib/ownership";
 import { groupTechByCategory } from "@/lib/tech";
 import { ProjectEvidence } from "./ProjectEvidence";
+import { ProjectLinks } from "./ProjectLinks";
 import { ProofPreview } from "./ProofPreview";
 import { RecruiterSummary } from "./RecruiterSummary";
 import { RichText } from "./RichText";
@@ -214,6 +215,10 @@ export function ProjectDetailBody({ project }: ProjectDetailProps) {
               </div>
             ))}
           </div>
+        </Section>
+
+        <Section title="Links.md">
+          <ProjectLinks links={project.links} />
         </Section>
 
         <Section title="Retrospective.md">

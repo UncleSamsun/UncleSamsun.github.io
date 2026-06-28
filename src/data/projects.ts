@@ -285,6 +285,7 @@ export const holaClimbingProject: PortfolioProject = {
     },
   ],
   links: [
+    { label: "Live Service", url: "https://hola-climb.app", external: true },
     { label: "GitHub Backend", url: "https://github.com/UncleSamsun/hola-climbing-server", external: true },
     { label: "GitHub AI", url: "https://github.com/UncleSamsun/hola-climbing-ai", external: true },
   ],
