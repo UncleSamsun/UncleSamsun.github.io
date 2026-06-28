@@ -4,6 +4,7 @@ import type { PortfolioProject } from "@/data/types";
 import { formatOwnership } from "@/lib/ownership";
 import { getVisibleTechStack } from "@/lib/tech";
 import { CodeLikeSection } from "./CodeLikeSection";
+import { ProofPreview } from "./ProofPreview";
 import { ProjectCard } from "./ProjectCard";
 import { RecruiterSummary } from "./RecruiterSummary";
 import { RichText } from "./RichText";
@@ -177,6 +178,7 @@ function ProjectCompactView({
       </header>
 
       <RecruiterSummary summary={project.recruiterSummary} />
+      <ProofPreview metrics={project.metrics} visuals={project.visuals} />
 
       <CodeLikeSection heading="// PROJECT RESULT">
         <div className="code-map">

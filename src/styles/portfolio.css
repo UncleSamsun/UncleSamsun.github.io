@@ -537,6 +537,48 @@ input {
   font-size: var(--text-sm);
 }
 
+.proof-preview {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.proof-preview-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  min-width: 0;
+}
+
+.proof-preview-item {
+  display: grid;
+  min-width: 0;
+  gap: 3px;
+}
+
+.proof-preview-label {
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.proof-preview-value {
+  color: var(--text-bright);
+  font-family: var(--font-mono);
+  font-size: var(--text-md);
+  font-weight: var(--weight-semibold);
+  line-height: var(--leading-snug);
+}
+
+.proof-preview-link {
+  align-self: center;
+}
+
 .metric-grid {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
@@ -1414,7 +1456,9 @@ input {
   .project-card-grid,
   .evidence-grid,
   .detail-grid,
-  .recruiter-summary {
+  .recruiter-summary,
+  .proof-preview,
+  .proof-preview-list {
     grid-template-columns: 1fr;
   }
 }

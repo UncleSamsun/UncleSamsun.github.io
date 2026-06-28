@@ -57,6 +57,8 @@ test("hola detail route renders backend and AI content", async ({ page }) => {
   await expect(page.getByRole("heading", { name: "AI.md" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "GCS Signed URL 직접 업로드" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Redis Streams 기반 AI dispatch" })).toBeVisible();
+  await expect(page.getByLabel("핵심 근거 미리보기").getByText("추천 피드 HTTP p95")).toBeVisible();
+  await expect(page.getByRole("link", { name: "근거 보기" })).toHaveAttribute("href", "#hola-climbing-evidence");
 });
 
 test("frontend-only stacks are not shown as project tech badges", async ({ page }) => {

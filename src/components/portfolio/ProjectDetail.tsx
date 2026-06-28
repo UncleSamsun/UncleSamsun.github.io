@@ -4,6 +4,7 @@ import { profile } from "@/data/profile";
 import { formatOwnership } from "@/lib/ownership";
 import { groupTechByCategory } from "@/lib/tech";
 import { ProjectEvidence } from "./ProjectEvidence";
+import { ProofPreview } from "./ProofPreview";
 import { RecruiterSummary } from "./RecruiterSummary";
 import { RichText } from "./RichText";
 import type { ReactNode } from "react";
@@ -44,11 +45,11 @@ function Field({ label, children }: { label: string; children: ReactNode }) {
   );
 }
 
-function Section({ title, children }: { title: string; children: ReactNode }) {
+function Section({ title, children, id }: { title: string; children: ReactNode; id?: string }) {
   const titleId = `detail-${title.replace(/[^a-zA-Z0-9]+/g, "-").replace(/^-|-$/g, "").toLowerCase()}`;
 
   return (
-    <section className="detail-section portfolio-reading" aria-labelledby={titleId}>
+    <section className="detail-section portfolio-reading" id={id} aria-labelledby={titleId}>
       <div className="detail-section-header">
         <h2 id={titleId}>{title}</h2>
       </div>
@@ -76,6 +77,7 @@ export function ProjectDetail({ project }: ProjectDetailProps) {
 
 export function ProjectDetailBody({ project }: ProjectDetailProps) {
   const groupedTech = groupTechByCategory(project.tech);
+  const evidenceId = `${project.slug}-evidence`;
 
   return (
     <>
@@ -93,6 +95,7 @@ export function ProjectDetailBody({ project }: ProjectDetailProps) {
             <Badge>{project.team}</Badge>
           </div>
           <RecruiterSummary summary={project.recruiterSummary} />
+          <ProofPreview metrics={project.metrics} visuals={project.visuals} href={`#${evidenceId}`} />
         </header>
 
         <Section title="Project.java">
@@ -198,7 +201,7 @@ export function ProjectDetailBody({ project }: ProjectDetailProps) {
           </Section>
         ) : null}
 
-        <Section title="Evidence/">
+        <Section title="Evidence/" id={evidenceId}>
           <ProjectEvidence visuals={project.visuals} />
           <div className="metric-grid">
             {project.metrics.map((metric) => (
