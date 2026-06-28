@@ -217,6 +217,33 @@ export const holaClimbingProject: PortfolioProject = {
   ],
   visuals: [
     {
+      kind: "architecture",
+      title: "Backend/AI Architecture",
+      src: "/assets/projects/hola-climbing/architecture.png",
+      caption: "`GCS direct upload`, Cloud Run Spring backend, Redis Streams, AI worker, PostgreSQL/pgvector, 외부 OAuth/SMTP/FCM 흐름",
+      highlight: "**Minjoun 담당**: Spring backend, Redis dispatch, AI worker pipeline",
+    },
+    {
+      kind: "erd",
+      title: "ERD",
+      src: "/assets/projects/hola-climbing/erd.png",
+      caption: "회원, 영상, 암장, 분석, 추천, 기록, 채팅 도메인 관계",
+    },
+    {
+      kind: "performance",
+      title: "Recommendation Performance Summary",
+      src: "/assets/projects/hola-climbing/performance/01-after-summary-card.png",
+      caption: "추천 피드 성능 테스트 요약: 100k videos / 10k users seed 기준 p95, SQL 실행 시간, 오류율",
+      highlight: "`p95 123ms`, `SQL 81ms`, `error_rate 0%` 측정 근거",
+    },
+    {
+      kind: "performance",
+      title: "Cursor Cache Comparison",
+      src: "/assets/projects/hola-climbing/performance/06-after-cursor-cache-comparison.png",
+      caption: "Redis snapshot cursor cache 적용 후 2·3페이지 cursor 호출 p95 분리 측정",
+      highlight: "2페이지 9ms, 3페이지 10ms, cursor 전체 10ms",
+    },
+    {
       kind: "screenshot",
       title: "App Screen Overview",
       src: "/assets/projects/hola-climbing/final/app-overview.jpg",
