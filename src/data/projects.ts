@@ -403,6 +403,12 @@ export const cafeGamsugwangProject: PortfolioProject = {
   ],
   visuals: [
     {
+      kind: "architecture",
+      title: "Architecture",
+      src: "/assets/projects/cafe-gamsugwang/architecture.png",
+      caption: "Next.js 클라이언트 → REST API 서버, Python `Crawler/NLP` 파이프라인과 `CafeDocument` 동기화 배치, Kakao·지도·임베딩 외부 연동, MySQL·ES(검색·Geo·Vector) 데이터 레이어",
+    },
+    {
       kind: "erd",
       title: "ERD",
       src: "/assets/projects/cafe-gamsugwang/erd.png",
@@ -690,6 +696,12 @@ export const readAndShareProject: PortfolioProject = {
     { label: "Graphify 노드", value: "1,030개", note: "vault Graphify readandshare AST-only 보고서 기준." },
   ],
   visuals: [
+    {
+      kind: "architecture",
+      title: "Architecture",
+      src: "/assets/projects/readandshare/architecture.png",
+      caption: "GitHub CI/CD → Docker Compose 배포, AWS 서버의 ReadNShare 백엔드와 `Refresh Token Store`, 도서 검색·이메일 인증·푸시 알림 외부 연동",
+    },
     {
       kind: "erd",
       title: "ERD",
