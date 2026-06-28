@@ -1,8 +1,10 @@
 import { Badge } from "@/design-system/portello/components";
 import type { PortfolioProject, TechCategory } from "@/data/types";
 import { profile } from "@/data/profile";
+import { formatOwnership } from "@/lib/ownership";
 import { groupTechByCategory } from "@/lib/tech";
 import { ProjectEvidence } from "./ProjectEvidence";
+import { RecruiterSummary } from "./RecruiterSummary";
 import { RichText } from "./RichText";
 import type { ReactNode } from "react";
 
@@ -90,6 +92,7 @@ export function ProjectDetailBody({ project }: ProjectDetailProps) {
             <Badge>{project.label}</Badge>
             <Badge>{project.team}</Badge>
           </div>
+          <RecruiterSummary summary={project.recruiterSummary} />
         </header>
 
         <Section title="Project.java">
@@ -151,10 +154,7 @@ export function ProjectDetailBody({ project }: ProjectDetailProps) {
                   <Field label="alternatives">{decision.alternatives.join(", ")}</Field>
                   <Field label="trade_off">{decision.tradeOff}</Field>
                   <Field label="verification">{decision.verification}</Field>
-                  <Field label="ownership">
-                    {decision.ownership}
-                    {decision.ownershipNote ? ` / ${decision.ownershipNote}` : ""}
-                  </Field>
+                  <Field label="ownership">{formatOwnership(decision.ownership, decision.ownershipNote)}</Field>
                 </div>
               </div>
             ))}

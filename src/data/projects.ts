@@ -10,6 +10,11 @@ export const holaClimbingProject: PortfolioProject = {
   status: "active",
   summary:
     "클라이밍 영상을 업로드하면 AI가 ==동작 기술과 동적/정적 성향==을 분석하고, SNS 피드·암장·기록·채팅 경험으로 연결하는 서비스",
+  recruiterSummary: {
+    role: "Spring Boot 백엔드 + Python AI worker pipeline 단독 담당",
+    impact: "GCS 직접 업로드, Redis Streams/SSE, snapshot cursor로 업로드·분석·추천 흐름 분리",
+    proof: "cursor aggregate p95 9.794ms, Spring/AI E2E smoke, raw/presentation evidence",
+  },
   common: {
     purpose: "영상 공유를 넘어 동작 데이터 회고와 성장 흐름 추적",
     goal:
@@ -38,7 +43,7 @@ export const holaClimbingProject: PortfolioProject = {
       "Flyway, Testcontainers, Swagger/ErrorCode 문서화",
     ],
     achievements: [
-      "Spring REST/STOMP ==100개 이상 API==, AI worker health/readiness 계약 코드 기준 정리",
+      "Spring REST/STOMP API 계약 다수, AI worker health/readiness 계약 코드 기준 정리",
       "PostgreSQL·Redis·GCS·AI worker 연결 분석 E2E 흐름 검증",
       "추천 피드 성능 evidence: raw 결과 + presentation 이미지 분리, 포트폴리오용 근거 확보",
     ],
@@ -124,9 +129,9 @@ export const holaClimbingProject: PortfolioProject = {
     },
     {
       title: "Redis Streams 기반 AI dispatch",
-      decision: "Kafka 신규 도입 대신 Redis Streams 기반 AI 분석 작업 큐 구성",
+      decision: "별도 메시지 브로커 신규 도입 없이 기존 Redis 기반 AI 분석 작업 큐 구성",
       reason: "JWT 블랙리스트·진행 버스용 Redis 선사용, 1인 운영 기준 신규 인프라 최소화",
-      alternatives: ["Kafka", "RabbitMQ", "HTTP direct call"],
+      alternatives: ["Kafka/RabbitMQ 신규 도입", "HTTP direct call"],
       tradeOff: "운영 단순성 확보 vs Kafka 수준 생태계·장기 보관·관측성 약화",
       verification: "Spring -> Redis Stream -> AI worker -> Spring callback -> SSE E2E smoke",
       ownership: "direct",
@@ -288,6 +293,11 @@ export const cafeGamsugwangProject: PortfolioProject = {
   team: "5명",
   status: "completed",
   summary: "제주 카페 리뷰와 위치 데이터를 기반으로 ==취향에 맞는 카페==를 추천하는 서비스",
+  recruiterSummary: {
+    role: "데이터 수집·전처리·정제 파이프라인 담당",
+    impact: "47,190 좌표, 3,950 카페, 22,144 리뷰, 30,336 추천 키워드 정리",
+    proof: "Kakao 45개 제한 대응, 200m grid + GeoJSON, Selenium retry, KR-SBERT/TF-IDF",
+  },
   common: {
     purpose: "위치·리뷰 키워드 나열을 넘어, 취향과 탐색 맥락에 맞춘 제주 카페 발견",
     goal:
@@ -454,33 +464,38 @@ export const jsonstoreProject: PortfolioProject = {
   team: "5명",
   status: "completed",
   summary: "상품 등록부터 장바구니, 배송지, 주문, 관리자 처리까지 이어지는 ==커머스 MVP==",
+  recruiterSummary: {
+    role: "장바구니·알림 흐름 분석/정리와 테스트 보강",
+    impact: "JWT 인증 주체 기준 API, Redis cart, FCM 알림 흐름의 권한 경계 점검",
+    proof: "Gradle test suite 당시 통과. 권한 필터·주문 만료 정책은 팀 구조 분석 기준",
+  },
   common: {
     purpose: "고객 쇼핑 흐름과 관리자 상품·주문 처리 흐름의 `커머스 MVP` 검증",
     goal: "고객/관리자 인증 분리, 상품·장바구니·배송지·주문·알림 흐름 연결",
     developmentIssue:
       "고객/관리자 공존 서비스. 인증 필터, 권한, 장바구니 캐싱, 주문 재고 ==동시성 경계== 혼재 위험.",
     results: [
-      "팀 프로젝트 고객/관리자 인증 분리 구조 분석, 본인 담당 API는 JWT 인증 주체 기준 정리",
-      "`Redis` 기반 장바구니 캐싱 흐름 구성",
-      "`Firebase Cloud Messaging` 기반 웹 알림 구현",
+      "팀 프로젝트 고객/관리자 인증 분리 구조 분석, 장바구니·알림 API는 JWT 인증 주체 기준 정리",
+      "`Redis` 기반 장바구니 캐싱 흐름 분석·테스트",
+      "`Firebase Cloud Messaging` 기반 웹 알림 흐름 분석·테스트",
       "주문·재고 동시성 테스트, JUnit/Mockito 테스트 보강",
     ],
   },
   role: {
     title: "Cart, notification & test coverage",
     contribution:
-      "**장바구니 캐싱, 웹 알림, 테스트 코드 담당**. 고객 쇼핑 흐름과 관리자 주문 처리 흐름의 API 계약·도메인 책임 정리.",
+      "**장바구니·알림 흐름 분석과 테스트 보강**. 고객 쇼핑 흐름과 관리자 주문 처리 흐름의 API 계약·도메인 책임 정리.",
     implementedFeatures: [
-      "장바구니 추가/조회/삭제",
-      "FCM 토큰 등록과 웹 알림 발송",
+      "장바구니 추가/조회/삭제 흐름 분석",
+      "FCM 토큰 등록과 웹 알림 발송 흐름 분석",
       "JWT 인증 주체 기준 장바구니·알림 API 정리",
       "주문·재고 동시성 테스트",
       "고객/관리자 권한 경계 테스트",
     ],
     achievements: [
-      "장바구니 `Redis` 저장소 분리, 반복 조회·수정 흐름 경량화",
-      "요청 파라미터 대신 JWT 인증 주체 기준 사용자 API 정리",
-      "주문·재고 차감 흐름의 동시성 위험 테스트 노출",
+      "장바구니 `Redis` 저장소 분리 구조의 반복 조회·수정 흐름 분석",
+      "요청 파라미터 대신 JWT 인증 주체를 쓰는 API 경계 정리",
+      "주문·재고 차감 흐름의 동시성 위험 테스트 시나리오화",
     ],
   },
   tech: [
@@ -507,7 +522,8 @@ export const jsonstoreProject: PortfolioProject = {
       alternatives: ["DB 테이블 단독 저장", "클라이언트 local state 중심 처리"],
       tradeOff: "Redis 키 스키마·만료 정책 관리 부담 vs 반복 조회·수정 응답 경량화",
       verification: "장바구니 추가/조회/삭제 서비스 테스트, 인증 사용자 기준 API 테스트",
-      ownership: "direct",
+      ownership: "analyzed",
+      ownershipNote: "포트폴리오 표현 범위: 구조 분석/테스트 보강.",
     },
     {
       title: "JWT principal 기반 장바구니·알림 API",
@@ -516,7 +532,8 @@ export const jsonstoreProject: PortfolioProject = {
       alternatives: ["요청 body memberId 사용", "path variable memberId 사용"],
       tradeOff: "테스트 인증 컨텍스트 구성 부담 vs API 입력 단순화·권한 경계 명확화",
       verification: "Spring Security Test 기반 인증 사용자 기준 장바구니·알림 동작과 실패 케이스 검증",
-      ownership: "direct",
+      ownership: "analyzed",
+      ownershipNote: "포트폴리오 표현 범위: 구조 분석/테스트 보강.",
     },
     {
       title: "FCM 알림과 테스트 보강",
@@ -525,7 +542,8 @@ export const jsonstoreProject: PortfolioProject = {
       alternatives: ["알림 기능 제외", "발송 실패를 로깅만 하고 테스트하지 않음"],
       tradeOff: "외부 SDK 추상화·테스트 setup 비용 증가 vs 알림 기능 회귀 감소",
       verification: "FCM 토큰 등록과 알림 발송 실패 예외 테스트",
-      ownership: "direct",
+      ownership: "analyzed",
+      ownershipNote: "포트폴리오 표현 범위: 구조 분석/테스트 보강.",
     },
   ],
   problems: [
@@ -599,6 +617,11 @@ export const readAndShareProject: PortfolioProject = {
   team: "4명",
   status: "completed",
   summary: "독서 기록 공유 서비스의 ==인증, 검색, 탈퇴 기능==을 확장한 커뮤니티 백엔드",
+  recruiterSummary: {
+    role: "member 도메인 전반 + 테스트 보강",
+    impact: "이메일 인증, BCrypt, 사용자 검색/탈퇴, 회원 생명주기 회귀 테스트",
+    proof: "본인 PR 8건: #44, #53, #80, #100, #133, #148, #158, #167",
+  },
   common: {
     purpose: "독서 기록·리뷰 공유 커뮤니티의 회원, 리뷰, 팔로우, 알림 흐름 안정화",
     goal: "기존 백엔드에 이메일 인증, 사용자 검색, 회원 탈퇴, 테스트, `Swagger` 문서화 보강",
@@ -606,7 +629,7 @@ export const readAndShareProject: PortfolioProject = {
       "짧은 기간의 기존 코드 인수인계와 기능 확장. 인증·회원·리뷰 도메인의 예외 흐름 동시 검증 필요.",
     results: [
       "이메일 인증, 사용자 검색, 회원 탈퇴 기능 구현",
-      "Auth, Book, Favorite, Review, Member 도메인 테스트 보강",
+      "`member` 중심 테스트 보강, 일부 도메인 회귀 테스트 정리",
       "`Swagger` 기반 API 문서화 추가, 협업 정합 강화",
     ],
   },
@@ -618,7 +641,7 @@ export const readAndShareProject: PortfolioProject = {
       "회원가입과 이메일 인증 토큰 발급·검증",
       "이메일 기반 사용자 검색",
       "회원 정보 수정과 탈퇴",
-      "도서/리뷰/즐겨찾기 도메인 테스트 보강",
+      "member 외 일부 도메인 회귀 테스트 보강",
       "Swagger 기반 API 문서화",
     ],
     achievements: [
@@ -744,6 +767,11 @@ export const theLastSupperProject: PortfolioProject = {
   team: "5명",
   status: "completed",
   summary: "식당 예약과 ==현장 웨이팅==을 함께 관리하는 백엔드 서비스",
+  recruiterSummary: {
+    role: "웨이팅 파트 + JMeter 부하 검증",
+    impact: "Redis atomic/queue/async로 웨이팅 등록 max 응답 233ms → 7ms",
+    proof: "500명/1초 JMeter spike, max 233ms → 7ms, 평균 40.9%~47.8% 감소",
+  },
   common: {
     purpose: "식당 이용자의 예약·현장 웨이팅 신청, 운영자의 대기열·예약 슬롯 관리",
     goal: "예약 슬롯 · 웨이팅 큐 · 고객 호출 · 이력 처리 · 모니터링의 `운영 흐름` 연결",
@@ -752,7 +780,7 @@ export const theLastSupperProject: PortfolioProject = {
     results: [
       "JMeter 부하 테스트 기반 웨이팅 등록 병목 확인",
       "`Redis Atomic` 연산 기반 중복 진입과 대기번호 발급 단순화",
-      "Spring 비동기 처리 기반 응답 경로와 DB 저장 경로 분리",
+      "Spring 비동기 처리 기반 응답 경로와 DB 저장 경로 분리, max response ==233ms → 7ms==",
       "Prometheus/Grafana와 Spring Batch 기반 운영 흐름 구성",
     ],
   },
@@ -828,7 +856,7 @@ export const theLastSupperProject: PortfolioProject = {
       cause: "API 응답 경로와 DB 저장의 강한 결합",
       solution: "API 응답 경로는 Redis 큐 선적재, DB 저장은 비동기 프로세서 담당",
       result:
-        "기존 포트폴리오 기록 기준, Spring 비동기 처리 후 웨이팅 등록 응답 시간 대폭 감소 확인",
+        "JMeter spike 기준 max response time 233ms → 7ms, 평균 응답 95ms → 1ms 확인",
     },
     {
       title: "웨이팅 번호 중복 동시성 문제",
@@ -840,14 +868,18 @@ export const theLastSupperProject: PortfolioProject = {
     },
   ],
   metrics: [
-    { label: "JMeter 계정 데이터", value: "2,000개", note: "웨이팅 등록 `부하 테스트용 계정 CSV` 기준." },
-    { label: "JMeter 로그", value: "28,661줄", note: "기존 포트폴리오 데이터의 실행 로그 규모." },
     {
-      label: "응답 속도",
-      before: "동기 DB 저장 경로",
-      after: "Redis 큐 적재 후 비동기 DB 저장 경로",
-      note: "기존 포트폴리오 기록의 max response time 개선 사례이며 전체 성능 보증 수치로 일반화하지 않는다.",
+      label: "웨이팅 등록 max response",
+      before: "233ms",
+      after: "7ms",
+      note: "500명/1초 JMeter spike. Redis atomic + queue + async 적용 후 max 기준.",
     },
+    {
+      label: "평균 응답 감소",
+      value: "40.9%~47.8%",
+      note: "동일 점주 반복 조회, 다수 점주 조회, 기간 확대, 대량 부하 시나리오 기준.",
+    },
+    { label: "JMeter 계정 데이터", value: "2,000개", note: "웨이팅 등록 `부하 테스트용 계정 CSV` 기준." },
     { label: "테스트 검증", value: "당시 Gradle test suite 통과", note: "기존 포트폴리오 기록 기준이며 전체 품질 보증률을 뜻하지 않는다." },
   ],
   visuals: [

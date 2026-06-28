@@ -16,7 +16,7 @@ export const profile = {
       slug: "hola-climbing",
       title: "Hola Climbing",
       point:
-        "Kafka 대신 **Redis Streams**로 AI 분석 파이프라인을 분리하고, cursor 조회 ==p95 9.8ms==를 측정·검증",
+        "기존 Redis 기반 **Redis Streams**로 AI 분석 파이프라인을 분리하고, cursor 조회 ==p95 9.8ms==를 측정·검증",
     },
     {
       slug: "cafe-gamsugwang",
@@ -28,7 +28,7 @@ export const profile = {
       slug: "the-last-supper",
       title: "The Last Supper",
       point:
-        "웨이팅 부하를 **Redis 큐 비동기**로 분산하고 JMeter 부하 테스트로 응답 경로를 검증",
+        "웨이팅 등록 부하를 **Redis Atomic + Queue**로 제어하고, max 응답 ==233ms → 7ms== 검증",
     },
   ],
   about: [

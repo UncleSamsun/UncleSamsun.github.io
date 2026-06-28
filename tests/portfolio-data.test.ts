@@ -81,6 +81,9 @@ describe("portfolio project data", () => {
       expectNonEmpty(project.period);
       expectNonEmpty(project.team);
       expectNonEmpty(project.summary);
+      expectNonEmpty(project.recruiterSummary.role);
+      expectNonEmpty(project.recruiterSummary.impact);
+      expectNonEmpty(project.recruiterSummary.proof);
       expectNonEmpty(project.common.purpose);
       expectNonEmpty(project.common.goal);
       expectNonEmpty(project.common.developmentIssue);

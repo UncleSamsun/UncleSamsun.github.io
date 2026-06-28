@@ -1,6 +1,7 @@
 import { Badge } from "@/design-system/portello/components";
 import type { PortfolioProject } from "@/data/types";
 import { getVisibleTechStack } from "@/lib/tech";
+import { RecruiterSummary } from "./RecruiterSummary";
 import { RichText } from "./RichText";
 
 interface ProjectCardProps {
@@ -9,19 +10,9 @@ interface ProjectCardProps {
   onOpenDetail?: (slug: string) => void;
 }
 
-function buildDepthSignals(project: PortfolioProject): string[] {
-  const signals: string[] = [];
-  if (project.decisions.length) signals.push(`의사결정 ${project.decisions.length}`);
-  if (project.problems.length) signals.push(`트러블슈팅 ${project.problems.length}`);
-  if (project.metrics.length) signals.push(`성능 수치 ${project.metrics.length}`);
-  if (project.visuals.some((visual) => visual.kind === "architecture")) signals.push("아키텍처 다이어그램");
-  return signals;
-}
-
 export function ProjectCard({ project, onOpen, onOpenDetail }: ProjectCardProps) {
   const visibleTech = getVisibleTechStack(project.tech).slice(0, 6);
   const fileId = `Projects/${project.slug}.md`;
-  const depthSignals = buildDepthSignals(project);
 
   return (
     <article className="portfolio-card project-card portfolio-reading">
@@ -45,11 +36,7 @@ export function ProjectCard({ project, onOpen, onOpenDetail }: ProjectCardProps)
           <Badge key={`${project.slug}-${item.name}`}>{item.name}</Badge>
         ))}
       </div>
-      {depthSignals.length ? (
-        <p className="project-depth-meta" aria-label={`${project.name} 상세 근거 구성`}>
-          {depthSignals.join(" · ")}
-        </p>
-      ) : null}
+      <RecruiterSummary summary={project.recruiterSummary} variant="card" />
       <div className="contact-links">
         {onOpen ? (
           <button

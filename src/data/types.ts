@@ -50,6 +50,12 @@ export interface ProjectVisualAsset {
   highlight?: string;
 }
 
+export interface RecruiterSummary {
+  role: string;
+  impact: string;
+  proof: string;
+}
+
 export interface PortfolioProject {
   slug: string;
   name: string;
@@ -59,6 +65,7 @@ export interface PortfolioProject {
   team: string;
   status: "active" | "completed";
   summary: string;
+  recruiterSummary: RecruiterSummary;
   common: {
     purpose: string;
     goal: string;

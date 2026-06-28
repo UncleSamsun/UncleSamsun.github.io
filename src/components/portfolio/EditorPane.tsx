@@ -1,9 +1,11 @@
 import { Badge, CodeBlock } from "@/design-system/portello/components";
 import type { PortfolioFile } from "@/data/navigation";
 import type { PortfolioProject } from "@/data/types";
+import { formatOwnership } from "@/lib/ownership";
 import { getVisibleTechStack } from "@/lib/tech";
 import { CodeLikeSection } from "./CodeLikeSection";
 import { ProjectCard } from "./ProjectCard";
+import { RecruiterSummary } from "./RecruiterSummary";
 import { RichText } from "./RichText";
 
 type Profile = typeof import("@/data/profile").profile;
@@ -174,6 +176,8 @@ function ProjectCompactView({
         </a>
       </header>
 
+      <RecruiterSummary summary={project.recruiterSummary} />
+
       <CodeLikeSection heading="// PROJECT RESULT">
         <div className="code-map">
           <div className="code-map-row">
@@ -224,8 +228,7 @@ function ProjectCompactView({
               <RichText text={decision.decision} />
             </p>
             <p className="ownership-note">
-              ownership: {decision.ownership}
-              {decision.ownershipNote ? ` / ${decision.ownershipNote}` : ""}
+              담당: {formatOwnership(decision.ownership, decision.ownershipNote)}
             </p>
           </div>
         ))}
