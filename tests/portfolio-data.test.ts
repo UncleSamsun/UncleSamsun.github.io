@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { existsSync } from "node:fs";
 import { defaultFileId, portfolioFiles } from "../src/data/navigation";
 import { profile } from "../src/data/profile";
 import { projects } from "../src/data/projects";
@@ -184,6 +185,15 @@ describe("portfolio project data", () => {
       for (const link of project.links) {
         expectNonEmpty(link.label);
         expect(link.url).toMatch(/^https?:\/\//);
+      }
+    }
+  });
+
+  it("points every visual asset to an existing public file", () => {
+    for (const project of projects) {
+      for (const visual of project.visuals) {
+        expect(visual.src).toMatch(/^\/assets\//);
+        expect(existsSync(`public${visual.src}`)).toBe(true);
       }
     }
   });
