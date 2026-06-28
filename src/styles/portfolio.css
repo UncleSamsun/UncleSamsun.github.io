@@ -331,7 +331,8 @@ input {
   margin: 0;
   color: var(--text-bright);
   font-family: var(--font-korean);
-  font-size: var(--text-2xl);
+  /* 28px: 36px page title read too large on a dense IDE document */
+  font-size: 1.75rem;
   line-height: var(--leading-tight);
   letter-spacing: 0;
 }
@@ -538,7 +539,8 @@ input {
 .evidence-card h3 {
   margin: 0 0 10px;
   font-family: var(--font-mono);
-  font-size: var(--text-base);
+  /* 18px: section headings were 14px and read as body, too weak as subtitles */
+  font-size: 1.125rem;
   line-height: var(--leading-snug);
   color: var(--text-bright);
   letter-spacing: 0;
@@ -1095,7 +1097,8 @@ input {
   margin: 0;
   color: var(--text-bright);
   font-family: var(--font-mono);
-  font-size: var(--text-sm);
+  /* 16px: nudged above body so sub-card titles read as headings under the 18px sections */
+  font-size: var(--text-md);
   line-height: var(--leading-snug);
 }
 
