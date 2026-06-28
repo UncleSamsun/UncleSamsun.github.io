@@ -709,8 +709,9 @@ input {
 .code-map-key {
   font-family: var(--font-mono);
   color: var(--syntax-property);
-  font-size: var(--text-xs);
-  line-height: var(--leading-relaxed);
+  font-size: var(--text-md);
+  font-weight: var(--weight-medium);
+  line-height: var(--leading-normal);
 }
 
 .code-map-value {
