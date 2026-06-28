@@ -401,7 +401,14 @@ export const cafeGamsugwangProject: PortfolioProject = {
     },
     { label: "검색 좌표", value: "47,190개", note: "200m 격자와 GeoJSON 육지 필터링 기반 좌표 수." },
   ],
-  visuals: [],
+  visuals: [
+    {
+      kind: "erd",
+      title: "ERD",
+      src: "/assets/projects/cafe-gamsugwang/erd.png",
+      caption: "사용자·카페·리뷰·키워드·메뉴·관심목록과 ES(`cafeDocument`·`keywords`·`address`) 검색 인덱스 구조",
+    },
+  ],
   retrospective: {
     learned: [
       "추천 품질은 모델보다 먼저 입력 데이터 품질과 재현 가능한 수집 절차에 크게 좌우된다.",
@@ -540,7 +547,14 @@ export const jsonstoreProject: PortfolioProject = {
     { label: "주문 만료 정책", value: "15분", note: "프로젝트 설정 분석 기준 대기 주문 재고 점유 제한 정책." },
     { label: "테스트 검증", value: "당시 Gradle test suite 통과", note: "기존 포트폴리오 기록의 검증 항목이며 전체 품질 보증률을 뜻하지 않는다." },
   ],
-  visuals: [],
+  visuals: [
+    {
+      kind: "erd",
+      title: "ERD",
+      src: "/assets/projects/jsonstore/erd.png",
+      caption: "회원·상품·재고·장바구니·주문(`orders`·`order_products`)·배송·결제·알림·관리자 도메인 관계",
+    },
+  ],
   retrospective: {
     learned: [
       "커머스에서는 인증 주체, 주문 상태, 재고 차감의 경계가 API 형태보다 중요하다.",
@@ -675,7 +689,14 @@ export const readAndShareProject: PortfolioProject = {
     { label: "테스트 검증", value: "당시 Java 17 로컬 test suite 통과", note: "기존 포트폴리오 기록 기준이며 전체 품질 보증률을 뜻하지 않는다." },
     { label: "Graphify 노드", value: "1,030개", note: "vault Graphify readandshare AST-only 보고서 기준." },
   ],
-  visuals: [],
+  visuals: [
+    {
+      kind: "erd",
+      title: "ERD",
+      src: "/assets/projects/readandshare/erd.png",
+      caption: "회원·도서·리뷰·팔로우·피드·좋아요·즐겨찾기와 인증(`refresh_token`·`email_token`·`fcm_token`) 도메인 관계",
+    },
+  ],
   retrospective: {
     learned: [
       "기존 코드에 기능을 추가할 때는 먼저 실패 흐름을 테스트로 고정해야 안전하다.",
@@ -819,7 +840,20 @@ export const theLastSupperProject: PortfolioProject = {
     },
     { label: "테스트 검증", value: "당시 Gradle test suite 통과", note: "기존 포트폴리오 기록 기준이며 전체 품질 보증률을 뜻하지 않는다." },
   ],
-  visuals: [],
+  visuals: [
+    {
+      kind: "architecture",
+      title: "Architecture",
+      src: "/assets/projects/the-last-supper/architecture.png",
+      caption: "Spring Boot 3.4.4 백엔드, Redis 7 대기열·캐시, MySQL 8, Firebase FCM 푸시, React 19 SPA와 JMeter 부하 테스트·Prometheus/Grafana 모니터링까지 포함한 구성",
+    },
+    {
+      kind: "erd",
+      title: "ERD",
+      src: "/assets/projects/the-last-supper/erd.png",
+      caption: "계정·매장·예약(`reservation_plan`·`slot`·`history`)·웨이팅(`queue`·`history`·`setting`)·알림 도메인 관계",
+    },
+  ],
   retrospective: {
     learned: [
       "동시성 문제는 추상적인 우려보다 부하 테스트와 단위 테스트로 재현해야 해결 방향이 선명해진다.",
