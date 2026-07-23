@@ -2,8 +2,8 @@
 
 ## Comparison Target
 
-- Source visual truth (room): `public/assets/home/minjoun-home-world.png`, `1487 × 1058` px.
-- Source visual truth (contact): `public/assets/home/minjoun-home-doorbell.png`, `1487 × 1058` px.
+- Source visual truth (room): `public/assets/home/minjoun-home-world.png`, `1486 × 1058` px.
+- Source visual truth (contact): `public/assets/home/minjoun-home-doorbell.png`, `1486 × 1058` px.
 - Implementation: `http://127.0.0.1:4321/`, browser-rendered at `1280 × 720` CSS px, density `1`.
 - States compared: initial room, project street, project entry, and the home-doorbell ending.
 - Full-view evidence: each source image and its same-state implementation were rendered together in one temporary local comparison page at the same browser capture scale. The temporary comparison routes were removed after review.
@@ -30,7 +30,7 @@
 - **Fonts and typography:** cream high-weight Korean display type and small monospace scene labels preserve the reference's hierarchy. Contact links remain readable, keyboard-focusable HTML rather than baked raster text.
 - **Spacing and layout rhythm:** the room, street, and contact views are one `100svh` scene each. There are no stacked portfolio sections or vertical-page transitions.
 - **Colors and visual tokens:** deep charcoal/navy, warm lamp amber, cream type, and restrained mint skill labels match the generated scene palette. No new gradients or simulated artwork were used.
-- **Image quality and asset fidelity:** the generated `1487 × 1058` room/contact scenes and five `1536 × 1024` project-district PNGs are used directly as full-bleed backgrounds. No CSS/SVG approximation replaces visible scene artwork.
+- **Image quality and asset fidelity:** the generated `1486 × 1058` room/contact scenes and five `1536 × 1024` project-district PNGs are used directly as full-bleed backgrounds. No CSS/SVG approximation replaces visible scene artwork.
 - **Copy and content:** copy is intentionally short and contextual: desk introduction, bookshelf skills, door CTA, then contact at the doorbell. Project evidence stays on each project-store detail route.
 
 ## Interaction and Browser Verification
@@ -96,5 +96,19 @@
 - Flow check: room → street, fifth district → contact, and contact → fifth district all completed with the expected location restored. The direct CLI E2E run could not launch the sandboxed browser process (`MachPortRendezvousServer` permission denied), so it is not counted as a product-test failure.
 
 final result: passed
+
+## 2026-07-23 Brand Spelling Correction
+
+- Corrected all user-visible `MINJOUN` / `Minjoun` branding to `MINJOON` / `Minjoon`: street title and heading, project-store brand, accessible labels, favicon label, project highlight, and smoke-test selectors.
+- Edited the room doorway sign to `MINJOON ST.` and the contact-house brass nameplate to `MINJOON'S HOME`, preserving the original scene composition and lighting.
+
+final result: passed
+
+## 2026-07-23 Return Through the Door
+
+- The contact-house door is now a bounded, invisible interaction target over the visible doorway. Selecting it returns through the existing cinematic transition to the first room state and normalizes the URL to `/`.
+- The contact card is layered above the doorway target so its email, phone, GitHub, and `거리로 돌아가기` controls remain independently usable at desktop and mobile widths.
+- The backward path is intentionally unchanged: `거리로 돌아가기`, `←`, and `Esc` return to the fifth storefront. The ending now has two clear directions rather than a forced reset.
+- Regression coverage: the desktop and mobile E2E flow verifies fifth storefront → contact → front door → first room, plus the existing contact → fifth storefront and project detail → same storefront routes.
 
 final result: passed

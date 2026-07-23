@@ -78,6 +78,11 @@ export function StreetHome({ profile, projects }: StreetHomeProps) {
 
   const enterStreet = () => transitionToScene("street");
   const enterContact = () => transitionToScene("contact");
+  const returnRoom = () => {
+    window.history.replaceState(window.history.state, "", "/");
+    setRoomFocus("intro");
+    transitionToScene("room");
+  };
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -106,7 +111,7 @@ export function StreetHome({ profile, projects }: StreetHomeProps) {
       }
 
       if (event.data.type === "minjoun-street:leave") enterContact();
-      if (event.data.type === "minjoun-street:return") transitionToScene("room");
+      if (event.data.type === "minjoun-street:return") returnRoom();
     };
 
     window.addEventListener("message", onMessage);
@@ -216,12 +221,12 @@ export function StreetHome({ profile, projects }: StreetHomeProps) {
       )}
 
       {scene === "street" && (
-        <section className="world-street" aria-label="MINJOUN ST. 프로젝트 거리">
+        <section className="world-street" aria-label="MINJOON ST. 프로젝트 거리">
           <iframe
             ref={streetFrame}
             className="world-street-frame"
             src={`/minjoun-street.html?world=1${streetShop ? `&shop=${encodeURIComponent(streetShop)}` : ""}`}
-            title="MINJOUN ST. 프로젝트 거리"
+            title="MINJOON ST. 프로젝트 거리"
             tabIndex={0}
           />
           <nav className="world-sr-only" aria-label="프로젝트 바로가기">
@@ -234,6 +239,12 @@ export function StreetHome({ profile, projects }: StreetHomeProps) {
       {scene === "contact" && (
         <section className="world-contact" aria-label="김민준의 집 앞">
           <div className="world-contact-art" style={{ backgroundImage: `url(${doorbellWorld})` }} aria-hidden="true" />
+          <button
+            className="world-hotspot world-hotspot--return-door"
+            type="button"
+            aria-label="문 안으로 들어가 작업실로 돌아가기"
+            onClick={returnRoom}
+          />
           <div className="world-contact-copy">
             <p>DOORBELL / CONTACT</p>
             <h2>연락하기.</h2>
@@ -242,7 +253,7 @@ export function StreetHome({ profile, projects }: StreetHomeProps) {
             <a href={profile.github} target="_blank" rel="noreferrer">GITHUB ↗</a>
             <button type="button" onClick={() => transitionToScene("street", projectStreetOrder[projectStreetOrder.length - 1])}>거리로 돌아가기</button>
           </div>
-          <p className="world-contact-hint">← 또는 Esc로 거리로 돌아가기</p>
+          <p className="world-contact-hint">문 안으로 → 작업실 · ← / Esc → 거리</p>
         </section>
       )}
     </div>

@@ -221,7 +221,7 @@ export const holaClimbingProject: PortfolioProject = {
       title: "Backend/AI Architecture",
       src: "/assets/projects/hola-climbing/architecture.png",
       caption: "`GCS direct upload`, Cloud Run Spring backend, Redis Streams, AI worker, PostgreSQL/pgvector, 외부 OAuth/SMTP/FCM 흐름",
-      highlight: "**Minjoun 담당**: Spring backend, Redis dispatch, AI worker pipeline",
+      highlight: "**Minjoon 담당**: Spring backend, Redis dispatch, AI worker pipeline",
     },
     {
       kind: "erd",

@@ -70,7 +70,7 @@ export function ProjectDetail({ project }: ProjectDetailProps) {
       <div className="store-detail-scrim" aria-hidden="true" />
       <div className="store-shell">
         <nav className="store-topbar" aria-label="포트폴리오 탐색">
-          <a className="store-brand" href="/">MINJOUN ST.</a>
+          <a className="store-brand" href="/">MINJOON ST.</a>
           <span aria-hidden="true">/</span>
           <span>{project.name.toUpperCase()} STORE</span>
           <a className="store-back-link" href={`/?scene=street&shop=${project.slug}`}>거리로 돌아가기</a>
