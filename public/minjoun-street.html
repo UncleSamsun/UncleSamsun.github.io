@@ -74,6 +74,17 @@
       z-index: 1;
       background: rgba(2, 8, 13, .34);
       pointer-events: none;
+      transition: background 420ms ease, opacity 420ms ease;
+    }
+
+    .street-store-portal {
+      position: absolute;
+      z-index: 3;
+      inset: 0;
+      background: radial-gradient(ellipse 22% 52% at 79% 50%, rgba(3, 8, 12, 0) 0 22%, rgba(3, 8, 12, .24) 45%, rgba(2, 5, 8, .88) 100%);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 420ms ease;
     }
 
     .street-topline,
@@ -198,6 +209,24 @@
       background: #f5d37b;
     }
 
+    #stage.is-entering-store { cursor: wait; }
+    #stage.is-entering-store .street-scene.is-active {
+      filter: brightness(.62) saturate(.88) blur(1px);
+      transform: scale(1.38);
+      transform-origin: 79% 50%;
+      transition-duration: 420ms;
+    }
+    #stage.is-entering-store .street-shade { background: rgba(2, 8, 13, .6); }
+    #stage.is-entering-store .street-store-portal { opacity: 1; }
+    #stage.is-entering-store .street-topline,
+    #stage.is-entering-store .street-project-copy,
+    #stage.is-entering-store .street-controls,
+    #stage.is-entering-store .street-entry-cue {
+      opacity: 0;
+      transform: translateX(-16px);
+      transition: opacity 220ms ease, transform 320ms ease;
+    }
+
     @media (max-width: 640px) {
       #stage { min-height: 500px; }
 
@@ -250,6 +279,7 @@
       <figure class="street-scene"><img src="/assets/street/jsonstore-district.png" alt="" loading="eager"></figure>
     </div>
     <div class="street-shade" aria-hidden="true"></div>
+    <div class="street-store-portal" aria-hidden="true"></div>
 
     <header class="street-topline" aria-hidden="true">
       <span>MINJOON ST.</span>
@@ -336,9 +366,12 @@
       }
 
       function enterStore() {
-        if (worldMode) {
+        if (!worldMode || locked) return;
+        locked = true;
+        stage.classList.add('is-entering-store');
+        window.setTimeout(function () {
           window.parent.postMessage({ type: 'minjoun-street:enter', index: index }, window.location.origin);
-        }
+        }, 420);
       }
 
       stage.addEventListener('wheel', function (event) {
