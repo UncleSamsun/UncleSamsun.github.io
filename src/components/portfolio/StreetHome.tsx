@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { PortfolioProject } from "@/data/types";
 
 interface StreetHomeProps {
@@ -43,6 +43,7 @@ export function StreetHome({ profile, projects }: StreetHomeProps) {
   const [scene, setScene] = useState<WorldScene>("room");
   const [roomFocus, setRoomFocus] = useState<RoomFocus>("intro");
   const [streetShop, setStreetShop] = useState<string | null>(null);
+  const [storeArrival, setStoreArrival] = useState(false);
   const [transitionPhase, setTransitionPhase] = useState<TransitionPhase>("idle");
   const streetFrame = useRef<HTMLIFrameElement>(null);
   const transitionTimer = useRef<number | undefined>(undefined);
@@ -83,6 +84,16 @@ export function StreetHome({ profile, projects }: StreetHomeProps) {
     setRoomFocus("intro");
     transitionToScene("room");
   };
+  const settleStoreArrival = useCallback(() => {
+    setStoreArrival(false);
+
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("arrival") !== "store") return;
+
+    params.delete("arrival");
+    const search = params.toString();
+    window.history.replaceState(window.history.state, "", `${window.location.pathname}${search ? `?${search}` : ""}`);
+  }, []);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -91,6 +102,7 @@ export function StreetHome({ profile, projects }: StreetHomeProps) {
 
     if (requestedScene === "street") {
       setStreetShop(requestedShop && projectStreetOrder.includes(requestedShop) ? requestedShop : null);
+      setStoreArrival(params.get("arrival") === "store");
       setScene("street");
     }
     if (requestedScene === "contact") setScene("contact");
@@ -106,6 +118,11 @@ export function StreetHome({ profile, projects }: StreetHomeProps) {
         const project = projectByStreetIndex[event.data.index ?? -1];
         if (project) {
           window.history.replaceState(window.history.state, "", `/?scene=street&shop=${project.slug}`);
+          try {
+            window.sessionStorage.setItem("minjoon-store-entry", project.slug);
+          } catch {
+            // The transition still works when session storage is unavailable.
+          }
           window.location.assign(`/projects/${project.slug}/?from=street`);
         }
       }
@@ -149,6 +166,12 @@ export function StreetHome({ profile, projects }: StreetHomeProps) {
     const focusStreet = window.setTimeout(() => streetFrame.current?.focus(), 80);
     return () => window.clearTimeout(focusStreet);
   }, [scene]);
+
+  useEffect(() => {
+    if (!storeArrival) return;
+    const settleArrival = window.setTimeout(settleStoreArrival, 900);
+    return () => window.clearTimeout(settleArrival);
+  }, [settleStoreArrival, storeArrival]);
 
   useEffect(() => {
     if (scene !== "contact") return;
@@ -221,13 +244,14 @@ export function StreetHome({ profile, projects }: StreetHomeProps) {
       )}
 
       {scene === "street" && (
-        <section className="world-street" aria-label="MINJOON ST. 프로젝트 거리">
+        <section className={`world-street${storeArrival ? " world-street--store-arrival" : ""}`} aria-label="MINJOON ST. 프로젝트 거리">
           <iframe
             ref={streetFrame}
             className="world-street-frame"
             src={`/minjoun-street.html?world=1${streetShop ? `&shop=${encodeURIComponent(streetShop)}` : ""}`}
             title="MINJOON ST. 프로젝트 거리"
             tabIndex={0}
+            onLoad={settleStoreArrival}
           />
           <nav className="world-sr-only" aria-label="프로젝트 바로가기">
             <a href="/">작업실로 돌아가기</a>

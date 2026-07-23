@@ -339,6 +339,7 @@ button, input, textarea, select { font: inherit; }
   background-repeat: no-repeat;
   background-size: cover;
   image-rendering: auto;
+  transition: opacity 320ms ease, transform 320ms cubic-bezier(.22, .75, .25, 1);
 }
 
 .store-detail-scrim {
@@ -349,9 +350,84 @@ button, input, textarea, select { font: inherit; }
 }
 
 .store-shell {
+  position: relative;
+  z-index: 1;
   width: min(1120px, calc(100% - 40px));
   margin: 0 auto;
   padding: 20px 0 72px;
+}
+
+.store-journey {
+  position: fixed;
+  z-index: 5;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  transform-origin: 79% 50%;
+}
+
+.store-journey--idle { display: none; }
+
+.store-journey-district,
+.store-journey-scrim {
+  position: absolute;
+  inset: 0;
+}
+
+.store-journey-district {
+  background-position: 79% center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.store-journey-scrim {
+  background:
+    radial-gradient(ellipse 24% 54% at 79% 50%, rgba(3, 8, 12, 0) 0 22%, rgba(3, 8, 12, .28) 48%, rgba(2, 5, 8, .9) 100%),
+    rgba(2, 6, 10, .16);
+}
+
+.store-journey--leaving {
+  animation: store-journey-leave 320ms cubic-bezier(.42, 0, 1, 1) both;
+}
+
+html[data-store-journey="arriving"] .store-journey--idle {
+  display: block;
+  animation: store-journey-arrive 480ms cubic-bezier(.22, .75, .25, 1) both;
+}
+
+html[data-store-journey="arriving"] .store-detail--idle .store-shell {
+  animation: store-reading-arrive 480ms cubic-bezier(.22, .75, .25, 1) both;
+}
+
+.store-detail--leaving .store-shell {
+  animation: store-reading-leave 320ms cubic-bezier(.42, 0, 1, 1) both;
+}
+
+.store-detail--leaving .store-interior {
+  opacity: .56;
+  transform: scale(.98);
+}
+
+@keyframes store-journey-arrive {
+  0% { opacity: 1; filter: brightness(.7) saturate(.9); transform: scale(1); }
+  58% { opacity: .96; filter: brightness(.58) saturate(.82); transform: scale(1.2); }
+  100% { opacity: 0; filter: brightness(.36) saturate(.72) blur(1px); transform: scale(1.38); }
+}
+
+@keyframes store-journey-leave {
+  0% { opacity: 0; filter: brightness(.36) saturate(.72) blur(1px); transform: scale(1.38); }
+  35% { opacity: 1; filter: brightness(.58) saturate(.82); }
+  100% { opacity: 1; filter: brightness(.7) saturate(.9); transform: scale(1); }
+}
+
+@keyframes store-reading-arrive {
+  0%, 34% { opacity: 0; filter: blur(4px); transform: scale(1.025); }
+  100% { opacity: 1; filter: none; transform: scale(1); }
+}
+
+@keyframes store-reading-leave {
+  0% { opacity: 1; filter: none; transform: scale(1); }
+  100% { opacity: 0; filter: blur(2px); transform: scale(.976); }
 }
 
 .store-topbar {
@@ -370,10 +446,23 @@ button, input, textarea, select { font: inherit; }
 }
 
 .store-back-link {
-  margin-left: auto;
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
   color: var(--street-yellow);
   text-decoration: none;
 }
+
+.store-return-hint {
+  margin-left: auto;
+  color: #91a4ab;
+  font-size: 10px;
+  letter-spacing: .05em;
+}
+
+.store-back-link span { margin-left: 5px; }
+.store-back-link:hover,
+.store-back-link:focus-visible { color: #fff1c2; }
 
 .store-reading-panel {
   margin-top: 18px;
@@ -381,6 +470,19 @@ button, input, textarea, select { font: inherit; }
   border: 1px solid rgba(242, 234, 215, .34);
   background: rgba(11, 19, 25, .95);
   color: var(--street-ink);
+}
+
+/* Key project evidence should read as a deliberate signal, not a highlighter label. */
+.store-reading-panel .rich-text-mark {
+  padding: 0 .04em;
+  background: transparent;
+  color: #edf8f2;
+  font-weight: 800;
+  text-decoration-line: underline;
+  text-decoration-color: color-mix(in srgb, var(--street-mint) 78%, transparent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: .24em;
+  text-decoration-skip-ink: none;
 }
 
 .store-hero {
@@ -732,6 +834,7 @@ button, input, textarea, select { font: inherit; }
   .store-shell { width: min(100% - 20px, 1120px); padding-top: 10px; }
   .store-topbar { min-height: 48px; padding: 0 11px; font-size: 9px; letter-spacing: .04em; }
   .store-topbar > span:nth-of-type(2) { display: none; }
+  .store-return-hint { display: none; }
   .store-back-link { font-size: 10px; }
   .store-reading-panel { margin-top: 10px; padding: 24px 16px 40px; }
   .store-hero h1 { font-size: 43px; }
@@ -1244,6 +1347,14 @@ body:has(.portfolio-world) #main {
   height: 100%;
   border: 0;
   background: #0c1017;
+  transition: opacity 420ms cubic-bezier(.22, .75, .25, 1), transform 420ms cubic-bezier(.22, .75, .25, 1), filter 420ms ease;
+}
+
+.world-street--store-arrival .world-street-frame {
+  opacity: .2;
+  filter: brightness(.52) blur(2px);
+  pointer-events: none;
+  transform: scale(.975);
 }
 
 .world-street-hud {
@@ -1361,7 +1472,14 @@ body:has(.portfolio-world) #main {
   .world-room,
   .world-street,
   .world-contact,
-  .world-transition-veil { transition: none; }
+  .world-transition-veil,
+  .world-street-frame,
+  .store-interior { transition: none; }
+
+  html[data-store-journey="arriving"] .store-journey--idle,
+  html[data-store-journey="arriving"] .store-detail--idle .store-shell,
+  .store-journey--leaving,
+  .store-detail--leaving .store-shell { animation-duration: 1ms; }
 }
 
 @media (max-width: 500px) {

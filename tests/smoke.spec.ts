@@ -52,11 +52,14 @@ test("store detail uses readable project content over the interior concept", asy
   await expect(page.getByRole("heading", { name: "AI·데이터 파이프라인" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Redis Streams 기반 AI dispatch" })).toBeVisible();
   await expect(page.getByRole("link", { name: "Live Service" })).toHaveAttribute("href", "https://hola-climb.app");
-  await expect(page.getByRole("link", { name: "거리로 돌아가기" })).toHaveAttribute(
+  await expect(page.getByRole("link", { name: "Hola Climbing 가게가 있는 거리로 나가기" })).toHaveAttribute(
     "href",
-    "/?scene=street&shop=hola-climbing",
+    "/?scene=street&shop=hola-climbing&arrival=store",
   );
   await expect(page.locator(".store-interior")).toHaveCount(1);
+  const keyEvidence = page.locator(".store-reading-panel .rich-text-mark").first();
+  await expect(keyEvidence).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
+  await expect(keyEvidence).toHaveCSS("text-decoration-line", "underline");
   await expectNoHorizontalOverflow(page);
 });
 
@@ -99,10 +102,36 @@ test("world keeps direction when returning from the contact house and a project 
   await street.locator("#store-entry").click();
   await expect(page).toHaveURL("/projects/readandshare/?from=street");
 
-  await page.getByRole("link", { name: "거리로 돌아가기" }).click();
+  await page.getByRole("link", { name: "ReadAndShare 가게가 있는 거리로 나가기" }).click();
   await expect(page).toHaveURL("/?scene=street&shop=readandshare");
   street = page.frameLocator('iframe[title="MINJOON ST. 프로젝트 거리"]');
   await expect(street.locator("#ix")).toHaveText("04 / 05");
+});
+
+test("store details offer an animated keyboard exit as well as the visible street link", async ({ page }) => {
+  await page.goto("/?scene=street&shop=the-last-supper");
+
+  const street = page.frameLocator('iframe[title="MINJOON ST. 프로젝트 거리"]');
+  await street.locator("#store-entry").click();
+  await expect(page).toHaveURL("/projects/the-last-supper/?from=street");
+  await expect(page.getByRole("link", { name: "The Last Supper 가게가 있는 거리로 나가기" })).toBeVisible();
+  await expect(page.getByText("Esc · 브라우저 ←")).toHaveCount(1);
+
+  await page.keyboard.press("Escape");
+  await expect(page).toHaveURL("/?scene=street&shop=the-last-supper");
+  await expect(page.frameLocator('iframe[title="MINJOON ST. 프로젝트 거리"]').locator("#ix")).toHaveText("03 / 05");
+});
+
+test("browser back exits a store through the same street transition", async ({ page }) => {
+  await page.goto("/?scene=street&shop=cafe-gamsugwang");
+
+  const street = page.frameLocator('iframe[title="MINJOON ST. 프로젝트 거리"]');
+  await street.locator("#store-entry").click();
+  await expect(page).toHaveURL("/projects/cafe-gamsugwang/?from=street");
+
+  await page.evaluate(() => window.history.back());
+  await expect(page).toHaveURL("/?scene=street&shop=cafe-gamsugwang");
+  await expect(page.frameLocator('iframe[title="MINJOON ST. 프로젝트 거리"]').locator("#ix")).toHaveText("02 / 05");
 });
 
 test("the first storefront returns naturally to the room", async ({ page }) => {

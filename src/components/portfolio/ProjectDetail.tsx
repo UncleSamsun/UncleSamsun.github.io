@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { useCallback, useEffect, useRef, useState, type MouseEvent, type ReactNode } from "react";
 import type { PortfolioProject, TechCategory } from "@/data/types";
 import { formatOwnership } from "@/lib/ownership";
 import { groupTechByCategory } from "@/lib/tech";
@@ -26,6 +26,16 @@ const storeInteriors: Record<string, string> = {
   readandshare: "/assets/projects/interiors/readandshare-store.png",
   jsonstore: "/assets/projects/interiors/jsonstore-store.png",
 };
+
+const storeDistricts: Record<string, string> = {
+  "hola-climbing": "/assets/street/hola-climbing-district.png",
+  "cafe-gamsugwang": "/assets/street/cafe-gamsugwang-district.png",
+  "the-last-supper": "/assets/street/the-last-supper-district.png",
+  readandshare: "/assets/street/readandshare-district.png",
+  jsonstore: "/assets/street/jsonstore-district.png",
+};
+
+type StoreJourneyPhase = "idle" | "leaving";
 
 function ListBlock({ items }: { items: string[] }) {
   return (
@@ -63,17 +73,99 @@ function Section({ title, children, id, note }: { title: string; children: React
 
 export function ProjectDetail({ project }: ProjectDetailProps) {
   const interior = storeInteriors[project.slug];
+  const district = storeDistricts[project.slug];
+  const returnHref = `/?scene=street&shop=${project.slug}&arrival=store`;
+  const [journeyPhase, setJourneyPhase] = useState<StoreJourneyPhase>("idle");
+  const exitTimer = useRef<number | undefined>(undefined);
+  const isExiting = useRef(false);
+  const hasStreetHistoryGuard = useRef(false);
+
+  const returnToStreet = useCallback((fromBrowserBack = false) => {
+    if (isExiting.current) return;
+
+    isExiting.current = true;
+    document.documentElement.removeAttribute("data-store-journey");
+    setJourneyPhase("leaving");
+    exitTimer.current = window.setTimeout(() => {
+      if (fromBrowserBack) {
+        window.history.back();
+        return;
+      }
+
+      if (hasStreetHistoryGuard.current) {
+        window.history.go(-2);
+        return;
+      }
+
+      window.location.assign(returnHref);
+    }, 320);
+  }, [returnHref]);
+
+  const handleReturnClick = (event: MouseEvent<HTMLAnchorElement>) => {
+    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    event.preventDefault();
+    returnToStreet();
+  };
+
+  useEffect(() => {
+    const arrivedFromStreet = new URLSearchParams(window.location.search).get("from") === "street";
+    if (!arrivedFromStreet) return;
+
+    if (window.history.state?.storeReturnGuard !== project.slug) {
+      window.history.pushState({ ...(window.history.state ?? {}), storeReturnGuard: project.slug }, "", window.location.href);
+    }
+    hasStreetHistoryGuard.current = true;
+
+    const onPopState = () => returnToStreet(true);
+    window.addEventListener("popstate", onPopState);
+
+    return () => {
+      window.removeEventListener("popstate", onPopState);
+      window.clearTimeout(exitTimer.current);
+    };
+  }, [project.slug, returnToStreet]);
+
+  useEffect(() => {
+    if (document.documentElement.dataset.storeJourney !== "arriving") return;
+    const finishArrival = window.setTimeout(() => document.documentElement.removeAttribute("data-store-journey"), 480);
+    return () => window.clearTimeout(finishArrival);
+  }, []);
+
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== "Escape" || document.querySelector(".lightbox-overlay")) return;
+      event.preventDefault();
+      returnToStreet();
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [returnToStreet]);
 
   return (
-    <article className="store-detail">
+    <article className={`store-detail store-detail--${journeyPhase}`}>
       {interior ? <div className="store-interior" style={{ backgroundImage: `url(${interior})` }} aria-hidden="true" /> : null}
       <div className="store-detail-scrim" aria-hidden="true" />
+      {district ? (
+        <div className={`store-journey store-journey--${journeyPhase}`} aria-hidden="true">
+          <div className="store-journey-district" style={{ backgroundImage: `url(${district})` }} />
+          <div className="store-journey-scrim" />
+        </div>
+      ) : null}
       <div className="store-shell">
         <nav className="store-topbar" aria-label="포트폴리오 탐색">
           <a className="store-brand" href="/">MINJOON ST.</a>
           <span aria-hidden="true">/</span>
           <span>{project.name.toUpperCase()} STORE</span>
-          <a className="store-back-link" href={`/?scene=street&shop=${project.slug}`}>거리로 돌아가기</a>
+          <span className="store-return-hint" aria-hidden="true">Esc · 브라우저 ←</span>
+          <a
+            className="store-back-link"
+            href={returnHref}
+            aria-label={`${project.name} 가게가 있는 거리로 나가기`}
+            onClick={handleReturnClick}
+          >
+            거리로 나가기 <span aria-hidden="true">←</span>
+          </a>
         </nav>
         <ProjectDetailBody project={project} />
       </div>

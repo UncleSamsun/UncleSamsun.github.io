@@ -112,3 +112,22 @@ final result: passed
 - Regression coverage: the desktop and mobile E2E flow verifies fifth storefront → contact → front door → first room, plus the existing contact → fifth storefront and project detail → same storefront routes.
 
 final result: passed
+
+## 2026-07-23 Store Threshold Transition
+
+- Project entry now first zooms toward the active storefront's real doorway area, dims the surrounding district, then carries the same district asset across the project-detail threshold before revealing the readable store interior.
+- Exit reverses that camera relationship: the detail panel recedes, the selected district scales back from the doorway, and the visitor lands on the same storefront rather than a generic project list.
+- The entry context is saved only for the immediate navigation and consumed before the static project page paints. This prevents a visible empty/full-detail flash while preserving direct project URLs and GitHub Pages static output.
+- Returning no longer depends on one visible link: the top-bar street link, `Esc`, and browser Back all use the same exit choreography. The visible street control has a 44px minimum target; a lightbox keeps its existing Escape behavior.
+- Regression coverage: `npm run test:e2e` passed all `24` desktop/mobile tests, including street → store → `Esc` → same street and street → store → browser Back → same street. `npm run check`, `npm run build`, and `git diff --check` also passed.
+
+final result: passed
+
+## 2026-07-23 Store Detail Inline Emphasis
+
+- Removed the browser-default yellow `mark` treatment from project-detail evidence phrases. The new treatment uses a near-cream text weight with one restrained mint underline, so the sentence remains readable without turning key evidence into a label-shaped box.
+- Scope is limited to `.store-reading-panel`; code-like values retain their separate inline-code treatment and the street/world palette remains unchanged.
+- Browser visual check: the Hola Climbing opening summary was inspected at the local desktop viewport. The highlighted phrase stays readable against the dark store interior with no filled yellow background.
+- Regression: the smoke test now asserts transparent mark backgrounds and an underline in both desktop and mobile runs. `npm run check`, `npm run build`, `npm run test:e2e` (24 tests), and `git diff --check` passed.
+
+final result: passed
