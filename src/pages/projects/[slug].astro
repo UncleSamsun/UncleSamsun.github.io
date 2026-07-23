@@ -20,8 +20,9 @@ if (!project) {
   canonical={`https://minjoon.me/projects/${project.slug}/`}
 >
   <script is:inline>
+    const projectSlug = window.location.pathname.split("/").filter(Boolean).at(-1);
+
     try {
-      const projectSlug = window.location.pathname.split("/").filter(Boolean).at(-1);
       if (sessionStorage.getItem("minjoon-store-entry") === projectSlug) {
         document.documentElement.dataset.storeJourney = "arriving";
         sessionStorage.removeItem("minjoon-store-entry");
@@ -29,6 +30,17 @@ if (!project) {
     } catch {
       // Storage may be unavailable in privacy-restricted browser modes.
     }
+
+    window.addEventListener("keydown", (event) => {
+      if (
+        event.key !== "Escape"
+        || document.documentElement.dataset.storeDetailInteractive === "true"
+        || document.querySelector(".lightbox-overlay")
+      ) return;
+
+      event.preventDefault();
+      window.location.assign(`/?scene=street&shop=${encodeURIComponent(projectSlug ?? "")}&arrival=store`);
+    });
   </script>
   <main id="main">
     <ProjectDetail client:load project={project} />

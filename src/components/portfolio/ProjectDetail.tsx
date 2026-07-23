@@ -78,22 +78,16 @@ export function ProjectDetail({ project }: ProjectDetailProps) {
   const [journeyPhase, setJourneyPhase] = useState<StoreJourneyPhase>("idle");
   const exitTimer = useRef<number | undefined>(undefined);
   const isExiting = useRef(false);
-  const hasStreetHistoryGuard = useRef(false);
 
-  const returnToStreet = useCallback((fromBrowserBack = false) => {
+  const returnToStreet = useCallback((replaceHistory = false) => {
     if (isExiting.current) return;
 
     isExiting.current = true;
     document.documentElement.removeAttribute("data-store-journey");
     setJourneyPhase("leaving");
     exitTimer.current = window.setTimeout(() => {
-      if (fromBrowserBack) {
-        window.history.back();
-        return;
-      }
-
-      if (hasStreetHistoryGuard.current) {
-        window.history.go(-2);
+      if (replaceHistory) {
+        window.location.replace(returnHref);
         return;
       }
 
@@ -114,7 +108,6 @@ export function ProjectDetail({ project }: ProjectDetailProps) {
     if (window.history.state?.storeReturnGuard !== project.slug) {
       window.history.pushState({ ...(window.history.state ?? {}), storeReturnGuard: project.slug }, "", window.location.href);
     }
-    hasStreetHistoryGuard.current = true;
 
     const onPopState = () => returnToStreet(true);
     window.addEventListener("popstate", onPopState);
@@ -141,6 +134,11 @@ export function ProjectDetail({ project }: ProjectDetailProps) {
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [returnToStreet]);
+
+  useEffect(() => {
+    document.documentElement.dataset.storeDetailInteractive = "true";
+    return () => document.documentElement.removeAttribute("data-store-detail-interactive");
+  }, []);
 
   return (
     <article className={`store-detail store-detail--${journeyPhase}`}>

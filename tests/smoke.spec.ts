@@ -122,6 +122,16 @@ test("store details offer an animated keyboard exit as well as the visible stree
   await expect(page.frameLocator('iframe[title="MINJOON ST. 프로젝트 거리"]').locator("#ix")).toHaveText("03 / 05");
 });
 
+test("direct project visits never rely on a fixed history offset for Escape", async ({ page }) => {
+  await page.goto("/projects/hola-climbing/?from=street");
+  await expect(page.getByRole("heading", { name: "Hola Climbing" })).toBeVisible();
+
+  await page.keyboard.press("Escape");
+
+  await expect(page).toHaveURL("/?scene=street&shop=hola-climbing");
+  await expect(page.frameLocator('iframe[title="MINJOON ST. 프로젝트 거리"]').locator("#ix")).toHaveText("01 / 05");
+});
+
 test("browser back exits a store through the same street transition", async ({ page }) => {
   await page.goto("/?scene=street&shop=cafe-gamsugwang");
 
