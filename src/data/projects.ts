@@ -9,7 +9,7 @@ export const holaClimbingProject: PortfolioProject = {
   team: "2명",
   status: "active",
   summary:
-    "클라이밍 영상을 업로드하면 AI가 ==동작 기술과 동적/정적 성향==을 분석하고, SNS 피드·암장·기록·채팅 경험으로 연결하는 서비스",
+    "클라이밍 영상을 AI로 분석해, ==기록과 피드·암장 탐색==으로 이어지는 서비스",
   recruiterSummary: {
     role: "Spring Boot 백엔드 + Python AI worker pipeline 단독 담당",
     impact: "GCS 직접 업로드, Redis Streams/SSE, snapshot cursor로 업로드·분석·추천 흐름 분리",
