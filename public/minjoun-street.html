@@ -1,0 +1,394 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MINJOON ST.</title>
+  <style>
+    :root {
+      color: #f3ead7;
+      background: #07101a;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    * { box-sizing: border-box; }
+    figure { margin: 0; }
+
+    html,
+    body {
+      width: 100%;
+      min-width: 320px;
+      min-height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background: #07101a;
+    }
+
+    #stage {
+      position: relative;
+      width: 100vw;
+      height: 100svh;
+      min-height: 540px;
+      overflow: hidden;
+      cursor: grab;
+      outline: 0;
+      isolation: isolate;
+      touch-action: pan-y;
+      user-select: none;
+    }
+
+    #stage:active { cursor: grabbing; }
+    #stage:focus-visible { box-shadow: inset 0 0 0 3px #f5d37b; }
+
+    .street-scenes,
+    .street-scene,
+    .street-scene img,
+    .street-shade {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .street-scenes { z-index: 0; }
+
+    .street-scene {
+      overflow: hidden;
+      opacity: 0;
+      transform: scale(1.035);
+      transition: opacity 740ms cubic-bezier(.22, .75, .25, 1), transform 900ms cubic-bezier(.22, .75, .25, 1);
+    }
+
+    .street-scene.is-active {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .street-scene img {
+      display: block;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    .street-shade {
+      z-index: 1;
+      background: rgba(2, 8, 13, .34);
+      pointer-events: none;
+    }
+
+    .street-topline,
+    .street-project-copy,
+    .street-controls,
+    .street-entry,
+    .street-entry-cue {
+      position: absolute;
+    }
+
+    .street-topline,
+    .street-project-copy,
+    .street-controls { z-index: 2; }
+
+    .street-entry {
+      z-index: 1;
+      top: 10%;
+      right: 0;
+      width: 39%;
+      height: 82%;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    .street-entry:focus-visible {
+      outline: 2px solid rgba(245, 211, 123, .78);
+      outline-offset: -2px;
+    }
+
+    .street-entry-cue {
+      right: clamp(32px, 9vw, 142px);
+      bottom: clamp(116px, 19vh, 178px);
+      z-index: 2;
+      color: rgba(255, 244, 212, .86);
+      font-size: clamp(10px, .85vw, 12px);
+      font-weight: 700;
+      letter-spacing: .13em;
+      pointer-events: none;
+      text-shadow: 0 2px 10px rgba(29, 12, 3, .75);
+    }
+
+    .street-topline {
+      top: clamp(18px, 3.2vw, 44px);
+      right: clamp(18px, 4vw, 62px);
+      left: clamp(18px, 4vw, 62px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: rgba(247, 240, 223, .92);
+      font-size: clamp(10px, 1.2vw, 13px);
+      font-weight: 800;
+      letter-spacing: .17em;
+      text-shadow: 0 2px 12px rgba(0, 0, 0, .82);
+    }
+
+    .street-project-copy {
+      top: clamp(92px, 15vh, 168px);
+      left: clamp(18px, 5.2vw, 82px);
+      width: min(430px, calc(100vw - 48px));
+      padding: clamp(16px, 2vw, 27px);
+      border-left: 2px solid #f5d37b;
+      background: rgba(3, 9, 14, .6);
+      box-shadow: 0 18px 50px rgba(0, 0, 0, .22);
+    }
+
+    .street-project-copy p,
+    .street-project-copy h1 { margin: 0; }
+
+    .street-project-copy p:first-child {
+      color: #f5d37b;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .15em;
+    }
+
+    .street-project-copy h1 {
+      margin-top: 12px;
+      color: #fff8ea;
+      font-size: clamp(26px, 4vw, 52px);
+      font-weight: 900;
+      letter-spacing: -.05em;
+      line-height: .97;
+      text-shadow: 0 2px 18px rgba(0, 0, 0, .86);
+    }
+
+    #de {
+      margin-top: 15px;
+      color: rgba(237, 241, 240, .77);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", sans-serif;
+      font-size: clamp(12px, 1.3vw, 15px);
+      letter-spacing: -.015em;
+      line-height: 1.55;
+    }
+
+    .street-controls {
+      right: clamp(18px, 4vw, 62px);
+      bottom: clamp(18px, 4vw, 52px);
+      display: grid;
+      justify-items: end;
+      gap: 12px;
+      color: rgba(239, 242, 238, .78);
+      font-size: clamp(9px, 1.1vw, 11px);
+      font-weight: 800;
+      letter-spacing: .11em;
+      text-align: right;
+      text-shadow: 0 2px 12px rgba(0, 0, 0, .85);
+    }
+
+    #dots { display: flex; gap: 6px; }
+    #dots i {
+      display: block;
+      width: 24px;
+      height: 3px;
+      background: rgba(255, 255, 255, .32);
+      transition: width 260ms ease, background-color 260ms ease;
+    }
+
+    #dots i.on {
+      width: 38px;
+      background: #f5d37b;
+    }
+
+    @media (max-width: 640px) {
+      #stage { min-height: 500px; }
+
+      .street-scene img { object-position: 62% center; }
+
+      .street-topline {
+        top: 17px;
+        font-size: 9px;
+        letter-spacing: .12em;
+      }
+
+      .street-project-copy {
+        top: 74px;
+        left: 16px;
+        width: min(315px, calc(100vw - 32px));
+        padding: 15px;
+      }
+
+      .street-project-copy h1 { font-size: clamp(25px, 9vw, 38px); }
+      #de { margin-top: 11px; font-size: 12px; }
+
+      .street-entry { width: 43%; }
+      .street-entry-cue { right: 34px; bottom: 112px; }
+
+      .street-controls {
+        right: 16px;
+        bottom: 24px;
+        max-width: 210px;
+        font-size: 9px;
+        line-height: 1.55;
+      }
+
+      #dots i { width: 15px; }
+      #dots i.on { width: 26px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .street-scene,
+      #dots i { transition-duration: 1ms; }
+    }
+  </style>
+</head>
+<body>
+  <main id="stage" tabindex="0" aria-label="MINJOON ST. 프로젝트 거리">
+    <div class="street-scenes" aria-hidden="true">
+      <figure class="street-scene"><img src="/assets/street/hola-climbing-district.png" alt="" fetchpriority="high"></figure>
+      <figure class="street-scene"><img src="/assets/street/cafe-gamsugwang-district.png" alt="" loading="eager"></figure>
+      <figure class="street-scene"><img src="/assets/street/the-last-supper-district.png" alt="" loading="eager"></figure>
+      <figure class="street-scene"><img src="/assets/street/readandshare-district.png" alt="" loading="eager"></figure>
+      <figure class="street-scene"><img src="/assets/street/jsonstore-district.png" alt="" loading="eager"></figure>
+    </div>
+    <div class="street-shade" aria-hidden="true"></div>
+
+    <header class="street-topline" aria-hidden="true">
+      <span>MINJOON ST.</span>
+      <span id="ix">01 / 05</span>
+    </header>
+
+    <section class="street-project-copy" aria-live="polite">
+      <p>PROJECT DISTRICT</p>
+      <h1 id="nm">HOLA CLIMBING</h1>
+      <p id="de">AI 분석 · 기록·피드·암장</p>
+    </section>
+    <button class="street-entry" id="store-entry" type="button" aria-label="현재 프로젝트 스토어 입장"></button>
+    <span class="street-entry-cue" aria-hidden="true">입장 →</span>
+
+    <footer class="street-controls" aria-hidden="true">
+      <span>← → 이동 · Enter 입장</span>
+      <span id="dots"></span>
+    </footer>
+  </main>
+
+  <script>
+    (function () {
+      var params = new URLSearchParams(window.location.search);
+      var worldMode = params.get('world') === '1';
+      var shops = [
+        { slug: 'hola-climbing', name: 'HOLA CLIMBING', description: 'AI 분석 · 기록·피드·암장' },
+        { slug: 'cafe-gamsugwang', name: '카페감수광', description: '22,144건 리뷰 기반 추천' },
+        { slug: 'the-last-supper', name: 'THE LAST SUPPER', description: '웨이팅 233ms → 7ms' },
+        { slug: 'readandshare', name: 'READANDSHARE', description: '독서 커뮤니티 백엔드' },
+        { slug: 'jsonstore', name: 'JSONSTORE', description: '커머스 API' }
+      ];
+      var requestedSlug = params.get('shop');
+      var requestedIndex = shops.findIndex(function (shop) { return shop.slug === requestedSlug; });
+      var index = requestedIndex >= 0 ? requestedIndex : 0;
+      var locked = false;
+      var startX = 0;
+      var moved = false;
+      var pointerActive = false;
+      var stage = document.getElementById('stage');
+      var storeEntry = document.getElementById('store-entry');
+      var scenes = Array.prototype.slice.call(document.querySelectorAll('.street-scene'));
+      var dots = document.getElementById('dots');
+      var indexLabel = document.getElementById('ix');
+      var nameLabel = document.getElementById('nm');
+      var descriptionLabel = document.getElementById('de');
+
+      shops.forEach(function () { dots.appendChild(document.createElement('i')); });
+
+      function render(immediate) {
+        scenes.forEach(function (scene, sceneIndex) {
+          if (immediate) scene.style.transitionDuration = '1ms';
+          scene.classList.toggle('is-active', sceneIndex === index);
+          if (immediate) window.setTimeout(function () { scene.style.removeProperty('transition-duration'); }, 0);
+        });
+
+        indexLabel.textContent = String(index + 1).padStart(2, '0') + ' / 05';
+        nameLabel.textContent = shops[index].name;
+        descriptionLabel.textContent = shops[index].description;
+        Array.prototype.forEach.call(dots.children, function (dot, dotIndex) {
+          dot.classList.toggle('on', dotIndex === index);
+        });
+      }
+
+      function visit(nextIndex, immediate) {
+        index = Math.max(0, Math.min(shops.length - 1, nextIndex));
+        render(Boolean(immediate));
+      }
+
+      function go(direction) {
+        var next = index + direction;
+        if (next > shops.length - 1 && worldMode) {
+          window.parent.postMessage({ type: 'minjoun-street:leave' }, window.location.origin);
+          return;
+        }
+        if (next < 0 && worldMode) {
+          window.parent.postMessage({ type: 'minjoun-street:return' }, window.location.origin);
+          return;
+        }
+        if (next < 0 || next > shops.length - 1 || locked) return;
+
+        locked = true;
+        visit(next);
+        window.setTimeout(function () { locked = false; }, 740);
+      }
+
+      function enterStore() {
+        if (worldMode) {
+          window.parent.postMessage({ type: 'minjoun-street:enter', index: index }, window.location.origin);
+        }
+      }
+
+      stage.addEventListener('wheel', function (event) {
+        if (locked) return;
+        if (Math.abs(event.deltaX) < 6 || Math.abs(event.deltaX) <= Math.abs(event.deltaY)) return;
+        event.preventDefault();
+        go(event.deltaX > 0 ? 1 : -1);
+      }, { passive: false });
+
+      stage.addEventListener('pointerdown', function (event) {
+        startX = event.clientX;
+        moved = false;
+        pointerActive = true;
+        stage.setPointerCapture(event.pointerId);
+      });
+
+      stage.addEventListener('pointermove', function (event) {
+        if (!pointerActive || moved || locked) return;
+        var delta = event.clientX - startX;
+        if (Math.abs(delta) > 52) {
+          moved = true;
+          go(delta < 0 ? 1 : -1);
+        }
+      });
+
+      stage.addEventListener('pointerup', function () { pointerActive = false; });
+      stage.addEventListener('pointercancel', function () { pointerActive = false; });
+
+      storeEntry.addEventListener('pointerdown', function (event) {
+        event.stopPropagation();
+      });
+
+      storeEntry.addEventListener('click', function (event) {
+        event.stopPropagation();
+        enterStore();
+      });
+
+      document.addEventListener('keydown', function (event) {
+        if (event.key === 'ArrowRight') { event.preventDefault(); go(1); }
+        if (event.key === 'ArrowLeft') { event.preventDefault(); go(-1); }
+        if (event.key === 'Enter') { event.preventDefault(); enterStore(); }
+        if (event.key === 'Escape' && worldMode) {
+          window.parent.postMessage({ type: 'minjoun-street:return' }, window.location.origin);
+        }
+      });
+
+      visit(index, true);
+      if (worldMode) stage.focus();
+      window.__dot = { jump: function (nextIndex) { visit(nextIndex, true); return index; } };
+    })();
+  </script>
+</body>
+</html>

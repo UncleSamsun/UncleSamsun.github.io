@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { IDEWindow } from "@/components/portfolio/IDEWindow";
+import { StreetHome } from "@/components/portfolio/StreetHome";
 import { profile } from "@/data/profile";
 import { getProjectsByPriority } from "@/lib/portfolio";
 
@@ -12,6 +12,6 @@ const projects = getProjectsByPriority();
   description="백엔드와 AI 파이프라인을 연결하는 개발자 김민준의 포트폴리오"
 >
   <main id="main">
-    <IDEWindow client:load profile={profile} projects={projects} />
+    <StreetHome client:load profile={profile} projects={projects} />
   </main>
 </BaseLayout>
